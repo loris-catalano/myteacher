@@ -1,0 +1,56 @@
+@startuml
+
+class Docente {
+   String Nome
+   String Cognome
+   String materia
+   Time fasciaOrariaDisponibile
+}
+
+class Studente {
+    String Nome
+    String Cognome
+    int puntiBonusLezione
+}
+
+class Localita {
+    String città
+}
+
+class Lezione{
+int prezzo // eventualmente anche 0 se il docente vuole
+}
+
+class Recensione{
+//attributi e metodi
+}
+
+class AgendaLezioni{
+list<Lezione> lezioni
++ list<Lezione> showLezioni()
+}
+
+class ListaLezioniPrecedenti{
+//metodi e attributi non presenti gia in AgendaLezioni
+}
+
+class Pagamento{
+//attributi e metodi
+}
+
+Studente "0..*" -- "0..*" Docente
+Docente "1..*" <-- "1..1" Localita
+Studente "1..1"-- "0..*" Lezione
+Studente "1..1" -- "0..*" Recensione
+Docente "1..1" -- "0..*" Recensione
+AgendaLezioni o-- Lezione:CompostoDa
+AgendaLezioni "1..1" -- "1..1" Docente:Possiede
+AgendaLezioni "1..1" -- "1..1" Studente:Possiede
+Docente  "1..1" -- "1..1" ListaLezioniPrecedenti:Visualizza
+Studente  "1..1" -- "1..1" ListaLezioniPrecedenti:Visualizza
+Studente "1..1" -- "0..*" Pagamento:Effettua
+Lezione "1..1" -- "1..1" Pagamento:Relativo alla
+Docente "1..1" -- "1..1" Pagamento:Riceve
+ListaLezioniPrecedenti "1..1" -- "0..*"Lezione: Formata
+AgendaLezioni<|-- ListaLezioniPrecedenti
+@enduml
