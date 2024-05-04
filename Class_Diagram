@@ -3,31 +3,55 @@
 class Docente {
    String Nome
    String Cognome
-   String materia
+   list<String> materie
+   int età  
+   boolean premium
+   list<Recensione> recensioniRicevute
+   Localita posizione 
    Time fasciaOrariaDisponibile
+   AgendaLezioni agendaDoc
+   File curriculum
+   + HttpResponse answerToReview(String answer) 
+   + HttpResponse insertLecture(Lezione lez,AgendaLezioni agendaDoc) 
+   + HttpResponse richiestaPremium(PagamentoPremium pagPrem) 
+   + HttpResponse deleteLecture(Lezione lez,AgendaLezioni agendaDoc) 
+
+
 }
 
 class Studente {
     String Nome
     String Cognome
     int puntiBonusLezione
+    list<Recensione> recensioniEffettuate
+    AgendaLezioni agendaStudente
 }
 
 class Localita {
     String città
+    String via
+    int civ 
+    Docente docente
 }
 
 class Lezione{
 int prezzo // eventualmente anche 0 se il docente vuole
+String materia //controllare le materie inseribili
+Docente docente
+Date data
+Studente student
+AgendaLezioni agendaStudente
+AgendaLezioni agentaDocente
 }
 
 class Recensione{
-//attributi e metodi
+int stelle
+Studente studente
+Docente docente
 }
 
 class AgendaLezioni{
 list<Lezione> lezioni
-+ list<Lezione> showLezioni()
 }
 
 class ListaLezioniPrecedenti{
@@ -35,11 +59,23 @@ class ListaLezioniPrecedenti{
 }
 
 class Pagamento{
-//attributi e metodi
+double importo
 }
 
+class PagamentoLezione{
+Lezione Lezione
+Docente docente 
+Studente studente  
+}
+
+class PagamentoPremium{
+Docente docente
+}
+
+
+
 Studente "0..*" -- "0..*" Docente
-Docente "1..*" <-- "1..1" Localita
+Docente "1..1" -- "1..1" Localita
 Studente "1..1"-- "0..*" Lezione
 Studente "1..1" -- "0..*" Recensione
 Docente "1..1" -- "0..*" Recensione
@@ -48,9 +84,13 @@ AgendaLezioni "1..1" -- "1..1" Docente:Possiede
 AgendaLezioni "1..1" -- "1..1" Studente:Possiede
 Docente  "1..1" -- "1..1" ListaLezioniPrecedenti:Visualizza
 Studente  "1..1" -- "1..1" ListaLezioniPrecedenti:Visualizza
-Studente "1..1" -- "0..*" Pagamento:Effettua
-Lezione "1..1" -- "1..1" Pagamento:Relativo alla
-Docente "1..1" -- "1..1" Pagamento:Riceve
+Studente "1..1" -- "0..*" PagamentoLezione:Effettua
+Lezione "1..1" -- "1..1" PagamentoLezione:Relativo alla
+Docente "1..1" -- "1..1" PagamentoLezione:Riceve
 ListaLezioniPrecedenti "1..1" -- "0..*"Lezione: Formata
 AgendaLezioni<|-- ListaLezioniPrecedenti
+Pagamento <|-- PagamentoLezione
+Pagamento <|-- PagamentoPremium
+PagamentoPremium "1..N" -- "1..1" Docente:Abbonamento
+
 @enduml
