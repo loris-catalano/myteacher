@@ -1,0 +1,94 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+  class Docente {
+    Nome: String
+    Cognome: String
+    materie: list<String>
+    età: int
+    premium: boolean
+    recensioniRicevute: list<Recensione>
+    posizione: Localita
+    fasciaOrariaDisponibile: Time
+    agendaDoc: AgendaLezioni
+    curriculum: File
+    answerToReview(answer: String): HttpResponse
+    insertLecture(lez: Lezione, agendaDoc: AgendaLezioni): HttpResponse
+    richiestaPremium(pagPrem: PagamentoPremium): HttpResponse
+    deleteLecture(lez: Lezione, agendaDoc: AgendaLezioni): HttpResponse
+  }
+
+  class Studente {
+    Nome: String
+    Cognome: String
+    puntiBonusLezione: int
+    recensioniEffettuate: list<Recensione>
+    agendaStudente: AgendaLezioni
+  }
+
+  class Localita {
+    città: String
+    via: String
+    civ: int
+    docente: Docente
+  }
+
+  class Lezione {
+    prezzo: int
+    materia: String
+    docente: Docente
+    data: Date
+    student: Studente
+    agendaStudente: AgendaLezioni
+    agentaDocente: AgendaLezioni
+  }
+
+  class Recensione {
+    stelle: int
+    studente: Studente
+    docente: Docente
+  }
+
+  class AgendaLezioni {
+    lezioni: list<Lezione>
+  }
+
+  class ListaLezioniPrecedenti {
+    // methods and attributes
+  }
+
+  class Pagamento {
+    importo: double
+  }
+
+  class PagamentoLezione {
+    Lezione: Lezione
+    docente: Docente
+    studente: Studente
+  }
+
+  class PagamentoPremium {
+    docente: Docente
+  }
+
+  Docente "0..*" -- "0..*" Studente
+  Docente "1..1" -- "1..1" Localita
+  Studente "1..1" -- "0..*" Lezione
+  Studente "1..1" -- "0..*" Recensione
+  Docente "1..1" -- "0..*" Recensione
+  AgendaLezioni "1..1" -- "0..*" Lezione
+  Docente "1..1" -- "1..1" AgendaLezioni
+  Studente "1..1" -- "1..1" AgendaLezioni
+  Docente "1..1" -- "1..1" ListaLezioniPrecedenti
+  Studente "1..1" -- "1..1" ListaLezioniPrecedenti
+  Studente "1..1" -- "0..*" PagamentoLezione
+  Lezione "1..1" -- "1..1" PagamentoLezione
+  Docente "1..1" -- "1..1" PagamentoLezione
+  ListaLezioniPrecedenti "1..1" -- "0..*" Lezione
+  AgendaLezioni <|-- ListaLezioniPrecedenti
+  Pagamento <|-- PagamentoLezione
+  Pagamento <|-- PagamentoPremium
+  PagamentoPremium "1..N" -- "1..1" Docente
+
+
+@enduml
