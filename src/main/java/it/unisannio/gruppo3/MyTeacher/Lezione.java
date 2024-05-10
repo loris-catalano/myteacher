@@ -19,6 +19,7 @@ public class Lezione {
     private Studente student;
     private AgendaLezioni agendaStudente;
     private AgendaLezioni agendaDocente;
+    private int testPush;
 
 
     public int getPrezzo() {
