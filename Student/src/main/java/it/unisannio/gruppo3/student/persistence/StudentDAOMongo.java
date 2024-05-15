@@ -1,6 +1,5 @@
 package it.unisannio.gruppo3.student.persistence;
 
-import com.google.gson.*;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.*;
@@ -8,13 +7,10 @@ import com.mongodb.client.*;
 
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-import it.unisannio.gruppo3.entities.Lesson;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
 import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Student;
 import org.bson.Document;
-import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
-import org.springframework.boot.json.GsonJsonParser;
 
 
 import static com.mongodb.client.model.Filters.eq;
@@ -31,8 +27,14 @@ public class StudentDAOMongo implements StudentDAO{
     private final MongoDatabase database;
     private final MongoCollection<Document> collection;
 
-    private Document highestIdDocument;
+    /**
+     * To always have a unique generated id I created a separate collection in MongoDB called
+     * "highestId", where there is only one document that has the "hId" field that contains the highest id,
+     * because we do them in progressive order so 1, 2, 3 etc. Every time a new user is created
+     * we update this progressive number in the DB and the highest number is assigned to the new user
+     */
     private Long highestID;
+    private final MongoCollection<Document> hIdCollection;
 
 
     public StudentDAOMongo() {
@@ -48,9 +50,9 @@ public class StudentDAOMongo implements StudentDAO{
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.collection = database.getCollection(COLLECTION_STUDENTS);
 
-        highestIdDocument = database.getCollection(COLLECTION_HIGHEST_ID).find().first();
-        assert highestIdDocument != null;
-        highestID = highestIdDocument.getLong(ELEMENT_HIGHEST_ID);
+        this.hIdCollection = database.getCollection(COLLECTION_HIGHEST_ID);
+
+        highestID = hIdCollection.find().first().getLong(ELEMENT_HIGHEST_ID);
 
         this.createDB();
     }
@@ -64,7 +66,6 @@ public class StudentDAOMongo implements StudentDAO{
         try {
             IndexOptions indexOptions = new IndexOptions().unique(true);
             String resultCreateIndex = this.collection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-//            System.out.println(String.format("Index created: %s", resultCreateIndex));
         } catch (DuplicateKeyException e) {
             System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
             return false;
@@ -73,8 +74,14 @@ public class StudentDAOMongo implements StudentDAO{
     }
 
     private void updateHighestId(){
-        highestID = highestIdDocument.getLong(ELEMENT_HIGHEST_ID) + 1;      // Gets the highest id + 1
-        highestIdDocument.put(ELEMENT_HIGHEST_ID, highestID);       // Puts the new highest id
+        // Define the filter to match the document to update. In this case we search for documents that have a field "ELEMENT_HIGHEST_ID"
+        Document filter = new Document(ELEMENT_HIGHEST_ID, new Document("$exists", true));
+
+        // Define the update operation
+        Document updateOperation = new Document("$set", new Document(ELEMENT_HIGHEST_ID, ++highestID));
+
+        // Perform the update
+        hIdCollection.updateOne(filter, updateOperation);
     }
 
     public Long getNextId(){
@@ -84,10 +91,6 @@ public class StudentDAOMongo implements StudentDAO{
 
     public Long createStudent(Student student){
         try {
-            updateHighestId();
-            Long currentId = highestID;
-            student.setId(currentId);
-            
             Document studentDocument = studentToDocument(student);
             this.collection.insertOne(studentDocument);
             return student.getId();
@@ -99,8 +102,8 @@ public class StudentDAOMongo implements StudentDAO{
 
     /**
      * Creates a new MongoDB document from a Student object
-     * @param student
-     * @return
+     * @param student The student
+     * @return The document
      */
     private Document studentToDocument(Student student) {
         return new Document()
@@ -123,16 +126,6 @@ public class StudentDAOMongo implements StudentDAO{
                     (LessonsAgenda) document.get(ELEMENT_AGENDA)
                     );
         else return null;
-
-
-
-
-        /* GSON ATTEMPT (UNCOMPLETED)
-        String studentJson = document.toJson();
-        //System.out.println("prova stampa: " + studentJson);
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(studentJson, Student.class);
-        */
     }
 
 
