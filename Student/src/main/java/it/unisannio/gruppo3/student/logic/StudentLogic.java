@@ -6,4 +6,8 @@ public interface StudentLogic {
     Long createStudent(Student student);
 
     Student getStudent(Long id);
+
+    Student updateStudent(Student student);
+
+    boolean deleteStudent(Long id);
 }

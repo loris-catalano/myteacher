@@ -41,7 +41,35 @@ public class StudentService {
             return Response.ok(studentById).build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
-
     }
+
+    @GET
+    public Response getAllStudents() {
+        return null;
+    }
+
+
+    public Response searchStudentsByFirstName(@QueryParam("firstName") String fName) {
+        return null;
+    }
+
+    @PUT
+    public Response updateStudent(Student student) {
+        Student studentUpdated = logic.updateStudent(student);
+        return Response.ok(studentUpdated).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteStudent(@PathParam("id") Long id) {
+        boolean isDeleted = logic.deleteStudent(id);
+        if (isDeleted){
+            return Response.noContent().build();
+        } else {
+            return Response.serverError().build();
+        }
+    }
+
+
 
 }

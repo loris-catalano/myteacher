@@ -7,13 +7,14 @@ import com.mongodb.client.*;
 
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import com.mongodb.client.result.DeleteResult;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
 import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Student;
 import org.bson.Document;
 
 
-import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.model.Filters;
 
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class StudentDAOMongo implements StudentDAO{
 
     private final MongoClient mongoClient;
     private final MongoDatabase database;
-    private final MongoCollection<Document> collection;
+    private final MongoCollection<Document> studentsCollection;
 
     /**
      * To always have a unique generated id I created a separate collection in MongoDB called
@@ -48,7 +49,7 @@ public class StudentDAOMongo implements StudentDAO{
         String URI = "mongodb://" + host + ":" + port;
         this.mongoClient = MongoClients.create(URI);
         this.database = mongoClient.getDatabase(DATABASE_NAME);
-        this.collection = database.getCollection(COLLECTION_STUDENTS);
+        this.studentsCollection = database.getCollection(COLLECTION_STUDENTS);
 
         this.hIdCollection = database.getCollection(COLLECTION_HIGHEST_ID);
 
@@ -65,7 +66,7 @@ public class StudentDAOMongo implements StudentDAO{
     public boolean createDB() {
         try {
             IndexOptions indexOptions = new IndexOptions().unique(true);
-            String resultCreateIndex = this.collection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
+            String resultCreateIndex = this.studentsCollection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
         } catch (DuplicateKeyException e) {
             System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
             return false;
@@ -92,7 +93,7 @@ public class StudentDAOMongo implements StudentDAO{
     public Long createStudent(Student student){
         try {
             Document studentDocument = studentToDocument(student);
-            this.collection.insertOne(studentDocument);
+            this.studentsCollection.insertOne(studentDocument);
             return student.getId();
         } catch (MongoWriteException e) {
             e.printStackTrace();
@@ -131,7 +132,7 @@ public class StudentDAOMongo implements StudentDAO{
 
     @Override
     public Student getStudent(Long id) {
-        Document d = collection.find(eq(ELEMENT_ID,id)).first();
+        Document d = studentsCollection.find(Filters.eq(ELEMENT_ID,id)).first();
         return studentFromDocument(d);
     }
 
@@ -145,14 +146,25 @@ public class StudentDAOMongo implements StudentDAO{
         return null;
     }
 
+    /**
+     * In this version if the given student has an invalid id, the filter will
+     * not find a student to update so nothing will happen
+     *
+     * @param student The student to update (with a set id)
+     * @return The same student that the server updated in the db.
+     */
     @Override
     public Student updateStudent(Student student) {
-        return null;
+        Document filter = new Document(ELEMENT_ID, student.getId());
+        Document updateOperation = new Document("$set", studentToDocument(student));
+        studentsCollection.updateOne(filter, updateOperation);
+
+        return student;
     }
 
     @Override
     public boolean deleteStudent(Long id) {
-        return false;
+        return studentsCollection.deleteOne(Filters.eq(ELEMENT_ID,id)).wasAcknowledged();
     }
 
     @Override

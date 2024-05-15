@@ -23,4 +23,14 @@ public class StudentLogicImpl implements StudentLogic{
     public Student getStudent(Long id) {
         return studentDAO.getStudent(id);
     }
+
+    @Override
+    public Student updateStudent(Student student) {
+        return studentDAO.updateStudent(student);
+    }
+
+    @Override
+    public boolean deleteStudent(Long id) {
+        return studentDAO.deleteStudent(id);
+    }
 }
