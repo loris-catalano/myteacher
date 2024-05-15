@@ -2,7 +2,6 @@ package it.unisannio.gruppo3.student.presentation;
 
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.student.logic.*;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.core.*;
 
 import jakarta.ws.rs.*;
@@ -69,7 +68,4 @@ public class StudentService {
             return Response.serverError().build();
         }
     }
-
-
-
 }

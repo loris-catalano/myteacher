@@ -19,7 +19,7 @@ public interface StudentDAO {
 
 
     String COLLECTION_HIGHEST_ID = "HighestId";
-    String ELEMENT_HIGHEST_ID = "hId";
+    String ELEMENT_HIGHEST_ID = "highestId";
 
     boolean dropDB();
 

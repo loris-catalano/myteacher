@@ -7,7 +7,6 @@ import com.mongodb.client.*;
 
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-import com.mongodb.client.result.DeleteResult;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
 import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Student;
@@ -35,7 +34,6 @@ public class StudentDAOMongo implements StudentDAO{
      * we update this progressive number in the DB and the highest number is assigned to the new user
      */
     private Long highestID;
-    private final MongoCollection<Document> hIdCollection;
 
 
     public StudentDAOMongo() {
@@ -51,9 +49,7 @@ public class StudentDAOMongo implements StudentDAO{
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.studentsCollection = database.getCollection(COLLECTION_STUDENTS);
 
-        this.hIdCollection = database.getCollection(COLLECTION_HIGHEST_ID);
-
-        highestID = hIdCollection.find().first().getLong(ELEMENT_HIGHEST_ID);
+        this.highestID = studentsCollection.find(Filters.exists(ELEMENT_HIGHEST_ID)).first().getLong(ELEMENT_HIGHEST_ID);
 
         this.createDB();
     }
@@ -82,7 +78,7 @@ public class StudentDAOMongo implements StudentDAO{
         Document updateOperation = new Document("$set", new Document(ELEMENT_HIGHEST_ID, ++highestID));
 
         // Perform the update
-        hIdCollection.updateOne(filter, updateOperation);
+        studentsCollection.updateOne(filter, updateOperation);
     }
 
     public Long getNextId(){
