@@ -13,9 +13,6 @@ public class StudentLogicImpl implements StudentLogic{
 
     @Override
     public Long createStudent(Student student) {
-        if(student.getId()==null){
-            student.setId(studentDAO.getNextId());
-        }
         return studentDAO.createStudent(student);
     }
 

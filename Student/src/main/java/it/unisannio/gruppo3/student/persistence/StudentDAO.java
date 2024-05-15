@@ -25,8 +25,6 @@ public interface StudentDAO {
 
     boolean createDB();
 
-    Long getNextId();
-
     Long createStudent(Student student);
 
     Student getStudent(Long id);

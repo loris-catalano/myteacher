@@ -81,16 +81,13 @@ public class StudentDAOMongo implements StudentDAO{
         studentsCollection.updateOne(filter, updateOperation);
     }
 
-    public Long getNextId(){
-        updateHighestId();
-        return highestID;
-    }
-
     public Long createStudent(Student student){
         try {
+            updateHighestId();
+            student.setId(highestID);
             Document studentDocument = studentToDocument(student);
             this.studentsCollection.insertOne(studentDocument);
-            return student.getId();
+            return highestID;
         } catch (MongoWriteException e) {
             e.printStackTrace();
         }
