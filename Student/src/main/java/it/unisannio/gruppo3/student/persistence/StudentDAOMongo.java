@@ -1,5 +1,6 @@
 package it.unisannio.gruppo3.student.persistence;
 
+import com.google.gson.*;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.*;
@@ -9,14 +10,18 @@ import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import it.unisannio.gruppo3.entities.Lesson;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
+import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Student;
 import org.bson.Document;
+import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
+import org.springframework.boot.json.GsonJsonParser;
 
 
 import static com.mongodb.client.model.Filters.eq;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class StudentDAOMongo implements StudentDAO{
     private static String host = System.getenv("MONGO_ADDRESS");
@@ -108,26 +113,33 @@ public class StudentDAOMongo implements StudentDAO{
     }
 
     private Student studentFromDocument(Document document){
-        /*
-        return new Student(
-                document.getLong(ELEMENT_ID),
-                document.getString(ELEMENT_FNAME),
-                document.getString(ELEMENT_LNAME),
-                document.getInteger(ELEMENT_LESSON_BONUS_POINTS),
+        if(document!=null)
+            return new Student(
+                    document.getLong(ELEMENT_ID),
+                    document.getString(ELEMENT_FNAME),
+                    document.getString(ELEMENT_LNAME),
+                    document.getInteger(ELEMENT_LESSON_BONUS_POINTS),
+                    (List<Review>) document.get(ELEMENT_COMPLETED_REVIEWS),
+                    (LessonsAgenda) document.get(ELEMENT_AGENDA)
+                    );
+        else return null;
 
-                // !!
-                document.getList(ELEMENT_AGENDA, ArrayList<Lesson>),
-                document.get(ELEMENT_AGENDA, LessonsAgenda.class);
-        )*/
-        return null;
+
+
+
+        /* GSON ATTEMPT (UNCOMPLETED)
+        String studentJson = document.toJson();
+        //System.out.println("prova stampa: " + studentJson);
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(studentJson, Student.class);
+        */
     }
 
 
     @Override
     public Student getStudent(Long id) {
         Document d = collection.find(eq(ELEMENT_ID,id)).first();
-        System.out.println(studentFromDocument(d));
-        return studentFromDocument(d);      //should return null if no student with that id is found in the database
+        return studentFromDocument(d);
     }
 
     @Override

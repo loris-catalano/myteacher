@@ -26,7 +26,7 @@ public class StudentService {
     public Response createStudent(Student student){
         Long createdStudentId = logic.createStudent(student);
         if(createdStudentId != null){
-            URI uri = UriBuilder.fromPath("/student/{id}").build(createdStudentId);
+            URI uri = UriBuilder.fromPath("/student/studs/{id}").build(createdStudentId);
             return Response.created(uri).build();
         } else{
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -43,6 +43,5 @@ public class StudentService {
         return Response.status(Response.Status.NOT_FOUND).build();
 
     }
-
 
 }
