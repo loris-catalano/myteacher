@@ -4,11 +4,41 @@ import java.io.File;
 import java.sql.Time;
 import java.util.List;
 
-
-import java.util.List;
-import java.sql.Time;
-
 public class Teacher {
+
+
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age=age;
+        this.premium=premium;
+        this.subjects=subjects;
+        this.receivedReviews=receivedReviews;
+        this.position=location;
+        this.teacherAgenda=lessonsAgenda;
+        this.resume=resume;
+        this.availableTimeSlot=availableTimeSlot;
+    }
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot) {
+        this.id = null;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age=age;
+        this.premium=premium;
+        this.subjects=subjects;
+        this.receivedReviews=receivedReviews;
+        this.position=location;
+        this.teacherAgenda=lessonsAgenda;
+        this.resume=resume;
+        this.availableTimeSlot=availableTimeSlot;
+    }
+    public Teacher(){}
+
+
+    public Long getId() {return id;}
+
+    public void setId(Long id) {this.id = id;}
 
     public String getFirstName() {
         return firstName;
@@ -90,6 +120,8 @@ public class Teacher {
         this.resume = resume;
     }
 
+
+    private Long id=null;
     private String firstName;
     private String lastName;
     private List<String> subjects;
@@ -100,5 +132,7 @@ public class Teacher {
     private Time availableTimeSlot;
     private LessonsAgenda teacherAgenda;
     private File resume;
+
+
 }
 

@@ -11,9 +11,16 @@
 	<groupId>it.unisannio.gruppo3</groupId>
 	<artifactId>MyTeacher</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MyTeacher</name>
+    <packaging>pom</packaging>
+    <name>MyTeacher</name>
 	<description>MyTeacher REST API</description>
-	<properties>
+    <modules>
+        <module>Teacher</module>
+        <module>teacher</module>
+		<module>Teacher</module>
+		<module>Teacher</module>
+	</modules>
+    <properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>

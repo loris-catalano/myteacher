@@ -66,11 +66,11 @@ public class StudentDAOMongo implements StudentDAO{
         }
         return true;
     }
-
     private void updateHighestId(){
         highestID = highestIdDocument.getLong(ELEMENT_HIGHEST_ID) + 1;      // Gets the highest id + 1
         highestIdDocument.put(ELEMENT_HIGHEST_ID, highestID);       // Puts the new highest id
     }
+
 
     public Long getNextId(){
         updateHighestId();
