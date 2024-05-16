@@ -11,7 +11,7 @@ public class Student {
         this.completedReviews = completedReviews;
         this.studentAgenda = studentAgenda;
     }
-    public Student(String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda, Long id) {
+    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
