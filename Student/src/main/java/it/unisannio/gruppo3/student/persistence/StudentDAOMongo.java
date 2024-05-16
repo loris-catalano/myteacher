@@ -131,7 +131,13 @@ public class StudentDAOMongo implements StudentDAO{
 
     @Override
     public ArrayList<Student> getAllStudents() {
-        return null;
+        ArrayList<Student> students = new ArrayList<>();
+        for(Document doc:studentsCollection.find()){
+            if(doc.containsKey(ELEMENT_HIGHEST_ID)) {continue;}
+            students.add(studentFromDocument(doc));
+            System.out.println(students);
+        }
+        return students;
     }
 
     @Override

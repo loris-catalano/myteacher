@@ -44,7 +44,8 @@ public class StudentService {
 
     @GET
     public Response getAllStudents() {
-        return null;
+        ArrayList<Student> students = logic.getAllStudents();
+        return Response.ok(students).build();
     }
 
 

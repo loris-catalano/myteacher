@@ -3,6 +3,8 @@ package it.unisannio.gruppo3.student.logic;
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.student.persistence.*;
 
+import java.util.ArrayList;
+
 public class StudentLogicImpl implements StudentLogic{
 
     StudentDAO studentDAO;
@@ -29,5 +31,10 @@ public class StudentLogicImpl implements StudentLogic{
     @Override
     public boolean deleteStudent(Long id) {
         return studentDAO.deleteStudent(id);
+    }
+
+    @Override
+    public ArrayList<Student> getAllStudents() {
+        return studentDAO.getAllStudents();
     }
 }
