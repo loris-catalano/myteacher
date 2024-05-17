@@ -20,6 +20,7 @@ public class TeacherService {
     public TeacherService(){
         logic = new TeacherLogicImpl();
     }
+    
     @POST
     public Response createTeacher(Teacher teacher){
         Long createdTeacherId = logic.createTeacher(teacher);

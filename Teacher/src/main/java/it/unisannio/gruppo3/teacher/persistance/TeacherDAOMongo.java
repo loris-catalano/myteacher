@@ -23,7 +23,7 @@ public class TeacherDAOMongo implements TeacherDAO {
     private final MongoClient mongoClient;
     private final MongoDatabase database;
     private final MongoCollection<Document> collection;
-    //private Document highestIdDocument;
+
     private Long highestID;
 
 
@@ -38,11 +38,7 @@ public class TeacherDAOMongo implements TeacherDAO {
         this.mongoClient = MongoClients.create(URI);
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.collection = database.getCollection(COLLECTION_TEACHERS);
-       /*
-        highestIdDocument = database.getCollection(COLLECTION_HIGHEST_ID).find().first();
-        assert highestIdDocument != null;
-        highestID = highestIdDocument.getLong(ELEMENT_HIGHEST_ID);
-       */
+
         this.highestID = collection.find(Filters.exists(ELEMENT_HIGHEST_ID)).first().getLong(ELEMENT_HIGHEST_ID);
         this.createDB();
     }
@@ -52,7 +48,6 @@ public class TeacherDAOMongo implements TeacherDAO {
         try {
             IndexOptions indexOptions = new IndexOptions().unique(true);
             String resultCreateIndex = this.collection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-//            System.out.println(String.format("Index created: %s", resultCreateIndex));
         } catch (DuplicateKeyException e) {
             System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
             return false;
@@ -125,8 +120,6 @@ public class TeacherDAOMongo implements TeacherDAO {
                 .append(ELEMENT_CURRICULUM, teacher.getResume())
                 .append(ELEMENT_AVAILABLE_TIME_SLOT,teacher.getAvailableTimeSlot());
          }
-
-
 
 
     @Override
