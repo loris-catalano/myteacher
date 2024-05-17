@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>3.1.6</version> <!-- Sostituisci con la versione di Jersey desiderata -->
+            <version>3.1.6</version>
         </dependency>
 
         <dependency>
