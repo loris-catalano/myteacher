@@ -100,7 +100,9 @@ public class TeacherDAOMongo implements TeacherDAO {
                     (Location)d.get(ELEMENT_LOCATION),
                     (LessonsAgenda)d.get(ELEMENT_AGENDA),
                     (File)d.get(ELEMENT_CURRICULUM),
-                    (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT));
+                    (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT),
+                    d.getString(ELEMENT_EMAIL),
+                    d.getString(ELEMENT_NROCELL));
         }
         return null;
     }
@@ -123,7 +125,10 @@ public class TeacherDAOMongo implements TeacherDAO {
                 .append(ELEMENT_LOCATION, teacher.getPosition())
                 .append(ELEMENT_AGENDA, teacher.getTeacherAgenda())
                 .append(ELEMENT_CURRICULUM, teacher.getResume())
-                .append(ELEMENT_AVAILABLE_TIME_SLOT,teacher.getAvailableTimeSlot());
+                .append(ELEMENT_AVAILABLE_TIME_SLOT,teacher.getAvailableTimeSlot())
+                .append(ELEMENT_EMAIL,teacher.getEmail())
+                .append(ELEMENT_NROCELL,teacher.getNroCell());
+
          }
 
 
