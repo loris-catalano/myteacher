@@ -10,6 +10,7 @@ public interface ReviewDAO{
     String COLLECTION_REVIEWS = "Reviews";
 
     String ELEMENT_REVIEW_ID = "reviewId";
+    String ELEMENT_STARS = "stars";
     String ELEMENT_REVIEW_TITLE = "title";
     String ELEMENT_REVIEW_BODY = "body";
     String ELEMENT_STUDENT_ID = "studentId";

@@ -4,22 +4,28 @@ package it.unisannio.gruppo3.entities;
 import java.time.Instant;
 
 public class Review {
-    public Review(Long id, int stars, String title, String body, Student student, Teacher teacher, Instant creationTime) {
-        this.id = id;
+
+    public Review(Long reviewId, int stars, String title, String body, Long studentId, Long teacherId, Instant creationTime) {
+        this.reviewId = reviewId;
         this.stars = stars;
         this.title = title;
         this.body = body;
-        this.student = student;
-        this.teacher = teacher;
+        this.studentId = studentId;
+        this.teacherId = teacherId;
         this.creationTime = creationTime;
     }
 
-    public Long getId() {
-        return id;
+    //Called when there is a POST request
+    public Review(){
+        this.creationTime = Instant.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(Long id) {
+        this.reviewId = id;
     }
 
     public int getStars() {
@@ -45,21 +51,21 @@ public class Review {
     public void setBody(String body) {
         this.body = body;
     }
-
-    public Student getStudent() {
-        return student;
+    public Long getStudentId() {
+        return studentId;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+
+    public void setStudentId(Long id) {
+        this.studentId = id;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Long getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacherId(Long id) {
+        this.teacherId = id;
     }
 
     public Instant getCreationTime() {
@@ -67,15 +73,15 @@ public class Review {
     }
 
     public void setCreationTime(Instant creationTime) {
-        this.creationTime = creationTime;
+        this.creationTime = Instant.now();
     }
 
-    private Long id;
+    private Long reviewId;
     private int stars;
     private String title;
     private String body;
-    private Student student;
-    private Teacher teacher;
+    private Long studentId;
+    private Long teacherId;
     private Instant creationTime;
 }
 

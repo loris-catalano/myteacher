@@ -7,6 +7,7 @@ import com.mongodb.client.*;
 
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import com.mongodb.client.result.UpdateResult;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
 import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Review;
@@ -16,7 +17,9 @@ import org.bson.Document;
 import com.mongodb.client.model.Filters;
 
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ReviewDAOMongo implements ReviewDAO{
@@ -84,7 +87,7 @@ public class ReviewDAOMongo implements ReviewDAO{
     public Long createReview(Review review){
         try {
             updateHighestId();
-            review.setId(highestID);
+            review.setReviewId(highestID);
             Document reviewDocument = reviewToDocument(review);
             this.reviewsCollection.insertOne(reviewDocument);
             return highestID;
@@ -100,13 +103,26 @@ public class ReviewDAOMongo implements ReviewDAO{
      * @return The document
      */
     private Document reviewToDocument(Review review) {
-        //TODO
-        return null;
+        return new Document()
+                .append(ELEMENT_REVIEW_ID, review.getReviewId())
+                .append(ELEMENT_STARS, review.getStars())
+                .append(ELEMENT_REVIEW_TITLE, review.getTitle())
+                .append(ELEMENT_REVIEW_BODY, review.getBody())
+                .append(ELEMENT_STUDENT_ID, review.getStudentId())
+                .append(ELEMENT_TEACHER_ID, review.getTeacherId())
+                .append(ELEMENT_CREATION_TIME, review.getCreationTime());
     }
 
     private Review reviewFromDocument(Document document){
-        //TODO
-        return null;
+        return new Review(
+                document.getLong(ELEMENT_REVIEW_ID),
+                document.getInteger(ELEMENT_STARS),
+                document.getString(ELEMENT_REVIEW_TITLE),
+                document.getString(ELEMENT_REVIEW_BODY),
+                document.getLong(ELEMENT_STUDENT_ID),
+                document.getLong(ELEMENT_TEACHER_ID),
+                ((Date) document.get(ELEMENT_CREATION_TIME)).toInstant()
+        );
     }
 
 
@@ -137,9 +153,9 @@ public class ReviewDAOMongo implements ReviewDAO{
      */
     @Override
     public Review updateReview(Review review) {
-        Document filter = new Document(ELEMENT_REVIEW_ID, review.getId());
+        Document filter = new Document(ELEMENT_REVIEW_ID, review.getReviewId());
         Document updateOperation = new Document("$set", reviewToDocument(review));
-        reviewsCollection.updateOne(filter, updateOperation);
+        UpdateResult res = reviewsCollection.updateOne(filter, updateOperation);
 
         return review;
     }

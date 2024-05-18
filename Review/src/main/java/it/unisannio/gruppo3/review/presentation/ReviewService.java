@@ -1,7 +1,11 @@
 package it.unisannio.gruppo3.review.presentation;
 
 import it.unisannio.gruppo3.entities.Review;
+import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.review.logic.*;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.*;
 
 import jakarta.ws.rs.*;
@@ -64,4 +68,27 @@ public class ReviewService {
             return Response.serverError().build();
         }
     }
+    /*
+    @GET
+    @Path("/student")
+    public Response getStudentByReview(@QueryParam("studentId") Long studentId) {
+        Client client = ClientBuilder.newClient();
+        try {
+            WebTarget target = client.target("http://localhost:8081/student/studentService/" + studentId);
+
+            System.out.println("Target: "+target);
+            Response response = target.request(MediaType.APPLICATION_JSON).get();
+            System.out.println("Response: "+response);
+            if(response.getStatus() == Response.Status.OK.getStatusCode()){
+                Student student = response.readEntity(Student.class);
+                return Response.ok(student).build();
+            }else if(response.getStatus() == Response.Status.NOT_FOUND.getStatusCode()){
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        }finally {
+            client.close();
+        }
+    }*/
 }
