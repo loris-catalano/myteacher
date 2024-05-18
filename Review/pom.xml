@@ -9,18 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>it.unisannio.gruppo3</groupId>
-	<artifactId>MyTeacher</artifactId>
+	<artifactId>Review</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>MyTeacher</name>
-	<description>MyTeacher REST API</description>
-    <modules>
-        <module>Teacher</module>
-        <module>teacher</module>
-		<module>Teacher</module>
-		<module>Teacher</module>
-	</modules>
-    <properties>
+	<name>Review</name>
+	<description>Review</description>
+	<properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -41,6 +34,42 @@
 			<version>3.1.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>bson</artifactId>
+			<version>4.11.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<version>4.9.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-core</artifactId>
+			<version>4.9.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>it.unisannio.gruppo3</groupId>
+			<artifactId>Entities</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
