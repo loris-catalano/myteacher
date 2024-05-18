@@ -16,7 +16,10 @@ public interface StudentDAO {
     String ELEMENT_COMPLETED_REVIEWS = "completedReviews";
     String ELEMENT_AGENDA = "agenda";
     String ELEMENT_ID = "id";
+    String ELEMENT_EMAIL="email";
+    String ELEMENT_NROCELL="nroCell";
 
+    String COLLECTION_HIGHEST_ID = "HighestId";
     String ELEMENT_HIGHEST_ID = "highestId";
 
     boolean dropDB();
