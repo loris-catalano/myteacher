@@ -10,4 +10,7 @@ public interface TeacherLogic {
     Teacher updateTeacher(Teacher teacher);
 
     boolean deleteTeacher(Long id);
+
+    
+
 }
