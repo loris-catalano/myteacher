@@ -1,7 +1,7 @@
 package it.unisannio.gruppo3.teacher.logic;
 
 import it.unisannio.gruppo3.entities.Teacher;
-
+//
 public interface TeacherLogic {
     Long createTeacher(Teacher teacher);
 

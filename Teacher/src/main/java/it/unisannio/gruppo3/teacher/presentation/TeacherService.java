@@ -40,7 +40,7 @@ public class TeacherService {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-
+//
     @PUT
     public Response updateTeacher(Teacher teacher) {
 
