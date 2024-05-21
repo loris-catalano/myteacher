@@ -3,16 +3,20 @@ package it.unisannio.gruppo3.entities;
 import java.util.List;
 
 public class Student {
-    public Student(String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda) {
-        this.id = null;     //the id will be set by us when creating
+    public Student(String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda,String email,String nroCell) {
+        this.id = null;//the id will be set by us when creating
+        this.email=email;
+        this.nroCell=nroCell;
         this.firstName = firstName;
         this.lastName = lastName;
         this.lessonBonusPoints = lessonBonusPoints;
         this.completedReviews = completedReviews;
         this.studentAgenda = studentAgenda;
     }
-    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda) {
+    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda,String email,String nroCell) {
         this.id = id;
+        this.email=email;
+        this.nroCell=nroCell;
         this.firstName = firstName;
         this.lastName = lastName;
         this.lessonBonusPoints = lessonBonusPoints;
@@ -54,7 +58,12 @@ public class Student {
     public void setStudentAgenda(LessonsAgenda studentAgenda) {
         this.studentAgenda = studentAgenda;
     }
-
+    public String getNroCell() {
+        return this.nroCell;
+    }
+    public String getEmail() {
+        return this.email;
+    }
 
     private Long id;
     private String firstName;
@@ -62,5 +71,7 @@ public class Student {
     private int lessonBonusPoints;
     private List<Review> completedReviews;
     private LessonsAgenda studentAgenda;
+    private String email;
+    private String nroCell;
 }
 
