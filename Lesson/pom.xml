@@ -10,8 +10,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>it.unisannio.gruppo3</groupId>
-
     <artifactId>Lesson</artifactId>
 
     <version>0.0.1-SNAPSHOT</version>
@@ -40,12 +38,6 @@
             <groupId>it.unisannio.gruppo3</groupId>
             <artifactId>Teacher</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
