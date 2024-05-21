@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/studs")
+@Path("/studentService")
 public class StudentService {
     StudentLogic logic;
 
