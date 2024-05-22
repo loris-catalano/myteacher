@@ -48,11 +48,6 @@ public class StudentService {
         return Response.ok(students).build();
     }
 
-
-    public Response searchStudentsByFirstName(@QueryParam("firstName") String fName) {
-        return null;
-    }
-
     @PUT
     public Response updateStudent(Student student) {
         Student studentUpdated = logic.updateStudent(student);
