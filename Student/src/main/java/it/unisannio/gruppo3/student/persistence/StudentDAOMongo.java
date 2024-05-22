@@ -106,7 +106,9 @@ public class StudentDAOMongo implements StudentDAO{
                 .append(ELEMENT_LNAME, student.getLastName())
                 .append(ELEMENT_LESSON_BONUS_POINTS, student.getLessonBonusPoints())
                 .append(ELEMENT_COMPLETED_REVIEWS, student.getCompletedReviews())
-                .append(ELEMENT_AGENDA, student.getStudentAgenda());
+                .append(ELEMENT_AGENDA, student.getStudentAgenda())
+                .append(ELEMENT_EMAIL,student.getEmail())
+                .append(ELEMENT_NROCELL,student.getNroCell());
     }
 
     private Student studentFromDocument(Document document){
@@ -117,7 +119,9 @@ public class StudentDAOMongo implements StudentDAO{
                     document.getString(ELEMENT_LNAME),
                     document.getInteger(ELEMENT_LESSON_BONUS_POINTS),
                     (List<Review>) document.get(ELEMENT_COMPLETED_REVIEWS),
-                    (LessonsAgenda) document.get(ELEMENT_AGENDA)
+                    (LessonsAgenda) document.get(ELEMENT_AGENDA),
+                    document.getString(ELEMENT_EMAIL),
+                    document.getString(ELEMENT_NROCELL)
                     );
         else return null;
     }

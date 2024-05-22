@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Path("/studs")
+@Path("/studentService")
 public class StudentService {
     StudentLogic logic;
 
@@ -46,11 +46,6 @@ public class StudentService {
     public Response getAllStudents() {
         ArrayList<Student> students = logic.getAllStudents();
         return Response.ok(students).build();
-    }
-
-
-    public Response searchStudentsByFirstName(@QueryParam("firstName") String fName) {
-        return null;
     }
 
     @PUT

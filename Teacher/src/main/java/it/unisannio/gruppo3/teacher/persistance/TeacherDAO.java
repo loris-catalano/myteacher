@@ -20,16 +20,16 @@ public interface TeacherDAO {
     String ELEMENT_AGENDA = "agenda";
     String ELEMENT_CURRICULUM="curriculum";
     String ELEMENT_AVAILABLE_TIME_SLOT="availableTimeSlot";
+    String ELEMENT_EMAIL="email";
+    String ELEMENT_NROCELL="nroCell";
 
-    String COLLECTION_HIGHEST_ID = "HighestId";
-    String ELEMENT_HIGHEST_ID = "hId";
+    String ELEMENT_HIGHEST_ID = "highestId";
 
     boolean createDB();
 
     boolean dropDB();
 
     Teacher getTeacher(Long id) ;
-//
 
     Long createTeacher(Teacher teacher);
 

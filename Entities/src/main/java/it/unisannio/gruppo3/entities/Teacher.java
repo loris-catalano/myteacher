@@ -7,7 +7,7 @@ import java.util.List;
 public class Teacher {
 
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,8 +19,10 @@ public class Teacher {
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
+        this.nroCell=nroCell;
+        this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,6 +34,8 @@ public class Teacher {
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
+        this.nroCell=nroCell;
+        this.email=email;
     }
     public Teacher(){}
 
@@ -51,6 +55,18 @@ public class Teacher {
     public String getLastName() {
         return lastName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNroCell() {
+        return nroCell;
+    }
+
+    public void setNroCell(String nroCell) {this.nroCell = nroCell;}
+
+    public void setEmail(String email){this.email=email;}
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
@@ -132,7 +148,8 @@ public class Teacher {
     private Time availableTimeSlot;
     private LessonsAgenda teacherAgenda;
     private File resume;
-
+    private String email;
+    private String nroCell;
 
 }
 
