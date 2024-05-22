@@ -41,4 +41,29 @@ public class TeacherService {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
+//
+    @PUT
+    public Response updateTeacher(Teacher teacher) {
+
+        Teacher teacherUpdated = logic.updateTeacher(teacher);
+
+        return Response.ok(teacherUpdated).build();
+
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteTeacher(@PathParam("id") Long id) {
+
+        boolean isDeleted = logic.deleteTeacher(id);
+
+        if(isDeleted) {
+            return Response.noContent().build();
+        } else {
+            return Response.serverError().build();
+        }
+
+    }
+
+
 }

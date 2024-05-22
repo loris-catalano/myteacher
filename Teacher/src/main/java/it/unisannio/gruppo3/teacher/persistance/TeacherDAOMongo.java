@@ -5,6 +5,7 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
+import com.mongodb.client.result.DeleteResult;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
 import it.unisannio.gruppo3.entities.*;
 import org.bson.Document;
@@ -153,13 +154,18 @@ public class TeacherDAOMongo implements TeacherDAO {
 
     @Override
     public Teacher updateTeacher(Teacher teacher) {
-        return null;
+    Document filter = new Document(ELEMENT_ID, teacher.getId());
+    Document update = teacherToDocument(teacher);
+
+    collection.updateOne(filter, new Document("$set", update));
+
+    return teacher;
     }
+//
 
     @Override
     public boolean deleteTeacher(Long id) {
-        return false;
-    }
+        return collection.deleteOne(Filters.eq(ELEMENT_ID,id)).wasAcknowledged();}
 
     @Override
     public boolean closeConnection() {

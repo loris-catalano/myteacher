@@ -1,7 +1,7 @@
 package it.unisannio.gruppo3.teacher.logic;
 
 import it.unisannio.gruppo3.entities.Teacher;
-
+//
 public interface TeacherLogic {
     Long createTeacher(Teacher teacher);
 
@@ -10,4 +10,7 @@ public interface TeacherLogic {
     Teacher updateTeacher(Teacher teacher);
 
     boolean deleteTeacher(Long id);
+
+    
+
 }
