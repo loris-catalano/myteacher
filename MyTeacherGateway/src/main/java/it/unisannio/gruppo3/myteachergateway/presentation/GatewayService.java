@@ -1,15 +1,12 @@
-package presentation;
+package it.unisannio.gruppo3.myteachergateway.presentation;
 
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
-import logic.GatewayLogic;
-import logic.GatewayLogicImpl;
-import okhttp3.*;
-
-import static okhttp3.Response.*;
+import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogic;
+import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogicImpl;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -21,7 +18,6 @@ public class GatewayService {
     public GatewayService() {
         logic = new GatewayLogicImpl();
     }
-
 
     @GET
     @Path("/student/studentService/{id}")
@@ -35,7 +31,4 @@ public class GatewayService {
         Teacher teacher = logic.getTeacher(id);
         return Response.ok(teacher).build();
     }
-
-
-
 }

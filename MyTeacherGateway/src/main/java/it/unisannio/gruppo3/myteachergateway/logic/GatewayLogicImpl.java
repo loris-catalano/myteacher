@@ -1,4 +1,4 @@
-package logic;
+package it.unisannio.gruppo3.myteachergateway.logic;
 
 import com.google.gson.Gson;
 import it.unisannio.gruppo3.entities.Student;
