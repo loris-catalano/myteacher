@@ -1,3 +1,15 @@
+# Rest API scheme
+
+![alt Rest API scheme](Brainstorming_-_Rest_API_scheme.jpg)
+
+
+# Use case diagrams
+
+![alt Use case diagrams](Brainstorming_-_Use_case_diagrams.jpg)
+
+
+# UML Class Diagram (draft)
+
 ```mermaid
 classDiagram
   class Teacher {
