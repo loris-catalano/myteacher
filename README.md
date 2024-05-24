@@ -1,90 +1,101 @@
+# Rest API scheme
+
+![alt Rest API scheme](Brainstorming_-_Rest_API_scheme.jpg)
+
+
+# Use case diagrams
+
+![alt Use case diagrams](Brainstorming_-_Use_case_diagrams.jpg)
+
+
+# UML Class Diagram (draft)
+
 ```mermaid
 classDiagram
-  class Docente {
-    Nome: String
-    Cognome: String
-    materie: list<String>
-    età: int
+  class Teacher {
+    id: Long
+    Name: String
+    Surname: String
+    subjects: List<String>
+    age: int
     premium: boolean
-    recensioniRicevute: list<Recensione>
-    posizione: Localita
-    fasciaOrariaDisponibile: Time
-    agendaDoc: AgendaLezioni
-    curriculum: File
-    answerToReview(answer: String): HttpResponse
-    insertLecture(lez: Lezione, agendaDoc: AgendaLezioni): HttpResponse
-    richiestaPremium(pagPrem: PagamentoPremium): HttpResponse
-    deleteLecture(lez: Lezione, agendaDoc: AgendaLezioni): HttpResponse
+    receivedReviews: list<Review>
+    location: Location
+    availableTimeSlot: Time
+    teacherSchedule: LessonSchedule
+    resume: File
+    email: String
+    cellNum: String
   }
   
-  class Studente {
-    Nome: String
-    Cognome: String
-    puntiBonusLezione: int
-    recensioniEffettuate: list<Recensione>
-    agendaStudente: AgendaLezioni
+  class Student {
+    id: Long
+    Name: String
+    Surname: String
+    bonusPoints: int
+    completedReviews: List<Review>
+    studentAgenda: LessonsAgenda
+    email: String
+    cellNum: String
   }
   
-  class Localita {
-    città: String
-    via: String
-    civ: int
-    docente: Docente
+  class Location {
+    city: String
+    street: String
+    houseNumber: int
+    teacher: Teacher
   }
   
-  class Lezione {
-    prezzo: int
-    materia: String
-    docente: Docente
-    data: Date
-    student: Studente
-    agendaStudente: AgendaLezioni
-    agentaDocente: AgendaLezioni
+  class Lesson {
+    price: int
+    subject: String
+    teacher: Teacher
+    date: Date
+    student: Student
+    studentSchedule: LessonSchedule
+    teacherSchedule: LessonSchedule
   }
   
-  class Recensione {
-    stelle: int
-    studente: Studente
-    docente: Docente
+  class Review {
+    id: Long
+    stars: int
+    title: String
+    body: String
+    studentId: Long
+    teacherId: Long
+    creationTime: Instant
   }
   
-  class AgendaLezioni {
-    lezioni: list<Lezione>
+  class LessonsAgenda {
+    id: Long
+    lessons: ArrayList<Lesson>
   }
   
-  class ListaLezioniPrecedenti {
-    // methods and attributes
+  class Payment {
+    amount: double
   }
   
-  class Pagamento {
-    importo: double
+  class LessonPayment {
+    lesson: Lesson
+    teacher: Teacher
+    student: Student
   }
   
-  class PagamentoLezione {
-    Lezione: Lezione
-    docente: Docente
-    studente: Studente
-  }
-  
-  class PagamentoPremium {
-    docente: Docente
+  class PremiumPayment {
+    teacher: Teacher
   }
 
-  Docente "0..*" -- "0..*" Studente
-  Docente "1..1" -- "1..1" Localita
-  Studente "1..1" -- "0..*" Lezione
-  Studente "1..1" -- "0..*" Recensione
-  Docente "1..1" -- "0..*" Recensione
-  AgendaLezioni "1..1" -- "0..*" Lezione
-  Docente "1..1" -- "1..1" AgendaLezioni
-  Studente "1..1" -- "1..1" AgendaLezioni
-  Docente "1..1" -- "1..1" ListaLezioniPrecedenti
-  Studente "1..1" -- "1..1" ListaLezioniPrecedenti
-  Studente "1..1" -- "0..*" PagamentoLezione
-  Lezione "1..1" -- "1..1" PagamentoLezione
-  Docente "1..1" -- "1..1" PagamentoLezione
-  ListaLezioniPrecedenti "1..1" -- "0..*" Lezione
-  AgendaLezioni <|-- ListaLezioniPrecedenti
-  Pagamento <|-- PagamentoLezione
-  Pagamento <|-- PagamentoPremium
-  PagamentoPremium "1..N" -- "1..1" Docente
+  Teacher "0..*" -- "0..*" Student
+  Teacher "1..1" -- "1..1" Location
+  Student "1..1" -- "0..*" Lesson
+  Student "1..1" -- "0..*" Review
+  Teacher "1..1" -- "0..*" Review
+  LessonsAgenda "1..1" -- "0..*" Lesson
+  Teacher "1..1" -- "1..1" LessonsAgenda
+  Student "1..1" -- "1..1" LessonsAgenda
+  Student "1..1" -- "0..*" LessonPayment
+  Lesson "1..1" -- "1..1" LessonPayment
+  Teacher "1..1" -- "1..1" LessonPayment
+  Payment <|-- LessonPayment
+  Payment <|-- PremiumPayment
+  PremiumPayment "1..N" -- "1..1" Teacher

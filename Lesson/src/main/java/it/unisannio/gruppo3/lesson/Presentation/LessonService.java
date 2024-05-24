@@ -1,7 +1,5 @@
 package it.unisannio.gruppo3.lesson.Presentation;
 
-
-
 import it.unisannio.gruppo3.entities.Lesson;
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;
