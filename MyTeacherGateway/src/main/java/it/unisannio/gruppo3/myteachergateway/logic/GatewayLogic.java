@@ -1,4 +1,4 @@
-package logic;
+package it.unisannio.gruppo3.myteachergateway.logic;
 
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;

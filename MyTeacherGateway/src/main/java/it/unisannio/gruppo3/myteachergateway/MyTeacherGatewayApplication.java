@@ -4,7 +4,7 @@ import jakarta.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import presentation.GatewayService;
+import it.unisannio.gruppo3.myteachergateway.presentation.GatewayService;
 
 @ApplicationPath("myTeacher")
 @SpringBootApplication
