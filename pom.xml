@@ -23,10 +23,13 @@
 	<description>MyTeacher REST API</description>
 
     <modules>
-        <module>Entities</module>
+		<module>Entities</module>
         <module>Student</module>
 		<module>Teacher</module>
 		<module>Review</module>
+		<module>Lesson</module>
+		<module>LessonsAgenda</module>
+		<module>MyTeacherGateway</module>
 	</modules>
 
     <properties>
@@ -52,13 +55,13 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
+			</plugins>
+		</build>
 
 </project>
