@@ -8,8 +8,6 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.result.UpdateResult;
-import it.unisannio.gruppo3.entities.LessonsAgenda;
-import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Review;
 import org.bson.Document;
 
@@ -17,10 +15,8 @@ import org.bson.Document;
 import com.mongodb.client.model.Filters;
 
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ReviewDAOMongo implements ReviewDAO{
     private static String host = System.getenv("MONGO_ADDRESS");
@@ -125,6 +121,15 @@ public class ReviewDAOMongo implements ReviewDAO{
         );
     }
 
+    @Override
+    public ArrayList<Review>  getReviewsByStars(int stars){
+        ArrayList<Review> reviews=new ArrayList<>();
+        for(Document doc: reviewsCollection.find(Filters.eq("stars",stars))){
+            Review review=reviewFromDocument(doc);
+            reviews.add(review);
+        }
+        return reviews;
+    }
 
     @Override
     public Review getReview(Long id) {
@@ -169,5 +174,6 @@ public class ReviewDAOMongo implements ReviewDAO{
     public boolean closeConnection() {
         return false;
     }
+
 
 }

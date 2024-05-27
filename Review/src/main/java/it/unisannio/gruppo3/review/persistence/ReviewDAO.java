@@ -35,4 +35,5 @@ public interface ReviewDAO{
 
     boolean closeConnection();
 
+    ArrayList<Review>  getReviewsByStars(int stars);
 }

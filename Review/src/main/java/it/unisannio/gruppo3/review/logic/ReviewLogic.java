@@ -14,4 +14,5 @@ public interface ReviewLogic {
     boolean deleteReview(Long id);
 
     ArrayList<Review> getAllReviews();
-}
+
+     ArrayList<Review> getReviewsByStars(int stars) ;}
