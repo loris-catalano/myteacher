@@ -37,6 +37,17 @@ public class ReviewService {
     }
 
     @GET
+    @Path("/stars")
+    public Response getReviewsByStars(@QueryParam("stars") int stars){
+        ArrayList<Review> reviews=logic.getReviewsByStars(stars);
+        if (reviews!= null){
+            return Response.ok(reviews).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+
+    @GET
     @Path("/{id}")
     public Response getReview(@PathParam("id") Long id){
         Review reviewById = logic.getReview(id);
@@ -51,6 +62,8 @@ public class ReviewService {
         ArrayList<Review> reviews = logic.getAllReviews();
         return Response.ok(reviews).build();
     }
+
+
 
     @PUT
     public Response updateReview(Review review) {

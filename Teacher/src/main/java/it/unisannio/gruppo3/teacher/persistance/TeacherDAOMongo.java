@@ -5,7 +5,6 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-import com.mongodb.client.result.DeleteResult;
 import it.unisannio.gruppo3.entities.LessonsAgenda;
 import it.unisannio.gruppo3.entities.*;
 import org.bson.Document;
@@ -147,10 +146,7 @@ public class TeacherDAOMongo implements TeacherDAO {
         return null;
     }
 
-    @Override
-    public ArrayList<Teacher> getTeachersBySubject(String subject) {
-        return null;
-    }
+
 
     @Override
     public Teacher updateTeacher(Teacher teacher) {
@@ -171,4 +167,66 @@ public class TeacherDAOMongo implements TeacherDAO {
     public boolean closeConnection() {
         return false;
     }
+
+
+
+    @Override
+    public ArrayList<Teacher> getTeachersByAge(int age) {
+
+        ArrayList<Teacher> teachers = new ArrayList<>();
+
+        for(Document doc : collection.find(Filters.eq("age", age))) {
+
+            Teacher teacher = teacherFromDocument(doc);
+            teachers.add(teacher);
+
+        }
+
+        return teachers;
+
+    }
+
+    @Override
+    public ArrayList<Teacher> getTeachersByAgeGte(int age) {
+        ArrayList<Teacher> teachers = new ArrayList<>();
+
+        for(Document doc : collection.find(Filters.gte("age", age))) {
+
+            Teacher teacher = teacherFromDocument(doc);
+            teachers.add(teacher);
+        }
+        return teachers;
+    }
+
+    @Override
+    public ArrayList<Teacher> getTeachersByAgeLte(int age) {
+        ArrayList<Teacher> teachers=new ArrayList<>();
+        for(Document doc:collection.find(Filters.lte("age", age))){
+            Teacher teacher=teacherFromDocument((doc));
+                    teachers.add(teacher);
+        }
+return teachers;}
+
+    @Override
+    public ArrayList<Teacher> getTeachersBySubjects(String subject) {
+
+
+            ArrayList<Teacher> teachers = new ArrayList<>();
+
+
+
+            for(Document doc : collection.find(Filters.eq("subjects", subject))) {
+
+                Teacher teacher = teacherFromDocument(doc);
+                teachers.add(teacher);
+
+            }
+
+            return teachers;
+
+        }
+
+
 }
+
+

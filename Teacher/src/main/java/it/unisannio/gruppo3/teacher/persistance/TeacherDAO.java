@@ -35,11 +35,20 @@ public interface TeacherDAO {
 
     ArrayList<Teacher> getTeachers();
 
-    ArrayList<Teacher> getTeachersBySubject(String subject);
-
     Teacher updateTeacher(Teacher teacher);
 
     boolean deleteTeacher(Long id);
 
     boolean closeConnection();
+
+    ArrayList<Teacher> getTeachersByAge(int age);
+
+    ArrayList<Teacher> getTeachersByAgeGte(int age);
+
+    ArrayList<Teacher> getTeachersByAgeLte(int age);
+
+    ArrayList<Teacher> getTeachersBySubjects(String subject);
+
+
+
 }

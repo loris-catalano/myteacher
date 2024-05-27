@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -17,10 +18,71 @@ import java.net.URI;
 public class TeacherService {
     TeacherLogic logic;
 
+
     public TeacherService(){
         logic = new TeacherLogicImpl();
     }
-    
+
+    @GET
+    @Path("/subjects")
+    public Response getTeachersBySubjects(@QueryParam("subjects") String subject) {
+
+        ArrayList<Teacher> teachers = logic.getTeachersBySubjects(subject);
+
+        if(teachers != null){
+            return Response.ok(teachers).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+
+    }
+
+
+
+
+    @GET
+    @Path("/age")
+    public Response getTeachersByAge(@QueryParam("age") int age) {
+
+        ArrayList<Teacher> teachers = logic.getTeachersByAge(age);
+
+        if(teachers != null){
+            return Response.ok(teachers).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+
+    }
+
+    @GET
+    @Path("/age/gte")
+    public Response getTeachersByAgeGte(@QueryParam("age") int age) {
+
+        ArrayList<Teacher> teachers = logic.getTeachersByAgeGte(age);
+
+        if(teachers != null){
+            return Response.ok(teachers).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+
+    }
+
+    @GET
+    @Path("/age/lte")
+    public Response getTeachersByAgeLte(@QueryParam("age") int age) {
+
+        ArrayList<Teacher> teachers = logic.getTeachersByAgeLte(age);
+
+        if(teachers != null){
+            return Response.ok(teachers).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+
+    }
+
+
     @POST
     public Response createTeacher(Teacher teacher){
         Long createdTeacherId = logic.createTeacher(teacher);
@@ -63,7 +125,7 @@ public class TeacherService {
             return Response.serverError().build();
         }
 
-    }
 
 
-}
+
+}}

@@ -37,4 +37,7 @@ public class ReviewLogicImpl implements ReviewLogic{
     public ArrayList<Review> getAllReviews() {
         return reviewDAO.getAllReviews();
     }
+
+    @Override
+    public ArrayList<Review> getReviewsByStars(int stars){ return reviewDAO.getReviewsByStars(stars);}
 }
