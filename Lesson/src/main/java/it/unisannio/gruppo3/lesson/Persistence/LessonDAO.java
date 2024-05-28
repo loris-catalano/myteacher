@@ -18,7 +18,7 @@ public interface LessonDAO {
     String ELEMENT_TEACHER_ID="teacherId";
     String ELEMENT_ID = "id";
 
-    String ELEMENT_HIGHEST_ID = "highestId";
+    String ELEMENT_HIGHEST_ID = "highest";
 
 
     boolean dropDB();

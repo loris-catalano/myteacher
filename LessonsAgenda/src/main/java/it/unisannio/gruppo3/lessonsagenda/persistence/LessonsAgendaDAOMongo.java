@@ -42,7 +42,7 @@ public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{ private static S
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.lessonsAgendasCollection = database.getCollection(COLLECTION_LESSONS_AGENDAS);
 
-        this.highestID = lessonsAgendasCollection.find(Filters.exists(ELEMENT_HIGHEST_ID)).first().getLong(ELEMENT_HIGHEST_ID);
+        this.highestID = lessonsAgendasCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
 
         this.createDB();
     }
@@ -64,14 +64,12 @@ public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{ private static S
     }
 
     private void updateHighestId(){
-        // Define the filter to match the document to update. In this case we search for documents that have a field "ELEMENT_HIGHEST_ID"
-        Document filter = new Document(ELEMENT_HIGHEST_ID, new Document("$exists", true));
-
         // Define the update operation
         Document updateOperation = new Document("$set", new Document(ELEMENT_HIGHEST_ID, ++highestID));
 
         // Perform the update
-        lessonsAgendasCollection.updateOne(filter, updateOperation);
+        //lessonsAgendasCollection.updateOne(filter, updateOperation);
+        lessonsAgendasCollection.updateOne(Filters.eq("_id","counter"), updateOperation);
     }
 
     public Long createLessonsAgenda(LessonsAgenda lessonsAgenda){

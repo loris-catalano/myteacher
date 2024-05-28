@@ -48,7 +48,7 @@ public class ReviewDAOMongo implements ReviewDAO{
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.reviewsCollection = database.getCollection(COLLECTION_REVIEWS);
 
-        this.highestID = reviewsCollection.find(Filters.exists(ELEMENT_HIGHEST_ID)).first().getLong(ELEMENT_HIGHEST_ID);
+        this.highestID = reviewsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
 
         this.createDB();
     }
@@ -70,14 +70,11 @@ public class ReviewDAOMongo implements ReviewDAO{
     }
 
     private void updateHighestId(){
-        // Define the filter to match the document to update. In this case we search for documents that have a field "ELEMENT_HIGHEST_ID"
-        Document filter = new Document(ELEMENT_HIGHEST_ID, new Document("$exists", true));
-
         // Define the update operation
         Document updateOperation = new Document("$set", new Document(ELEMENT_HIGHEST_ID, ++highestID));
 
         // Perform the update
-        reviewsCollection.updateOne(filter, updateOperation);
+        reviewsCollection.updateOne(Filters.eq("_id","counter"), updateOperation);
     }
 
     public Long createReview(Review review){

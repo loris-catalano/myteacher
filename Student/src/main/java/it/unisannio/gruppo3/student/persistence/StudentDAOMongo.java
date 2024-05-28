@@ -49,7 +49,7 @@ public class StudentDAOMongo implements StudentDAO{
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.studentsCollection = database.getCollection(COLLECTION_STUDENTS);
 
-        this.highestID = studentsCollection.find(Filters.exists(ELEMENT_HIGHEST_ID)).first().getLong(ELEMENT_HIGHEST_ID);
+        this.highestID = studentsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
 
         this.createDB();
     }
@@ -71,14 +71,11 @@ public class StudentDAOMongo implements StudentDAO{
     }
 
     private void updateHighestId(){
-        // Define the filter to match the document to update. In this case we search for documents that have a field "ELEMENT_HIGHEST_ID"
-        Document filter = new Document(ELEMENT_HIGHEST_ID, new Document("$exists", true));
-
         // Define the update operation
         Document updateOperation = new Document("$set", new Document(ELEMENT_HIGHEST_ID, ++highestID));
 
         // Perform the update
-        studentsCollection.updateOne(filter, updateOperation);
+        studentsCollection.updateOne(Filters.eq("_id","counter"), updateOperation);
     }
 
     public Long createStudent(Student student){

@@ -12,7 +12,7 @@ public interface LessonsAgendaDAO {
     String ELEMENT_ID = "id";
     String ELEMENT_LESSONS = "lessons";
 
-    String ELEMENT_HIGHEST_ID = "highestId";
+    String ELEMENT_HIGHEST_ID = "highest";
 
     boolean dropDB();
 

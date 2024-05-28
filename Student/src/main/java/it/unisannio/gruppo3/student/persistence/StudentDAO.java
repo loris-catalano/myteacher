@@ -19,8 +19,7 @@ public interface StudentDAO {
     String ELEMENT_EMAIL="email";
     String ELEMENT_NROCELL="nroCell";
 
-    String COLLECTION_HIGHEST_ID = "HighestId";
-    String ELEMENT_HIGHEST_ID = "highestId";
+    String ELEMENT_HIGHEST_ID = "highest";
 
     boolean dropDB();
 

@@ -39,7 +39,7 @@ public class TeacherDAOMongo implements TeacherDAO {
         this.database = mongoClient.getDatabase(DATABASE_NAME);
         this.collection = database.getCollection(COLLECTION_TEACHERS);
 
-        this.highestID = collection.find(Filters.exists(ELEMENT_HIGHEST_ID)).first().getLong(ELEMENT_HIGHEST_ID);
+        this.highestID = collection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
         this.createDB();
     }
 
@@ -63,15 +63,11 @@ public class TeacherDAOMongo implements TeacherDAO {
     }
 
     private void updateHighestId(){
-        // Define the filter to match the document to update. In this case we search for documents that have a field "ELEMENT_HIGHEST_ID"
-        Document filter = new Document(ELEMENT_HIGHEST_ID, new Document("$exists", true));
-
         // Define the update operation
         Document updateOperation = new Document("$set", new Document(ELEMENT_HIGHEST_ID, ++highestID));
 
         // Perform the update
-        collection.updateOne(filter, updateOperation);
-
+        collection.updateOne(Filters.eq("_id","counter"), updateOperation);
     }
 
 
@@ -205,25 +201,19 @@ public class TeacherDAOMongo implements TeacherDAO {
             Teacher teacher=teacherFromDocument((doc));
                     teachers.add(teacher);
         }
-return teachers;}
+        return teachers;
+    }
 
     @Override
     public ArrayList<Teacher> getTeachersBySubjects(String subject) {
-
-
             ArrayList<Teacher> teachers = new ArrayList<>();
 
-
-
             for(Document doc : collection.find(Filters.eq("subjects", subject))) {
-
                 Teacher teacher = teacherFromDocument(doc);
                 teachers.add(teacher);
-
             }
 
             return teachers;
-
         }
 
 
