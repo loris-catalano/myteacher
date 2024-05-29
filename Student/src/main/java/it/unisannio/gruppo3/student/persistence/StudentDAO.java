@@ -39,4 +39,6 @@ public interface StudentDAO {
     boolean deleteStudent(Long id);
 
     boolean closeConnection();
+
+    Long getNextId();
 }

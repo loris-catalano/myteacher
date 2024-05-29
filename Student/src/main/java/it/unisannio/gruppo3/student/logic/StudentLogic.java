@@ -14,4 +14,6 @@ public interface StudentLogic {
     boolean deleteStudent(Long id);
 
     ArrayList<Student> getAllStudents();
+
+    Long getNextId();
 }

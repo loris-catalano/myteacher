@@ -7,7 +7,7 @@ import java.util.List;
 public class Teacher {
 
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,7 +22,7 @@ public class Teacher {
         this.nroCell=nroCell;
         this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, File resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -128,11 +128,11 @@ public class Teacher {
         this.teacherAgenda = teacherAgenda;
     }
 
-    public File getResume() {
+    public String getResume() {
         return resume;
     }
 
-    public void setResume(File resume) {
+    public void setResume(String resume) {
         this.resume = resume;
     }
 
@@ -147,7 +147,7 @@ public class Teacher {
     private Location position;
     private Time availableTimeSlot;
     private LessonsAgenda teacherAgenda;
-    private File resume;
+    private String resume;
     private String email;
     private String nroCell;
 

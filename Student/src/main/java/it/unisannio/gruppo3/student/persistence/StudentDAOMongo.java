@@ -175,4 +175,15 @@ public class StudentDAOMongo implements StudentDAO{
         return false;
     }
 
+    @Override
+    public Long getNextId() {
+        Document result = studentsCollection.find().sort(new Document(ELEMENT_ID, -1)).first();
+        if (result == null) {
+            return 1L;
+        }
+        return result.getLong(ELEMENT_ID) + 1;
+
+    }
+
+
 }
