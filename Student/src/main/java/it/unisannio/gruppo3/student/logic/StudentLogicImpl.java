@@ -37,4 +37,7 @@ public class StudentLogicImpl implements StudentLogic{
     public ArrayList<Student> getAllStudents() {
         return studentDAO.getAllStudents();
     }
+
+    @Override
+    public Long getNextId() {return studentDAO.getNextId();}
 }

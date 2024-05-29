@@ -75,7 +75,6 @@ public class TeacherDAOMongo implements TeacherDAO {
     @Override
     public Teacher getTeacher(Long id) {
         Document d = collection.find(Filters.eq(ELEMENT_ID,id)).first();
-        System.out.println(teacherFromDocument(d));
         return teacherFromDocument(d);
     }
 
@@ -90,7 +89,7 @@ public class TeacherDAOMongo implements TeacherDAO {
                     (List<Review>)d.get(COLLECTION_RECEIVED_REVIEWS),
                     (Location)d.get(ELEMENT_LOCATION),
                     (LessonsAgenda)d.get(ELEMENT_AGENDA),
-                    (File)d.get(ELEMENT_CURRICULUM),
+                    d.getString(ELEMENT_CURRICULUM),
                     (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT),
                     d.getString(ELEMENT_EMAIL),
                     d.getString(ELEMENT_NROCELL));
