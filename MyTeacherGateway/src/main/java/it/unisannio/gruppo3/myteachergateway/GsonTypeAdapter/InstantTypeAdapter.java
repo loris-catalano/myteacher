@@ -9,7 +9,6 @@ import java.time.Instant;
 
 public class InstantTypeAdapter extends TypeAdapter<Instant> {
 
-
     @Override
     public Instant read(JsonReader in) throws IOException {
         return Instant.parse(in.nextString()); // Deserializza Instant dalla sua rappresentazione stringa

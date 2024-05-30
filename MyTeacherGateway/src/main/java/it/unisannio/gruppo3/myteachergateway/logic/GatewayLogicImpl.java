@@ -58,6 +58,8 @@ public class GatewayLogicImpl implements GatewayLogic  {
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                     .create();
 
+
+            System.out.println(responseBody);
             Student student = gson.fromJson(responseBody, Student.class);
             return student;
         } catch (IOException e) {
