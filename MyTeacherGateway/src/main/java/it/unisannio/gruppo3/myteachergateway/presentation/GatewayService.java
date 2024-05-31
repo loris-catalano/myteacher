@@ -21,7 +21,7 @@ public class GatewayService {
     }
 
     @GET
-    @Path("/student/studentService/{id}")
+    @Path("/student/{id}")
     @RolesAllowed({"STUDENT", "TEACHER"})
     public Response getStudent(@PathParam("id") Long id) {
         Student student = logic.getStudent(id);
@@ -29,7 +29,7 @@ public class GatewayService {
     }
 
     @GET
-    @Path("/teacher/teacherService/{id}")
+    @Path("/teacher/{id}")
     @RolesAllowed({"STUDENT"})
     public Response getTeacher(@PathParam("id") Long id) {
         Teacher teacher = logic.getTeacher(id);

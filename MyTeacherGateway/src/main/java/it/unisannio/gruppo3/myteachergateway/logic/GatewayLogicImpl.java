@@ -9,11 +9,89 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 
+
 public class GatewayLogicImpl implements GatewayLogic  {
+    public static final String SERVER_IP = "localhost";
+
+    public static final String STUDENT_SERVICE_URL = "http://"+SERVER_IP+":8081/student/studentService/";
+    public static final String TEACHER_SERVICE_URL = "http://"+SERVER_IP+":8082/teacher/teacherService/";
+    public static final String REVIEW_SERVICE_URL = "http://"+SERVER_IP+":8083";
+    public static final String LESSON_SERVICE_URL = "http://"+SERVER_IP+":8084";
+    public static final String PAYMENT_SERVICE_URL = "http://"+SERVER_IP+":8085";
+    public static final String AGENDA_SERVICE_URL = "http://"+SERVER_IP+":8086";
+    public static final String BOOKING_SERVICE_URL = "http://"+SERVER_IP+":8087";
+    public static final String CHAT_SERVICE_URL = "http://"+SERVER_IP+":8088";
+
+
+    public GatewayLogicImpl(){
+    }
+
+    @Override
+    public Student getStudent(Long studentId) {
+        try {
+            String URL = String.format(STUDENT_SERVICE_URL + studentId);
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+            Response response = client.newCall(request).execute();
+            // Stampa il corpo della risposta
+            String responseBody = response.body().string();
+
+            if (response.code() != 200 ){
+                return null;
+            }
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+
+            System.out.println(responseBody);
+            Student student = gson.fromJson(responseBody, Student.class);
+            return student;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public Teacher getTeacher(Long teacherId) {
+        try {
+            String URL = String.format(TEACHER_SERVICE_URL + teacherId);
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+            Response response = client.newCall(request).execute();
+            // Stampa il corpo della risposta
+            String responseBody = response.body().string();
+
+            if (response.code() != 200 ){
+                return null;
+            }
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            Teacher teacher = gson.fromJson(responseBody, Teacher.class);
+            return teacher;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /*
     private final String studentAddress;
     private final String teacherAddress;
     public GatewayLogicImpl() {
@@ -97,5 +175,7 @@ public class GatewayLogicImpl implements GatewayLogic  {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
+
+
 }
