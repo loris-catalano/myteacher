@@ -2,6 +2,7 @@ package it.unisannio.gruppo3.myteachergateway;
 
 import jakarta.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import it.unisannio.gruppo3.myteachergateway.presentation.GatewayService;
@@ -14,5 +15,9 @@ public class MyTeacherGatewayApplication extends ResourceConfig {
 		SpringApplication.run(MyTeacherGatewayApplication.class, args);
 	}
 
-	public MyTeacherGatewayApplication(){register(GatewayService.class);}
+	public MyTeacherGatewayApplication(){
+		register(GatewayService.class);
+		register(RolesAllowedDynamicFeature.class);
+
+	}
 }
