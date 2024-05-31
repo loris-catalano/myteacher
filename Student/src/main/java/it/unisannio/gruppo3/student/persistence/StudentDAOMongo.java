@@ -174,12 +174,8 @@ public class StudentDAOMongo implements StudentDAO{
 
     @Override
     public Long getNextId() {
-        Document result = studentsCollection.find().sort(new Document(ELEMENT_ID, -1)).first();
-        if (result == null) {
-            return 1L;
-        }
-        return result.getLong(ELEMENT_ID) + 1;
-
+        Long actualHighestID = studentsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
+        return actualHighestID+1;
     }
 
 
