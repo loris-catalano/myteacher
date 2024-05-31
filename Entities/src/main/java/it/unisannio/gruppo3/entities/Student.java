@@ -1,6 +1,7 @@
 package it.unisannio.gruppo3.entities;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Student {
     public Student(String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda,String email,String nroCell) {
@@ -64,6 +65,34 @@ public class Student {
     public String getEmail() {
         return this.email;
     }
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", lessonBonusPoints=" + lessonBonusPoints +
+                ", completedReviews=" + completedReviews +
+                ", studentAgenda=" + studentAgenda +
+                ", email='" + email + '\'' +
+                ", nroCell='" + nroCell + '\'' +
+                '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return lessonBonusPoints == student.lessonBonusPoints &&
+                firstName.equals(student.firstName) &&
+                lastName.equals(student.lastName) &&
+                email.equals(student.email) &&
+                nroCell.equals(student.nroCell) &&
+                Objects.equals(id, student.id) &&
+                Objects.equals(completedReviews, student.completedReviews) &&
+                Objects.equals(studentAgenda, student.studentAgenda);
+    }
+
 
     private Long id;
     private String firstName;

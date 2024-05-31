@@ -2,14 +2,14 @@ package it.unisannio.gruppo3.student.persistence;
 
 import it.unisannio.gruppo3.entities.Student;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudentDAOMongoTest {
     static boolean init=false;
     static StudentDAO studentDAO;
@@ -30,16 +30,19 @@ public class StudentDAOMongoTest {
     }
 
     @Test
+    @Order(1)
     void createStudent() {
         Long nextId = studentDAO.getNextId();
         assertTrue(nextId > 0);
-        assertEquals(nextId, st1Id);
-        Long studentId = studentDAO.createStudent(st1);
-        assertEquals(studentId, st1Id);
+        assertEquals(nextId, st1Id+1);
+        Student stCreated = new Student(nextId, "Michele","Fuccio",0,null,null,"fra@gmail.com","1981288");
+        Long studentId = studentDAO.createStudent(stCreated);
+        assertEquals(studentId, st1Id+1);
         System.out.println("nextId = " + nextId);
     }
 
     @Test
+    @Order(2)
     void getStudent() {
         Student student = studentDAO.getStudent(st1Id);
         assertEquals(st1,student);
@@ -47,12 +50,14 @@ public class StudentDAOMongoTest {
 
 
     @Test
+    @Order(3)
     void getAllStudents() {
         ArrayList<Student> allStudents = studentDAO.getAllStudents();
         assertFalse(allStudents.isEmpty());
     }
 
     @Test
+    @Order(4)
     void updateStudent() {
         st1.setFirstName("Loris");
         Student student = studentDAO.updateStudent(st1);
@@ -60,6 +65,7 @@ public class StudentDAOMongoTest {
     }
 
     @Test
+    @Order(5)
     void deleteStudent() {
         studentDAO.deleteStudent(st1Id);
     }
