@@ -2,14 +2,19 @@ package it.unisannio.gruppo3.myteachergateway.logic;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;
 import it.unisannio.gruppo3.myteachergateway.GsonTypeAdapter.InstantTypeAdapter;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import jakarta.ws.rs.core.UriBuilder;
+import okhttp3.*;
+import okio.BufferedSink;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 import java.io.IOException;
+import java.net.URI;
 import java.time.Instant;
 
 
@@ -18,7 +23,7 @@ public class GatewayLogicImpl implements GatewayLogic  {
 
     public static final String STUDENT_SERVICE_URL = "http://"+SERVER_IP+":8081/student/studentService/";
     public static final String TEACHER_SERVICE_URL = "http://"+SERVER_IP+":8082/teacher/teacherService/";
-    public static final String REVIEW_SERVICE_URL = "http://"+SERVER_IP+":8083";
+    public static final String REVIEW_SERVICE_URL = "http://"+SERVER_IP+":8083/review/reviewService/";
     public static final String LESSON_SERVICE_URL = "http://"+SERVER_IP+":8084";
     public static final String PAYMENT_SERVICE_URL = "http://"+SERVER_IP+":8085";
     public static final String AGENDA_SERVICE_URL = "http://"+SERVER_IP+":8086";
@@ -39,28 +44,54 @@ public class GatewayLogicImpl implements GatewayLogic  {
                     .url(URL)
                     .get()
                     .build();
+
             Response response = client.newCall(request).execute();
-            // Stampa il corpo della risposta
+            if (response.code() != 200 )return null;
+
             String responseBody = response.body().string();
 
-            if (response.code() != 200 ){
-                return null;
-            }
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                     .create();
 
-
-            System.out.println(responseBody);
             Student student = gson.fromJson(responseBody, Student.class);
             return student;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
+    @Override
+    public jakarta.ws.rs.core.Response createStudent(Student student) {
+        try {
+            String URL = String.format(STUDENT_SERVICE_URL);
+            OkHttpClient client = new OkHttpClient();
 
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            String json = gson.toJson(student);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 201 )return null;
+
+            URI uri = UriBuilder.fromPath(response.header("location")).build();
+            return jakarta.ws.rs.core.Response.created(uri).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public Teacher getTeacher(Long teacherId) {
@@ -72,13 +103,14 @@ public class GatewayLogicImpl implements GatewayLogic  {
                     .url(URL)
                     .get()
                     .build();
-            Response response = client.newCall(request).execute();
-            // Stampa il corpo della risposta
-            String responseBody = response.body().string();
 
+            Response response = client.newCall(request).execute();
             if (response.code() != 200 ){
                 return null;
             }
+
+            String responseBody = response.body().string();
+
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                     .create();
@@ -87,95 +119,69 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return teacher;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
-    }
-
-    /*
-    private final String studentAddress;
-    private final String teacherAddress;
-    public GatewayLogicImpl() {
-        String studentHost = System.getenv("STUDENT_HOST");
-        String studentPort = System.getenv("STUDENT_PORT");
-        if (studentHost == null) {
-            studentHost = "localhost";
-        }
-        if (studentPort == null) {
-            studentPort = "8081";
-        }
-        studentAddress = "http://" + studentHost + ":" + studentPort;
-        String teacherHost = System.getenv("TEACHER_HOST");
-        String teacherPort = System.getenv("TEACHER_PORT");
-        if (teacherHost == null) {
-            teacherHost = "localhost";
-        }
-        if (teacherPort == null) {
-            teacherPort = "8082";
-        }
-        teacherAddress = "http://" + teacherHost + ":" + teacherPort;
     }
 
     @Override
-    public Student getStudent(Long studentId) {
+    public jakarta.ws.rs.core.Response createTeacher(Teacher teacher) {
         try {
-            String URL = String.format(studentAddress + "/student/studentService/" + studentId);
+            String URL = String.format(TEACHER_SERVICE_URL);
             OkHttpClient client = new OkHttpClient();
 
-            Request request = new Request.Builder()
-                    .url(URL)
-                    .get()
-                    .build();
-            Response response = client.newCall(request).execute();
-            // Stampa il corpo della risposta
-            String responseBody = response.body().string();
-
-            if (response.code() != 200 ){
-                return null;
-            }
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                     .create();
 
-
-            System.out.println(responseBody);
-            Student student = gson.fromJson(responseBody, Student.class);
-            return student;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-
-    @Override
-    public Teacher getTeacher(Long teacherId) {
-        try {
-            String URL = String.format(teacherAddress + "/teacher/teacherService/" + teacherId);
-            OkHttpClient client = new OkHttpClient();
+            String json = gson.toJson(teacher);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
 
             Request request = new Request.Builder()
                     .url(URL)
-                    .get()
+                    .post(body)
                     .build();
-            Response response = client.newCall(request).execute();
-            // Stampa il corpo della risposta
-            String responseBody = response.body().string();
 
-            if (response.code() != 200 ){
-                return null;
-            }
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 201 )return null;
+
+            URI uri = UriBuilder.fromPath(response.header("location")).build();
+            return jakarta.ws.rs.core.Response.created(uri).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public jakarta.ws.rs.core.Response createReview(Review review) {
+        try {
+            String URL = String.format(REVIEW_SERVICE_URL);
+            OkHttpClient client = new OkHttpClient();
+
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                     .create();
 
-            Teacher teacher = gson.fromJson(responseBody, Teacher.class);
-            return teacher;
+            String json = gson.toJson(review);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 201 )return null;
+
+            URI uri = UriBuilder.fromPath(response.header("location")).build();
+            return jakarta.ws.rs.core.Response.created(uri).build();
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
-    }*/
-
-
+    }
 }
