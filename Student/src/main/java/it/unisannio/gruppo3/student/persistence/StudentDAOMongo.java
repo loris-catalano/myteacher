@@ -102,8 +102,8 @@ public class StudentDAOMongo implements StudentDAO{
                     document.getString(ELEMENT_FNAME),
                     document.getString(ELEMENT_LNAME),
                     document.getInteger(ELEMENT_LESSON_BONUS_POINTS),
-                    (List<Review>) document.get(ELEMENT_COMPLETED_REVIEWS),
-                    (LessonsAgenda) document.get(ELEMENT_AGENDA),
+                    document.getList(ELEMENT_COMPLETED_REVIEWS, Long.class),
+                    document.getLong(ELEMENT_AGENDA),
                     document.getString(ELEMENT_EMAIL),
                     document.getString(ELEMENT_NROCELL)
                     );
@@ -164,6 +164,4 @@ public class StudentDAOMongo implements StudentDAO{
         Long actualHighestID = studentsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
         return actualHighestID+1;
     }
-
-
 }

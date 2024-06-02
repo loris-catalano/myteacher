@@ -1,9 +1,6 @@
 package it.unisannio.gruppo3.myteachergateway.logic;
 
-import it.unisannio.gruppo3.entities.Lesson;
-import it.unisannio.gruppo3.entities.Review;
-import it.unisannio.gruppo3.entities.Student;
-import it.unisannio.gruppo3.entities.Teacher;
+import it.unisannio.gruppo3.entities.*;
 import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
@@ -22,4 +19,8 @@ public interface GatewayLogic {
      Lesson getLesson(Long id);
 
      Response createLesson(Lesson lesson);
+
+     LessonsAgenda getLessonsAgenda(Long id);
+
+     Response createLessonsAgenda(LessonsAgenda lessonsAgenda);
 }
