@@ -2,6 +2,7 @@ package it.unisannio.gruppo3.myteachergateway.logic;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.unisannio.gruppo3.entities.Lesson;
 import it.unisannio.gruppo3.entities.Review;
 import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;
@@ -26,7 +27,7 @@ public class GatewayLogicImpl implements GatewayLogic  {
     private static final String STUDENT_SERVICE_URL = "http://"+SERVER_IP+":8081/student/studentService/";
     private static final String TEACHER_SERVICE_URL = "http://"+SERVER_IP+":8082/teacher/teacherService/";
     private static final String REVIEW_SERVICE_URL = "http://"+SERVER_IP+":8083/review/reviewService/";
-    private static final String LESSON_SERVICE_URL = "http://"+SERVER_IP+":8084";
+    private static final String LESSON_SERVICE_URL = "http://"+SERVER_IP+":8084/lesson/lessonService/";
     private static final String PAYMENT_SERVICE_URL = "http://"+SERVER_IP+":8085";
     private static final String AGENDA_SERVICE_URL = "http://"+SERVER_IP+":8086";
     private static final String BOOKING_SERVICE_URL = "http://"+SERVER_IP+":8087";
@@ -192,7 +193,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
-
     @Override
     public jakarta.ws.rs.core.Response createReview(Review review) {
         try {
@@ -210,6 +210,67 @@ public class GatewayLogicImpl implements GatewayLogic  {
                     .url(URL)
                     .post(body)
                     .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 201 )return null;
+
+            URI uri = UriBuilder.fromPath(response.header("location")).build();
+            return jakarta.ws.rs.core.Response.created(uri).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @Override
+    public Lesson getLesson(Long lessonId) {
+        try {
+            String URL = String.format(LESSON_SERVICE_URL + lessonId);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return gson.fromJson(responseBody, Lesson.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    @Override
+    public jakarta.ws.rs.core.Response createLesson(Lesson lesson) {
+        try {
+            String URL = String.format(LESSON_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .create();
+
+            String json = gson.toJson(lesson);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
 
             Response response = client.newCall(request).execute();
 

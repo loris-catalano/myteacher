@@ -16,7 +16,7 @@ public interface TeacherDAO {
     String COLLECTION_SUBJECTS = "subjects";
     String COLLECTION_RECEIVED_REVIEWS = "receivedReviews";
     String ELEMENT_LOCATION = "pos";
-    String ELEMENT_ID = "id";
+    String ELEMENT_ID = "_id";
     String ELEMENT_AGENDA = "agenda";
     String ELEMENT_CURRICULUM="curriculum";
     String ELEMENT_AVAILABLE_TIME_SLOT="availableTimeSlot";
@@ -25,7 +25,6 @@ public interface TeacherDAO {
 
     String ELEMENT_HIGHEST_ID = "highest";
 
-    boolean createDB();
 
     boolean dropDB();
 

@@ -15,15 +15,13 @@ public interface StudentDAO {
     String ELEMENT_LESSON_BONUS_POINTS = "lessonBonusPoints";
     String ELEMENT_COMPLETED_REVIEWS = "completedReviews";
     String ELEMENT_AGENDA = "agenda";
-    String ELEMENT_ID = "id";
+    String ELEMENT_ID = "_id";
     String ELEMENT_EMAIL="email";
     String ELEMENT_NROCELL="nroCell";
 
     String ELEMENT_HIGHEST_ID = "highest";
 
     boolean dropDB();
-
-    boolean createDB();
 
     Long createStudent(Student student);
 

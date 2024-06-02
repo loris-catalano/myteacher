@@ -50,23 +50,10 @@ public class StudentDAOMongo implements StudentDAO{
         this.studentsCollection = database.getCollection(COLLECTION_STUDENTS);
 
         this.highestID = studentsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
-
-        this.createDB();
     }
 
     public boolean dropDB() {
         database.drop();
-        return true;
-    }
-
-    public boolean createDB() {
-        try {
-            IndexOptions indexOptions = new IndexOptions().unique(true);
-            String resultCreateIndex = this.studentsCollection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-        } catch (DuplicateKeyException e) {
-            System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
-            return false;
-        }
         return true;
     }
 

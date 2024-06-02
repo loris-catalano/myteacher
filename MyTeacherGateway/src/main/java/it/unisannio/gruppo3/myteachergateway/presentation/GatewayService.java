@@ -94,4 +94,21 @@ public class GatewayService {
         else return Response.serverError().build();
     }
 
+
+    @GET
+    @Path("/lessons/{id}")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getLesson(@PathParam("id") Long id) {
+        Lesson lesson = logic.getLesson(id);
+        return Response.ok(lesson).build();
+    }
+
+    @POST
+    @Path("/lessons/")
+    @RolesAllowed({"TEACHER"})
+    public Response createLesson(Lesson lesson) {
+        return logic.createLesson(lesson);
+    }
+
+
 }

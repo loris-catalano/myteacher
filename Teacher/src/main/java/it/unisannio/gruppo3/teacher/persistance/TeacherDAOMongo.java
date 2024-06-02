@@ -40,21 +40,9 @@ public class TeacherDAOMongo implements TeacherDAO {
         this.collection = database.getCollection(COLLECTION_TEACHERS);
 
         this.highestID = collection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
-        this.createDB();
     }
 
-    @Override
-    public boolean createDB() {
-        try {
-            IndexOptions indexOptions = new IndexOptions().unique(true);
-            String resultCreateIndex = this.collection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-        } catch (DuplicateKeyException e) {
-            System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
-            return false;
-        }
-        return true;
 
-    }
 
     @Override
     public boolean dropDB() {
