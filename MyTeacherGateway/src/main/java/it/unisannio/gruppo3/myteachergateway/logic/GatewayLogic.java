@@ -5,6 +5,8 @@ import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
+
 public interface GatewayLogic {
      Student getStudent(Long studentId);
      Response createStudent(Student student);
@@ -14,7 +16,7 @@ public interface GatewayLogic {
 
      Response createReview(Review review);
 
+     Review getReview(Long id);
 
-     //Review getReview(Long reviewId);
-     //Review getReviews(int stars);
+
 }

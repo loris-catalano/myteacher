@@ -7,7 +7,7 @@ import java.util.List;
 public class Teacher {
 
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,7 +22,7 @@ public class Teacher {
         this.nroCell=nroCell;
         this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,11 +96,11 @@ public class Teacher {
         this.premium = premium;
     }
 
-    public List<Review> getReceivedReviews() {
+    public List<Long> getReceivedReviews() {
         return receivedReviews;
     }
 
-    public void setReceivedReviews(List<Review> receivedReviews) {
+    public void setReceivedReviews(List<Long> receivedReviews) {
         this.receivedReviews = receivedReviews;
     }
 
@@ -143,7 +143,7 @@ public class Teacher {
     private List<String> subjects;
     private int age;
     private boolean premium;
-    private List<Review> receivedReviews;
+    private List<Long> receivedReviews;
     private Location position;
     private Time availableTimeSlot;
     private LessonsAgenda teacherAgenda;

@@ -13,10 +13,8 @@ public class Lesson {
     private Date startLesson;
     private int duration;
     private Long studentId;
-    private LessonsAgenda studentAgenda;
-    private LessonsAgenda teacherAgenda;
 
-    public Lesson(Long id,int price, String subject, Long teacherId, Date startLesson,int duration,Long studentId, LessonsAgenda studentAgenda, LessonsAgenda teacherAgenda) {
+    public Lesson(Long id,int price, String subject, Long teacherId, Date startLesson,int duration,Long studentId) {
         this.id=id;
         this.price = price;
         this.subject = subject;
@@ -24,12 +22,10 @@ public class Lesson {
         this.startLesson=startLesson;
         this.duration=duration;
         this.studentId = studentId;
-        this.studentAgenda = studentAgenda;
-        this.teacherAgenda = teacherAgenda;
     }
     public Lesson (){}
 
-    public Lesson(int price, String subject, Long teacherId, Date startLesson,int duration, Long studentId, LessonsAgenda studentAgenda, LessonsAgenda teacherAgenda) {
+    public Lesson(int price, String subject, Long teacherId, Date startLesson,int duration, Long studentId) {
         this.id=null;
         this.price = price;
         this.subject = subject;
@@ -37,8 +33,6 @@ public class Lesson {
         this.startLesson=startLesson;
         this.duration=duration;
         this.studentId = studentId;
-        this.studentAgenda = studentAgenda;
-        this.teacherAgenda = teacherAgenda;
     }
     public int getPrice() {
         return price;
@@ -87,22 +81,6 @@ public class Lesson {
         this.teacherId=teacherId;
     }
 
-
-    public LessonsAgenda getStudentAgenda() {
-        return studentAgenda;
-    }
-
-    public void setStudentAgenda(LessonsAgenda studentAgenda) {
-        this.studentAgenda = studentAgenda;
-    }
-
-    public LessonsAgenda getTeacherAgenda() {
-        return teacherAgenda;
-    }
-
-    public void setTeacherAgenda(LessonsAgenda teacherAgenda) {
-        this.teacherAgenda = teacherAgenda;
-    }
 
     public Long getId(){
         return this.id;

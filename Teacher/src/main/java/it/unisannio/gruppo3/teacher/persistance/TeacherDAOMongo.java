@@ -86,7 +86,7 @@ public class TeacherDAOMongo implements TeacherDAO {
                     d.getInteger(ELEMENT_AGE),
                     d.getBoolean(ELEMENT_PREMIUM),
                     (List<String>)d.get(COLLECTION_SUBJECTS),
-                    (List<Review>)d.get(COLLECTION_RECEIVED_REVIEWS),
+                    d.getList(COLLECTION_RECEIVED_REVIEWS, Long.class),
                     (Location)d.get(ELEMENT_LOCATION),
                     (LessonsAgenda)d.get(ELEMENT_AGENDA),
                     d.getString(ELEMENT_CURRICULUM),

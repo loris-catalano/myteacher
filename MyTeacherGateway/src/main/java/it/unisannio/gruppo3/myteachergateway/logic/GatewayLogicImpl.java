@@ -16,29 +16,39 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class GatewayLogicImpl implements GatewayLogic  {
     public static final String SERVER_IP = "localhost";
 
-    public static final String STUDENT_SERVICE_URL = "http://"+SERVER_IP+":8081/student/studentService/";
-    public static final String TEACHER_SERVICE_URL = "http://"+SERVER_IP+":8082/teacher/teacherService/";
-    public static final String REVIEW_SERVICE_URL = "http://"+SERVER_IP+":8083/review/reviewService/";
-    public static final String LESSON_SERVICE_URL = "http://"+SERVER_IP+":8084";
-    public static final String PAYMENT_SERVICE_URL = "http://"+SERVER_IP+":8085";
-    public static final String AGENDA_SERVICE_URL = "http://"+SERVER_IP+":8086";
-    public static final String BOOKING_SERVICE_URL = "http://"+SERVER_IP+":8087";
-    public static final String CHAT_SERVICE_URL = "http://"+SERVER_IP+":8088";
+    private static final String STUDENT_SERVICE_URL = "http://"+SERVER_IP+":8081/student/studentService/";
+    private static final String TEACHER_SERVICE_URL = "http://"+SERVER_IP+":8082/teacher/teacherService/";
+    private static final String REVIEW_SERVICE_URL = "http://"+SERVER_IP+":8083/review/reviewService/";
+    private static final String LESSON_SERVICE_URL = "http://"+SERVER_IP+":8084";
+    private static final String PAYMENT_SERVICE_URL = "http://"+SERVER_IP+":8085";
+    private static final String AGENDA_SERVICE_URL = "http://"+SERVER_IP+":8086";
+    private static final String BOOKING_SERVICE_URL = "http://"+SERVER_IP+":8087";
+    private static final String CHAT_SERVICE_URL = "http://"+SERVER_IP+":8088";
 
+    private static final String METHOD_GET = "GET";
+    private static final String METHOD_POST = "POST";
+    private static final String METHOD_PUT = "PUT";
+    private static final String METHOD_DELETE = "DELETE";
+
+
+    private final OkHttpClient client;
 
     public GatewayLogicImpl(){
+        client = new OkHttpClient();
     }
+
 
     @Override
     public Student getStudent(Long studentId) {
         try {
             String URL = String.format(STUDENT_SERVICE_URL + studentId);
-            OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
                     .url(URL)
@@ -54,6 +64,7 @@ public class GatewayLogicImpl implements GatewayLogic  {
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                     .create();
 
+
             Student student = gson.fromJson(responseBody, Student.class);
             return student;
         } catch (IOException e) {
@@ -66,7 +77,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
     public jakarta.ws.rs.core.Response createStudent(Student student) {
         try {
             String URL = String.format(STUDENT_SERVICE_URL);
-            OkHttpClient client = new OkHttpClient();
 
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
@@ -97,7 +107,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
     public Teacher getTeacher(Long teacherId) {
         try {
             String URL = String.format(TEACHER_SERVICE_URL + teacherId);
-            OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
                     .url(URL)
@@ -127,7 +136,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
     public jakarta.ws.rs.core.Response createTeacher(Teacher teacher) {
         try {
             String URL = String.format(TEACHER_SERVICE_URL);
-            OkHttpClient client = new OkHttpClient();
 
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
@@ -154,11 +162,41 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+
+
+    @Override
+    public Review getReview(Long reviewId) {
+        try {
+            String URL = String.format(REVIEW_SERVICE_URL + reviewId);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return gson.fromJson(responseBody, Review.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     @Override
     public jakarta.ws.rs.core.Response createReview(Review review) {
         try {
             String URL = String.format(REVIEW_SERVICE_URL);
-            OkHttpClient client = new OkHttpClient();
 
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(Instant.class, new InstantTypeAdapter())

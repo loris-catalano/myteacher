@@ -11,6 +11,7 @@ import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogicImpl;
 import jakarta.ws.rs.core.UriBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -25,7 +26,7 @@ public class GatewayService {
 
 
     @GET
-    @Path("/student/{id}")
+    @Path("/students/{id}")
     @RolesAllowed({"TEACHER"})
     public Response getStudent(@PathParam("id") Long id) {
         Student student = logic.getStudent(id);
@@ -33,7 +34,7 @@ public class GatewayService {
     }
 
     @POST
-    @Path("/student/")
+    @Path("/students/")
     @PermitAll
     public Response createStudent(Student student) {
         return logic.createStudent(student);
@@ -41,7 +42,7 @@ public class GatewayService {
 
 
     @GET
-    @Path("/teacher/{id}")
+    @Path("/teachers/{id}")
     @RolesAllowed({"STUDENT"})
     public Response getTeacher(@PathParam("id") Long id) {
         Teacher teacher = logic.getTeacher(id);
@@ -49,15 +50,41 @@ public class GatewayService {
     }
 
     @POST
-    @Path("/teacher/")
+    @Path("/teachers/")
     @PermitAll
     public Response createTeacher(Teacher teacher) {
         return logic.createTeacher(teacher);
     }
 
 
+    @GET
+    @Path("/teachers/{id}/reviews")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getTeacherReviews(@PathParam("id") Long teacherId) {
+        Teacher teacher = logic.getTeacher(teacherId);
+        ArrayList<Long> reviewsIds = (ArrayList<Long>) teacher.getReceivedReviews();
+
+        if (reviewsIds==null) return Response.noContent().build();
+
+        ArrayList<Review> reviews = new ArrayList<>();
+
+        for(Long reviewId: reviewsIds){
+            reviews.add(logic.getReview(reviewId));
+        }
+
+        return Response.ok(reviews).build();
+    }
+
+    @GET
+    @Path("/reviews/{id}")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getReview(@PathParam("id") Long id) {
+        Review review = logic.getReview(id);
+        return Response.ok(review).build();
+    }
+
     @POST
-    @Path("/review/")
+    @Path("/reviews/")
     @RolesAllowed({"STUDENT"})
     public Response createReview(Review review) {
         //if the ids of the student and the teacher don't exist there is an error
