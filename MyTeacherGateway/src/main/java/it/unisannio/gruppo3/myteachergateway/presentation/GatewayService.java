@@ -107,7 +107,33 @@ public class GatewayService {
     @Path("/lessons/")
     @RolesAllowed({"TEACHER"})
     public Response createLesson(Lesson lesson) {
+        LessonsAgenda teacherAgenda = logic.getTeacher(lesson.getTeacherId()).getTeacherAgenda();
+        logic.updateLessonsAgenda(teacherAgenda);
         return logic.createLesson(lesson);
+    }
+
+
+    @GET
+    @Path("/lessonsAgendas/{id}")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getLessonsAgenda(@PathParam("id") Long id) {
+        LessonsAgenda lessonsAgenda = logic.getLessonsAgenda(id);
+        return Response.ok(lessonsAgenda).build();
+    }
+
+    @POST
+    @Path("/lessonsAgendas/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response createLessonsAgenda(LessonsAgenda lessonsAgenda) {
+        return logic.createLessonsAgenda(lessonsAgenda);
+    }
+
+
+    @PUT
+    @Path("/lessonsAgendas/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response updateLessonsAgenda(LessonsAgenda lessonsAgenda) {
+        return logic.updateLessonsAgenda(lessonsAgenda);
     }
 
 

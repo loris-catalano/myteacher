@@ -335,4 +335,34 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return null;
         }
     }
+
+    public jakarta.ws.rs.core.Response updateLessonsAgenda(LessonsAgenda lessonsAgenda){
+        try {
+            String URL = String.format(LESSONS_AGENDA_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .create();
+
+            String json = gson.toJson(lessonsAgenda);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .put(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 200 )return null;
+
+            return jakarta.ws.rs.core.Response.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 }

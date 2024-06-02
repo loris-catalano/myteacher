@@ -23,4 +23,6 @@ public interface GatewayLogic {
      LessonsAgenda getLessonsAgenda(Long id);
 
      Response createLessonsAgenda(LessonsAgenda lessonsAgenda);
+
+     Response updateLessonsAgenda(LessonsAgenda lessonsAgenda);
 }
