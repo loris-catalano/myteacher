@@ -5,11 +5,12 @@ import java.time.Instant;
 
 public class Review {
 
-    public Review(Long reviewId, int stars, String title, String body, Long studentId, Long teacherId, Instant creationTime) {
-        this.reviewId = reviewId;
+    public Review(Long id, int stars, String title, String body, String answer, Long studentId, Long teacherId, Instant creationTime) {
+        this.id = id;
         this.stars = stars;
         this.title = title;
         this.body = body;
+        this.answer = answer;
         this.studentId = studentId;
         this.teacherId = teacherId;
         this.creationTime = creationTime;
@@ -20,12 +21,12 @@ public class Review {
         this.creationTime = Instant.now();
     }
 
-    public Long getReviewId() {
-        return reviewId;
+    public Long getId() {
+        return id;
     }
 
-    public void setReviewId(Long id) {
-        this.reviewId = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getStars() {
@@ -51,10 +52,16 @@ public class Review {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public String getAnswer() {return answer;}
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
     public Long getStudentId() {
         return studentId;
     }
-
 
     public void setStudentId(Long id) {
         this.studentId = id;
@@ -76,10 +83,11 @@ public class Review {
         this.creationTime = Instant.now();
     }
 
-    private Long reviewId;
+    private Long id;
     private int stars;
     private String title;
     private String body;
+    private String answer;
     private Long studentId;
     private Long teacherId;
     private Instant creationTime;

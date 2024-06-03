@@ -160,7 +160,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
     }
 
 
-
     @Override
     public Review getReview(Long reviewId) {
         try {
@@ -188,6 +187,8 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return null;
         }
     }
+
+
 
     @Override
     public jakarta.ws.rs.core.Response createReview(Review review) {
@@ -219,6 +220,61 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    @Override
+    public jakarta.ws.rs.core.Response updateReview(Review review) {
+        try {
+            String URL = String.format(REVIEW_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            String json = gson.toJson(review);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .put(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 200 )return null;
+
+            return jakarta.ws.rs.core.Response.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public jakarta.ws.rs.core.Response deleteReview(Long id) {
+        try {
+            String URL = String.format(REVIEW_SERVICE_URL + id);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .delete()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 204 && response.code() != 202 )return null;
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return jakarta.ws.rs.core.Response.noContent().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public Lesson getLesson(Long lessonId) {
@@ -247,7 +303,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return null;
         }
     }
-
 
     @Override
     public jakarta.ws.rs.core.Response createLesson(Lesson lesson) {

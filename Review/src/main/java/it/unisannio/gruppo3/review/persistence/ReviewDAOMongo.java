@@ -68,7 +68,7 @@ public class ReviewDAOMongo implements ReviewDAO{
     public Long createReview(Review review){
         try {
             updateHighestId();
-            review.setReviewId(highestID);
+            review.setId(highestID);
             Document reviewDocument = reviewToDocument(review);
             this.reviewsCollection.insertOne(reviewDocument);
             return highestID;
@@ -85,10 +85,11 @@ public class ReviewDAOMongo implements ReviewDAO{
      */
     private Document reviewToDocument(Review review) {
         return new Document()
-                .append(ELEMENT_REVIEW_ID, review.getReviewId())
+                .append(ELEMENT_REVIEW_ID, review.getId())
                 .append(ELEMENT_STARS, review.getStars())
                 .append(ELEMENT_REVIEW_TITLE, review.getTitle())
                 .append(ELEMENT_REVIEW_BODY, review.getBody())
+                .append(ELEMENT_REVIEW_ANSWER, review.getAnswer())
                 .append(ELEMENT_STUDENT_ID, review.getStudentId())
                 .append(ELEMENT_TEACHER_ID, review.getTeacherId())
                 .append(ELEMENT_CREATION_TIME, review.getCreationTime());
@@ -100,6 +101,7 @@ public class ReviewDAOMongo implements ReviewDAO{
                 document.getInteger(ELEMENT_STARS),
                 document.getString(ELEMENT_REVIEW_TITLE),
                 document.getString(ELEMENT_REVIEW_BODY),
+                document.getString(ELEMENT_REVIEW_ANSWER),
                 document.getLong(ELEMENT_STUDENT_ID),
                 document.getLong(ELEMENT_TEACHER_ID),
                 ((Date) document.get(ELEMENT_CREATION_TIME)).toInstant()
@@ -143,7 +145,7 @@ public class ReviewDAOMongo implements ReviewDAO{
      */
     @Override
     public Review updateReview(Review review) {
-        Document filter = new Document(ELEMENT_REVIEW_ID, review.getReviewId());
+        Document filter = new Document(ELEMENT_REVIEW_ID, review.getId());
         Document updateOperation = new Document("$set", reviewToDocument(review));
         UpdateResult res = reviewsCollection.updateOne(filter, updateOperation);
 

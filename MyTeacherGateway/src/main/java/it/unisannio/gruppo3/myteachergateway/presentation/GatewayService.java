@@ -94,6 +94,45 @@ public class GatewayService {
         else return Response.serverError().build();
     }
 
+    /**
+     * Enables the teacher to answer to a review.
+     */
+    @PUT
+    @Path("/reviews/{id}/answer")
+    @RolesAllowed({"TEACHER"})
+    public Response answerToReview(@PathParam("id")Long id, String answer) {
+        Review review = logic.getReview(id);
+        review.setAnswer(answer);
+        return logic.updateReview(review);
+    }
+
+    /**
+     * Enables the student to edit a review that he already made.
+     */
+    @PUT
+    @Path("/reviews/{id}/editbody")
+    @RolesAllowed({"STUDENT"})
+    public Response editBodyOfReview(@PathParam("id")Long id, String newBody) {
+        Review review = logic.getReview(id);
+        review.setBody(newBody);
+        return logic.updateReview(review);
+    }
+
+    @DELETE
+    @Path("/reviews/{id}")
+    @RolesAllowed({"STUDENT"})
+    public Response deleteReview(@PathParam("id")Long id) {
+        return logic.deleteReview(id);
+    }
+
+    /* I don't know if it is necessary
+    @PUT
+    @Path("/reviews/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response updateReview(Review review) {
+        return logic.updateReview(review);
+    }*/
+
 
     @GET
     @Path("/lessons/{id}")
@@ -129,12 +168,13 @@ public class GatewayService {
     }
 
 
+    /*Don't know if necessary
     @PUT
     @Path("/lessonsAgendas/")
     @RolesAllowed({"STUDENT","TEACHER"})
     public Response updateLessonsAgenda(LessonsAgenda lessonsAgenda) {
         return logic.updateLessonsAgenda(lessonsAgenda);
-    }
+    }*/
 
 
 }

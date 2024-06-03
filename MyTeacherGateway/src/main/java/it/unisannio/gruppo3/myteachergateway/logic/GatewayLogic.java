@@ -16,6 +16,10 @@ public interface GatewayLogic {
 
      Review getReview(Long id);
 
+     Response updateReview(Review review);
+
+     Response deleteReview(Long id);
+
      Lesson getLesson(Long id);
 
      Response createLesson(Lesson lesson);
@@ -25,4 +29,5 @@ public interface GatewayLogic {
      Response createLessonsAgenda(LessonsAgenda lessonsAgenda);
 
      Response updateLessonsAgenda(LessonsAgenda lessonsAgenda);
+
 }
