@@ -21,12 +21,6 @@ public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{ private static S
     private final MongoDatabase database;
     private final MongoCollection<Document> lessonsAgendasCollection;
 
-    /**
-     * To always have a unique generated id I created a separate collection in MongoDB called
-     * "highestId", where there is only one document that has the "hId" field that contains the highest id,
-     * because we do them in progressive order so 1, 2, 3 etc. Every time a new user is created
-     * we update this progressive number in the DB and the highest number is assigned to the new user
-     */
     private Long highestID;
 
     public LessonsAgendaDAOMongo() {
@@ -43,8 +37,6 @@ public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{ private static S
         this.lessonsAgendasCollection = database.getCollection(COLLECTION_LESSONS_AGENDAS);
 
         this.highestID = lessonsAgendasCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
-
-        this.createDB();
     }
 
     public boolean dropDB() {
@@ -52,16 +44,6 @@ public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{ private static S
         return true;
     }
 
-    public boolean createDB() {
-        try {
-            IndexOptions indexOptions = new IndexOptions().unique(true);
-            String resultCreateIndex = this.lessonsAgendasCollection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-        } catch (DuplicateKeyException e) {
-            System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
-            return false;
-        }
-        return true;
-    }
 
     private void updateHighestId(){
         // Define the update operation

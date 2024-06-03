@@ -1,9 +1,10 @@
 package it.unisannio.gruppo3.entities;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Student {
-    public Student(String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda,String email,String nroCell) {
+    public Student(String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String nroCell) {
         this.id = null;//the id will be set by us when creating
         this.email=email;
         this.nroCell=nroCell;
@@ -13,7 +14,7 @@ public class Student {
         this.completedReviews = completedReviews;
         this.studentAgenda = studentAgenda;
     }
-    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Review> completedReviews, LessonsAgenda studentAgenda,String email,String nroCell) {
+    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String nroCell) {
         this.id = id;
         this.email=email;
         this.nroCell=nroCell;
@@ -46,16 +47,16 @@ public class Student {
     public void setLessonBonusPoints(int lessonBonusPoints) {
         this.lessonBonusPoints = lessonBonusPoints;
     }
-    public List<Review> getCompletedReviews() {
+    public List<Long> getCompletedReviews() {
         return completedReviews;
     }
-    public void setCompletedReviews(List<Review> completedReviews) {
+    public void setCompletedReviews(List<Long> completedReviews) {
         this.completedReviews = completedReviews;
     }
-    public LessonsAgenda getStudentAgenda() {
+    public Long getStudentAgenda() {
         return studentAgenda;
     }
-    public void setStudentAgenda(LessonsAgenda studentAgenda) {
+    public void setStudentAgenda(Long studentAgenda) {
         this.studentAgenda = studentAgenda;
     }
     public String getNroCell() {
@@ -64,13 +65,41 @@ public class Student {
     public String getEmail() {
         return this.email;
     }
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", lessonBonusPoints=" + lessonBonusPoints +
+                ", completedReviews=" + completedReviews +
+                ", studentAgenda=" + studentAgenda +
+                ", email='" + email + '\'' +
+                ", nroCell='" + nroCell + '\'' +
+                '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return lessonBonusPoints == student.lessonBonusPoints &&
+                firstName.equals(student.firstName) &&
+                lastName.equals(student.lastName) &&
+                email.equals(student.email) &&
+                nroCell.equals(student.nroCell) &&
+                Objects.equals(id, student.id) &&
+                Objects.equals(completedReviews, student.completedReviews) &&
+                Objects.equals(studentAgenda, student.studentAgenda);
+    }
+
 
     private Long id;
     private String firstName;
     private String lastName;
     private int lessonBonusPoints;
-    private List<Review> completedReviews;
-    private LessonsAgenda studentAgenda;
+    private List<Long> completedReviews;
+    private Long studentAgenda;
     private String email;
     private String nroCell;
 }

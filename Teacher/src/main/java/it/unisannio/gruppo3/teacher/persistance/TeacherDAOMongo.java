@@ -40,21 +40,9 @@ public class TeacherDAOMongo implements TeacherDAO {
         this.collection = database.getCollection(COLLECTION_TEACHERS);
 
         this.highestID = collection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
-        this.createDB();
     }
 
-    @Override
-    public boolean createDB() {
-        try {
-            IndexOptions indexOptions = new IndexOptions().unique(true);
-            String resultCreateIndex = this.collection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-        } catch (DuplicateKeyException e) {
-            System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
-            return false;
-        }
-        return true;
 
-    }
 
     @Override
     public boolean dropDB() {
@@ -86,8 +74,9 @@ public class TeacherDAOMongo implements TeacherDAO {
                     d.getInteger(ELEMENT_AGE),
                     d.getBoolean(ELEMENT_PREMIUM),
                     (List<String>)d.get(COLLECTION_SUBJECTS),
-                    (List<Review>)d.get(COLLECTION_RECEIVED_REVIEWS),
-                    (Location)d.get(ELEMENT_LOCATION),
+                    d.getList(COLLECTION_RECEIVED_REVIEWS, Long.class),
+                    d.getDouble(ELEMENT_LATITUDE),
+                    d.getDouble(ELEMENT_LONGITUDE),
                     (LessonsAgenda)d.get(ELEMENT_AGENDA),
                     d.getString(ELEMENT_CURRICULUM),
                     (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT),
@@ -112,7 +101,8 @@ public class TeacherDAOMongo implements TeacherDAO {
                 .append(ELEMENT_PREMIUM, teacher.isPremium())
                 .append (COLLECTION_SUBJECTS,teacher.getSubjects())
                 .append(COLLECTION_RECEIVED_REVIEWS,teacher.getReceivedReviews())
-                .append(ELEMENT_LOCATION, teacher.getPosition())
+                .append(ELEMENT_LATITUDE, teacher.getLatitude())
+                .append(ELEMENT_LONGITUDE, teacher.getLongitude())
                 .append(ELEMENT_AGENDA, teacher.getTeacherAgenda())
                 .append(ELEMENT_CURRICULUM, teacher.getResume())
                 .append(ELEMENT_AVAILABLE_TIME_SLOT,teacher.getAvailableTimeSlot())

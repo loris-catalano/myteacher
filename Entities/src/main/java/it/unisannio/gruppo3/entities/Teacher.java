@@ -7,7 +7,7 @@ import java.util.List;
 public class Teacher {
 
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -15,14 +15,15 @@ public class Teacher {
         this.premium=premium;
         this.subjects=subjects;
         this.receivedReviews=receivedReviews;
-        this.position=location;
+        this.latitude=latitude;
+        this.longitude=longitude;
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
         this.nroCell=nroCell;
         this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Review> receivedReviews, Location location, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,7 +31,8 @@ public class Teacher {
         this.premium=premium;
         this.subjects=subjects;
         this.receivedReviews=receivedReviews;
-        this.position=location;
+        this.latitude=latitude;
+        this.longitude=longitude;
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
@@ -96,21 +98,22 @@ public class Teacher {
         this.premium = premium;
     }
 
-    public List<Review> getReceivedReviews() {
+    public List<Long> getReceivedReviews() {
         return receivedReviews;
     }
 
-    public void setReceivedReviews(List<Review> receivedReviews) {
+    public void setReceivedReviews(List<Long> receivedReviews) {
         this.receivedReviews = receivedReviews;
     }
 
-    public Location getPosition() {
-        return position;
+    public Double getLatitude() {
+        return this.latitude;
     }
+    public void setLatitude(Double latitude) { this.latitude=latitude; }
+    public Double getLongitude() {return this.longitude;}
+    public void setLongitude(Double longitude) { this.longitude=longitude; }
 
-    public void setPosition(Location position) {
-        this.position = position;
-    }
+
 
     public Time getAvailableTimeSlot() {
         return availableTimeSlot;
@@ -143,8 +146,9 @@ public class Teacher {
     private List<String> subjects;
     private int age;
     private boolean premium;
-    private List<Review> receivedReviews;
-    private Location position;
+    private List<Long> receivedReviews;
+    private Double latitude;
+    private Double longitude;
     private Time availableTimeSlot;
     private LessonsAgenda teacherAgenda;
     private String resume;

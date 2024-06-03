@@ -46,7 +46,6 @@ public class LessonDAOMongo implements LessonDAO {
 
         this.highestID = lessonsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
 
-        this.createDB();
     }
 
 
@@ -54,18 +53,6 @@ public class LessonDAOMongo implements LessonDAO {
         database.drop();
         return true;
     }
-
-    public boolean createDB() {
-        try {
-            IndexOptions indexOptions = new IndexOptions().unique(true);
-            String resultCreateIndex = this.lessonsCollection.createIndex(Indexes.ascending(ELEMENT_ID), indexOptions);
-        } catch (DuplicateKeyException e) {
-            System.out.printf("duplicate field values encountered, couldn't create index: \t%s\n", e);
-            return false;
-        }
-        return true;
-    }
-
 
 
     private void updateHighestId(){
@@ -122,16 +109,12 @@ public class LessonDAOMongo implements LessonDAO {
     public static Document lessonToDocument(Lesson lesson) {
         return new Document()
                 .append(ELEMENT_ID, lesson.getId())
-                .append(ELEMENT_TEACHER_AGENDA, lesson.getTeacherAgenda())
-                .append(ELEMENT_STUDENT_AGENDA, lesson.getStudentAgenda())
                 .append(ELEMENT_STUDENT_ID, lesson.getStudentId())
                 .append(ELEMENT_TEACHER_ID, lesson.getTeacherId())
                 .append(ELEMENT_SUBJECT, lesson.getSubject())
                 .append(ELEMENT_PRICE, lesson.getPrice())
                 .append(ELEMENT_DURATION,lesson.getDuration())
                 .append(ELEMENT_LESSON_START,lesson.getStartLesson());
-
-
     }
 
     public static Lesson lessonFromDocument(Document document) {
@@ -143,9 +126,7 @@ public class LessonDAOMongo implements LessonDAO {
                     document.getLong(ELEMENT_TEACHER_ID),
                     (Date)document.get(ELEMENT_LESSON_START),
                     document.getInteger(ELEMENT_DURATION),
-                    document.getLong(ELEMENT_STUDENT_ID),
-                    (LessonsAgenda) document.get(ELEMENT_STUDENT_AGENDA),
-                    (LessonsAgenda) document.get(ELEMENT_TEACHER_AGENDA)
+                    document.getLong(ELEMENT_STUDENT_ID)
             );
         else
             return null;
