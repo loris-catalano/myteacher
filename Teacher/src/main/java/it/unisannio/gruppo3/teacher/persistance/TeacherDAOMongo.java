@@ -75,7 +75,8 @@ public class TeacherDAOMongo implements TeacherDAO {
                     d.getBoolean(ELEMENT_PREMIUM),
                     (List<String>)d.get(COLLECTION_SUBJECTS),
                     d.getList(COLLECTION_RECEIVED_REVIEWS, Long.class),
-                    (Location)d.get(ELEMENT_LOCATION),
+                    d.getDouble(ELEMENT_LATITUDE),
+                    d.getDouble(ELEMENT_LONGITUDE),
                     (LessonsAgenda)d.get(ELEMENT_AGENDA),
                     d.getString(ELEMENT_CURRICULUM),
                     (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT),
@@ -100,7 +101,8 @@ public class TeacherDAOMongo implements TeacherDAO {
                 .append(ELEMENT_PREMIUM, teacher.isPremium())
                 .append (COLLECTION_SUBJECTS,teacher.getSubjects())
                 .append(COLLECTION_RECEIVED_REVIEWS,teacher.getReceivedReviews())
-                .append(ELEMENT_LOCATION, teacher.getPosition())
+                .append(ELEMENT_LATITUDE, teacher.getLatitude())
+                .append(ELEMENT_LONGITUDE, teacher.getLongitude())
                 .append(ELEMENT_AGENDA, teacher.getTeacherAgenda())
                 .append(ELEMENT_CURRICULUM, teacher.getResume())
                 .append(ELEMENT_AVAILABLE_TIME_SLOT,teacher.getAvailableTimeSlot())
