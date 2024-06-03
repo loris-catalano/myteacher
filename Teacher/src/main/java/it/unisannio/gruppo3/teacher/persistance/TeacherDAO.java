@@ -15,7 +15,8 @@ public interface TeacherDAO {
     String ELEMENT_PREMIUM="premiumAcc";
     String COLLECTION_SUBJECTS = "subjects";
     String COLLECTION_RECEIVED_REVIEWS = "receivedReviews";
-    String ELEMENT_LOCATION = "pos";
+    String ELEMENT_LONGITUDE = "longitude";
+    String ELEMENT_LATITUDE = "latitude";
     String ELEMENT_ID = "_id";
     String ELEMENT_AGENDA = "agenda";
     String ELEMENT_CURRICULUM="curriculum";
