@@ -96,8 +96,8 @@ public PaymentDaoMongo(){
      */
     private Document paymentToDocument(Payment payment) {
         return new Document()
-                .append(ELEMENT_AMOUNT, payment.getAmount())
                 .append(ELEMENT_ID, payment.getId())
+                .append(ELEMENT_AMOUNT, payment.getAmount())
                 .append(ELEMENT_LESSON_ID, payment.getLessonId());
     }
 

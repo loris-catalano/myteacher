@@ -26,7 +26,7 @@ public interface GatewayLogic {
 
      Response createUser(User user);
 
-     Response getPayment(Long id);
+     Payment getPayment(Long id);
      Response createPayment(Payment payment);
 
 
