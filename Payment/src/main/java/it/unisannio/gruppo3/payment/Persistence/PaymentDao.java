@@ -8,11 +8,9 @@ public interface PaymentDao {
     String DATABASE_NAME = "myteacher";
     String COLLECTION_PAYMENTS = "Payments";
 
-
     String ELEMENT_ID= "_id";
     String ELEMENT_AMOUNT = "amount";
-    String ELEMENT_STUDENTID = "studentId";
-    String ELEMENT_TEACHERID = "teacherId";
+    String ELEMENT_LESSON_ID = "lessonId";
 
     String ELEMENT_HIGHEST_ID = "highest";
 

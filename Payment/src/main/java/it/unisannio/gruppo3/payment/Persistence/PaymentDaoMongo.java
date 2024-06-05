@@ -81,10 +81,9 @@ public PaymentDaoMongo(){
     public Payment paymentFromDocument(Document d){
         if(d!=null) {
             return new Payment(
-                    d.getDouble(ELEMENT_AMOUNT),
                     d.getLong(ELEMENT_ID),
-                    d.getLong(ELEMENT_TEACHERID),
-                    d.getLong(ELEMENT_STUDENTID));
+                    d.getDouble(ELEMENT_AMOUNT),
+                    d.getLong(ELEMENT_LESSON_ID));
         }
         return null;
     }
@@ -99,10 +98,7 @@ public PaymentDaoMongo(){
         return new Document()
                 .append(ELEMENT_AMOUNT, payment.getAmount())
                 .append(ELEMENT_ID, payment.getId())
-                .append(ELEMENT_TEACHERID, payment.getTeacherId())
-                .append(ELEMENT_STUDENTID, payment.getStudentId());
-
-
+                .append(ELEMENT_LESSON_ID, payment.getLessonId());
     }
 
 
