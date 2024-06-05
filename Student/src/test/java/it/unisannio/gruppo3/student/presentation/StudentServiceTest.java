@@ -1,176 +1,121 @@
 package it.unisannio.gruppo3.student.presentation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import it.unisannio.gruppo3.entities.Student;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import jakarta.ws.rs.core.Response;
+
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudentServiceTest {
     private static final String BASE_URI = "http://localhost:8081/student/studentService";
 
+    static StudentService studentService;
     static boolean init = false;
 
     static Long st1Id;
     static Student st1;
 
-    @BeforeAll
-    public static void setup() {
-        if (!init) {
-            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+   @BeforeAll
+   public static void setup() throws IOException {
+      if (!init) {
+        studentService = new StudentService();
 
-                st1 = new Student("Francesco", "Fuccio", 0, null, null, "fra@gmail.com", "1981288");
+        st1 = new Student("Francesco", "Fuccio", 0, null, null, "fra@gmail.com", "1981288");
 
-                ObjectMapper mapper = new ObjectMapper();
-                String jsonBody = mapper.writeValueAsString(st1);
+        // Chiama il metodo createStudent di StudentService per inserire lo studente
+        Response response = studentService.createStudent(st1);
 
-                HttpPost request = new HttpPost(BASE_URI);
-                StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
-                request.setEntity(entity);
+        // Verifica che la chiamata al metodo createStudent abbia avuto successo (status code 201)
+        assertEquals(201, response.getStatus());
 
-                HttpResponse response = httpClient.execute(request);
-                assertEquals(201, response.getStatusLine().getStatusCode());
+        // Estrai l'ID dello studente dalla risposta
+        String location = response.getLocation().toString();
+        String[] segments = location.split("/");
+        st1Id = Long.parseLong(segments[segments.length - 1]);
 
-                Header locationHeader = response.getFirstHeader("Location");
-                assertNotNull(locationHeader);
-                String location = locationHeader.getValue();
+        assertNotNull(st1Id);
+        st1.setId(st1Id);
 
-
-                String[] segments = location.split("/");
-                st1Id = Long.parseLong(segments[segments.length - 1]);
-
-
-                assertNotNull(st1Id);
-                st1.setId(st1Id);
-
-
-                init = true;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+        init = true;
+      }
+   }
 
     @Test
     @Order(1)
     public void createStudent() {
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            Student newStd = new Student("Michele", "Catalano", 0, null, null, "fra@gmail.com", "1981288");
 
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonBody = mapper.writeValueAsString(newStd);
+        // Creazione di un nuovo studente
+        Student newStudent = new Student("Michele", "Catalano", 0, null, null, "michele@gmail.com", "1981288");
+        Response responseNewStudent = studentService.createStudent(newStudent);
 
-            HttpPost request = new HttpPost(BASE_URI);
-            StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
-            request.setEntity(entity);
+        // Verifica che la chiamata al metodo createStudent abbia avuto successo (status code 201)
+        assertEquals(201, responseNewStudent.getStatus());
 
-            HttpResponse response = httpClient.execute(request);
-            assertEquals(201, response.getStatusLine().getStatusCode());
+        // Estrazione dell'ID del nuovo studente dalla risposta
+        String locationNewStudent = responseNewStudent.getLocation().toString();
+        String[] segmentsNewStudent = locationNewStudent.split("/");
+        Long newStudentId = Long.parseLong(segmentsNewStudent[segmentsNewStudent.length - 1]);
 
-            Header locationHeader = response.getFirstHeader("Location");
-            assertNotNull(locationHeader);
-            String location = locationHeader.getValue();
-
-
-            String[] segments = location.split("/");
-            Long newStdId = Long.parseLong(segments[segments.length - 1]);
-
-            assertNotNull(newStdId);
-            newStd.setId(newStdId);
-
-            assertNotEquals(newStdId, st1Id);
-            System.out.println(st1Id);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // Verifica che l'ID del nuovo studente sia diverso dall'ID dello studente st1
+        assertNotEquals(newStudentId, st1Id);
     }
-
     @Test
     @Order(2)
     public void getStudent() {
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            URI uri = new URIBuilder(BASE_URI + "/" + st1Id)
-                    .build();
+        // Chiamata al metodo getStudent per ottenere lo studente st1
+        Response response = studentService.getStudent(st1Id);
 
-            HttpGet request = new HttpGet(uri);
-            HttpResponse response = httpClient.execute(request);
+        // Verifica che la chiamata al metodo getStudent abbia avuto successo (status code 200)
+        assertEquals(200, response.getStatus());
 
-            assertEquals(200, response.getStatusLine().getStatusCode());
+        // Estrazione dello studente dalla risposta
+        Student student = response.readEntity(Student.class);
 
-            ObjectMapper mapper = new ObjectMapper();
-            Student student = mapper.readValue(EntityUtils.toString(response.getEntity()), Student.class);
-            assertEquals(student, st1);
-        } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        // Verifica che lo studente ottenuto sia uguale a st1
+        assertEquals(st1, student);
     }
 
     @Test
     @Order(3)
-    public void testGetAllStudents() throws Exception {
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(BASE_URI);
-            HttpResponse response = httpClient.execute(request);
-            assertEquals(200, response.getStatusLine().getStatusCode());
-            // Puoi aggiungere ulteriori asserzioni per verificare il corpo della risposta se necessario
-        }
+    public void testGetAllStudents() {
+        // Chiamata al metodo getAllStudents per ottenere tutti gli studenti
+        Response response = studentService.getAllStudents();
+
+        // Verifica che la chiamata al metodo getAllStudents abbia avuto successo (status code 200)
+        assertEquals(200, response.getStatus());
+
+
+
     }
 
     @Test
     @Order(4)
-    public void testUpdateStudent() throws Exception {
-
+    public void testUpdateStudent() {
+        // Modifica lo studente st1
         st1.setFirstName("Loris");
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            URI uri = new URIBuilder(BASE_URI).build();
+        // Chiamata al metodo updateStudent per aggiornare lo studente st1
+        Response response = studentService.updateStudent(st1);
 
-            HttpPut request = new HttpPut(uri);
-
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonBody = mapper.writeValueAsString(st1);
-
-            StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
-            request.setEntity(entity);
-
-            HttpResponse response = httpClient.execute(request);
-            assertEquals(200, response.getStatusLine().getStatusCode());
-        }
+        // Verifica che la chiamata al metodo updateStudent abbia avuto successo (status code 200)
+        assertEquals(200, response.getStatus());
     }
 
     @Test
     @Order(5)
-    public void testDeleteStudent() throws Exception {
-        // Assicurati di avere un ID valido per uno studente esistente da eliminare
+    public void testDeleteStudent() {
+        // Chiamata al metodo deleteStudent per eliminare lo studente st1
+        Response response = studentService.deleteStudent(st1Id);
 
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            // Eseguire una richiesta DELETE per eliminare lo studente
-            HttpDelete request = new HttpDelete(BASE_URI + "/" + st1Id);
-            HttpResponse response = httpClient.execute(request);
-            assertEquals(204, response.getStatusLine().getStatusCode());
-        }
-
-
+        // Verifica che la chiamata al metodo deleteStudent abbia avuto successo (status code 204)
+        assertEquals(204, response.getStatus());
     }
 }
 
