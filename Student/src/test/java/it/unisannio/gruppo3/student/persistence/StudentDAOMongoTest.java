@@ -39,6 +39,7 @@ public class StudentDAOMongoTest {
         Long studentId = studentDAO.createStudent(stCreated);
         assertEquals(studentId, st1Id+1);
         System.out.println("nextId = " + nextId);
+        studentDAO.deleteStudent(studentId);
     }
 
     @Test

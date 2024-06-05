@@ -39,7 +39,7 @@ public class StudentLogicImplTest {
         Student stCreated = new Student(nextId, "Michele","Fuccio",0,null,null,"fra@gmail.com","1981288");
         Long newStudentId = studentLogic.createStudent(stCreated);
         assertEquals(newStudentId, st1Id+1);
-
+        studentLogic.deleteStudent(newStudentId);
     }
 
     @Test
