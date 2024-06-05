@@ -24,6 +24,13 @@ public class GatewayService {
         logic = new GatewayLogicImpl();
     }
 
+    @POST
+    @Path("/users/")
+    @PermitAll
+    public Response createUser(User user) {
+        return logic.createUser(user);
+    }
+
 
     @GET
     @Path("/students/{id}")

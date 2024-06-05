@@ -28,6 +28,7 @@ public class GatewayLogicImpl implements GatewayLogic  {
     private static final String PAYMENT_SERVICE_URL = "http://"+SERVER_IP+":8085/payment/paymentService/";
     private static final String LESSONS_AGENDA_SERVICE_URL = "http://"+SERVER_IP+":8086/lessonsAgenda/lessonsAgendaService/";
     private static final String CHAT_SERVICE_URL = "http://"+SERVER_IP+":8088/chat/chatService";
+    private static final String USER_SERVICE_URL = "http://"+SERVER_IP+":8089/user/userService/";
 
     private static final String METHOD_GET = "GET";
     private static final String METHOD_POST = "POST";
@@ -418,6 +419,10 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    @Override
+    public jakarta.ws.rs.core.Response createUser(User user) {
+        return null;
+    }
 
 
 }

@@ -30,4 +30,5 @@ public interface GatewayLogic {
 
      Response updateLessonsAgenda(LessonsAgenda lessonsAgenda);
 
+    Response createUser(User user);
 }
