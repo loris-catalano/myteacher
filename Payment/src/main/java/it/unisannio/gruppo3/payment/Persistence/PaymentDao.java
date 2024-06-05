@@ -9,16 +9,16 @@ public interface PaymentDao {
     String COLLECTION_PAYMENTS = "Payments";
 
 
+    String ELEMENT_ID= "_id";
     String ELEMENT_AMOUNT = "amount";
-    String ELEMENT_IDS= "ids";
-    String ELEMENT_STUDENTID = "studentid";
-    String ELEMENT_TEACHERID = "teacherid";
+    String ELEMENT_STUDENTID = "studentId";
+    String ELEMENT_TEACHERID = "teacherId";
 
     String ELEMENT_HIGHEST_ID = "highest";
 
     boolean dropDB();
 
-    boolean createDB();
+    //boolean createDB();
 
     Long createPayment(Payment payment);
 

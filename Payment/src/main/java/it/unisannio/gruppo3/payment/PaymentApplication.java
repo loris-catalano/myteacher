@@ -6,17 +6,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 
-@SpringBootApplication
-public class PaymentApplication {exclude = {MongoDataAutoConfiguration.class }
-    @ApplicationPath("payment")
 
-    public class PaymentApplication extends ResourceConfig {
+@ApplicationPath("payment")
+@SpringBootApplication(exclude = {MongoDataAutoConfiguration.class })
+public class PaymentApplication extends ResourceConfig {
 
-        public static void main(String[] args) {
+    public static void main(String[] args) {
             SpringApplication.run(PaymentApplication.class, args);
         }
-        public PaymentApplication(){
+
+    public PaymentApplication(){
             register(PaymentService.class);
-        }
+    }
 
 }

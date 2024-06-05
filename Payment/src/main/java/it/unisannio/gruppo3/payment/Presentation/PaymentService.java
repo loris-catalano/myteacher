@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.*;
 import java.net.URI;
 import java.util.ArrayList;
 
-@Path("/payments")
+@Path("/paymentService")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PaymentService {
@@ -27,7 +27,7 @@ public class PaymentService {
     public Response createPayment(Payment payment) {
         Long id = logic.createPayment(payment);
         if(id != null) {
-            URI uri = URI.create("/payments/" + id);
+            URI uri = URI.create("/paymentService/" + id);
             return Response.created(uri).build();
         }
         return Response.serverError().build();
