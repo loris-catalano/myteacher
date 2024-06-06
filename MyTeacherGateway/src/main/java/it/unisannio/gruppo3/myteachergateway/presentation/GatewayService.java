@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogic;
 import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogicImpl;
 import jakarta.ws.rs.core.UriBuilder;
+import org.springframework.security.core.parameters.P;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -22,6 +23,13 @@ public class GatewayService {
 
     public GatewayService() {
         logic = new GatewayLogicImpl();
+    }
+
+    @POST
+    @Path("/users/")
+    @PermitAll
+    public Response createUser(User user) {
+        return logic.createUser(user);
     }
 
 
@@ -151,6 +159,13 @@ public class GatewayService {
         return logic.createLesson(lesson);
     }
 
+    /*
+    @GET
+    @Path("lessons/{lessonId}/student/{studentId}")
+    @RolesAllowed({"STUDENT"})
+    public Response payLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
+    }*/
+
 
     @GET
     @Path("/lessonsAgendas/{id}")
@@ -175,6 +190,22 @@ public class GatewayService {
     public Response updateLessonsAgenda(LessonsAgenda lessonsAgenda) {
         return logic.updateLessonsAgenda(lessonsAgenda);
     }*/
+
+
+    @GET
+    @Path("/payments/{id}")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getPayment(@PathParam("id") Long id) {
+        Payment payment = logic.getPayment(id);
+        return Response.ok(payment).build();
+    }
+
+    @POST
+    @Path("/payments/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response createPayment(Payment payment) {
+        return logic.createPayment(payment);
+    }
 
 
 }

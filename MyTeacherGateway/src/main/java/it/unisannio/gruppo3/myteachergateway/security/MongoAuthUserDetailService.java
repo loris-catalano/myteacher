@@ -33,7 +33,7 @@ public class MongoAuthUserDetailService implements UserDetailsService {
     private final MongoCollection<Document> userCollection;
 
     public static final String DATABASE_NAME = "security";
-    public static final String COLLECTION_USERS = "users";
+    public static final String COLLECTION_USERS = "Users";
     public static final String ELEMENT_USERNAME = "email";
     public static final String ELEMENT_PASSWORD = "password";
     public static final String ELEMENT_ROLE = "roles";
@@ -83,6 +83,7 @@ public class MongoAuthUserDetailService implements UserDetailsService {
 //      mongoClient.close();
 
         User user = new User(username, password, grantedAuthorities);
+
         return user;
     }
 }

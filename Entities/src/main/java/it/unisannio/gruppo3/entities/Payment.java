@@ -1,11 +1,10 @@
 package it.unisannio.gruppo3.entities;
 
 public class Payment {
-    public Payment(Double amount, Long id, Long teacherId, Long studentId){
-        this.amount=amount;
+    public Payment(Long id, Double amount, Long lessonId){
         this.id= id;
-        this.teacherId=teacherId;
-        this.studentId=studentId;
+        this.amount=amount;
+        this.lessonId=lessonId;
     }
 
 
@@ -17,20 +16,17 @@ public class Payment {
 
     public void setId(Long id) {this.id=id;
     }
-
     public Long getId(){return this.id;}
 
-    public Long getTeacherId(){return this.teacherId;}
-
-    public Long getStudentId(){return this.studentId;}
-
+    public Long getLessonId() {
+        return lessonId;
+    }
+    public void setLessonId(Long lessonId) {
+        this.lessonId = lessonId;
+    }
 
 
     private Double amount;
     private Long id;
-    private Long teacherId;
-    private Long studentId;
-
-
-
+    private Long lessonId;
 }

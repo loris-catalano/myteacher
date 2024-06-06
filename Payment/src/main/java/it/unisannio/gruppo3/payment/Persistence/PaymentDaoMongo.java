@@ -39,10 +39,10 @@ public PaymentDaoMongo(){
     this.collection = database.getCollection(COLLECTION_PAYMENTS);
 
     this.highestID = collection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
-    this.createDB();
+    //this.createDB();
 }
 
-
+/*
     @Override
     public boolean createDB() {
         try {
@@ -54,7 +54,7 @@ public PaymentDaoMongo(){
         }
         return true;
 
-    }
+    }*/
 
     @Override
     public boolean dropDB() {
@@ -74,17 +74,16 @@ public PaymentDaoMongo(){
 
     @Override
     public Payment getPayment(Long id) {
-        Document d = collection.find(Filters.eq(ELEMENT_IDS,id)).first();
+        Document d = collection.find(Filters.eq(ELEMENT_ID,id)).first();
         return paymentFromDocument(d);
     }
 
     public Payment paymentFromDocument(Document d){
         if(d!=null) {
             return new Payment(
+                    d.getLong(ELEMENT_ID),
                     d.getDouble(ELEMENT_AMOUNT),
-                    d.getLong(ELEMENT_IDS),
-                    d.getLong(ELEMENT_TEACHERID),
-                    d.getLong(ELEMENT_STUDENTID));
+                    d.getLong(ELEMENT_LESSON_ID));
         }
         return null;
     }
@@ -97,12 +96,9 @@ public PaymentDaoMongo(){
      */
     private Document paymentToDocument(Payment payment) {
         return new Document()
+                .append(ELEMENT_ID, payment.getId())
                 .append(ELEMENT_AMOUNT, payment.getAmount())
-                .append(ELEMENT_IDS, payment.getId())
-                .append(ELEMENT_TEACHERID, payment.getTeacherId())
-                .append(ELEMENT_STUDENTID, payment.getStudentId());
-
-
+                .append(ELEMENT_LESSON_ID, payment.getLessonId());
     }
 
 
@@ -122,7 +118,7 @@ public PaymentDaoMongo(){
 
         @Override
         public boolean deletePayment(Long id) {
-            return collection.deleteOne(Filters.eq(ELEMENT_IDS,id)).wasAcknowledged();}
+            return collection.deleteOne(Filters.eq(ELEMENT_ID,id)).wasAcknowledged();}
 
     @Override
     public ArrayList<Payment> getAllPayments() {{
