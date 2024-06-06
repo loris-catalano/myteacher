@@ -7,6 +7,11 @@ public class Payment {
         this.lessonId=lessonId;
     }
 
+    public Payment(Double amount, Long lessonId){
+        this.amount=amount;
+        this.lessonId=lessonId;
+    }
+
 
     public Double getAmount(){return amount;}
 
