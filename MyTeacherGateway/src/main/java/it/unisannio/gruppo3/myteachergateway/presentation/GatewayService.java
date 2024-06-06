@@ -45,7 +45,7 @@ public class GatewayService {
     @Path("/students/")
     @PermitAll
     public Response createStudent(Student student) {
-        return logic.createStudent(student);
+        return logic.createStudent(student);    //this also creates an empty LessonsAgenda and puts the id in the student
     }
 
 
@@ -61,7 +61,7 @@ public class GatewayService {
     @Path("/teachers/")
     @PermitAll
     public Response createTeacher(Teacher teacher) {
-        return logic.createTeacher(teacher);
+        return logic.createTeacher(teacher);     //this also creates an empty LessonsAgenda and puts the id in the teacher
     }
 
 
@@ -154,17 +154,16 @@ public class GatewayService {
     @Path("/lessons/")
     @RolesAllowed({"TEACHER"})
     public Response createLesson(Lesson lesson) {
-        LessonsAgenda teacherAgenda = logic.getTeacher(lesson.getTeacherId()).getTeacherAgenda();
-        logic.updateLessonsAgenda(teacherAgenda);
         return logic.createLesson(lesson);
     }
 
-    /*
+
     @GET
     @Path("lessons/{lessonId}/student/{studentId}")
     @RolesAllowed({"STUDENT"})
     public Response payLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
-    }*/
+        return logic.payLesson(lessonId,studentId);
+    }
 
 
     @GET

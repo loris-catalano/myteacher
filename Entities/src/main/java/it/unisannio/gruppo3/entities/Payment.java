@@ -12,6 +12,8 @@ public class Payment {
         this.lessonId=lessonId;
     }
 
+    public Payment(){}
+
 
     public int getAmount(){return amount;}
 

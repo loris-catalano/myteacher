@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Array;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -74,6 +75,14 @@ public class GatewayLogicImpl implements GatewayLogic  {
     @Override
     public jakarta.ws.rs.core.Response createStudent(Student student) {
         try {
+            // Creates an empty lessons agenda and gets the id by looking at its location
+            jakarta.ws.rs.core.Response res = createLessonsAgenda(new LessonsAgenda(new ArrayList<>()));
+            String location = res.getLocation().toString();
+            String[] segments = location.split("/");
+            Long lessonsAgendaId = Long.parseLong(segments[segments.length - 1]);
+
+            student.setStudentAgenda(getLessonsAgenda(lessonsAgendaId).getId());
+
             String URL = String.format(STUDENT_SERVICE_URL);
 
             Gson gson = new GsonBuilder()
@@ -133,6 +142,15 @@ public class GatewayLogicImpl implements GatewayLogic  {
     @Override
     public jakarta.ws.rs.core.Response createTeacher(Teacher teacher) {
         try {
+            // Creates an empty lessons agenda and gets the id by looking at its location
+            jakarta.ws.rs.core.Response res = createLessonsAgenda(new LessonsAgenda(new ArrayList<>()));
+            String location = res.getLocation().toString();
+            String[] segments = location.split("/");
+            Long lessonsAgendaId = Long.parseLong(segments[segments.length - 1]);
+
+            teacher.setTeacherAgenda(getLessonsAgenda(lessonsAgendaId).getId());
+
+
             String URL = String.format(TEACHER_SERVICE_URL);
 
             Gson gson = new GsonBuilder()
@@ -308,6 +326,16 @@ public class GatewayLogicImpl implements GatewayLogic  {
     @Override
     public jakarta.ws.rs.core.Response createLesson(Lesson lesson) {
         try {
+            //Get the teacher agenda from the id of the teacher of the lesson
+            LessonsAgenda teacherAgenda = getLessonsAgenda(getTeacher(lesson.getTeacherId()).getTeacherAgenda());
+            //Add this lesson to the teacher agenda
+            ArrayList<Long> lessons = teacherAgenda.getLessons();
+            lessons.add(lesson.getId());
+            //Update teacher agenda with the new lesson
+            teacherAgenda.setLessons(lessons);
+            updateLessonsAgenda(teacherAgenda);
+
+
             String URL = String.format(LESSON_SERVICE_URL);
 
             Gson gson = new GsonBuilder()
@@ -480,5 +508,25 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    @Override
+    public jakarta.ws.rs.core.Response payLesson(Long lessonId, Long studentId) {
 
+        // Create the payment
+
+        Lesson lesson = getLesson(lessonId);
+        Student student = getStudent(studentId);
+        int price = lesson.getPrice();
+
+        jakarta.ws.rs.core.Response res = createPayment(new Payment(price, lessonId));
+
+        if(res.getStatus() != 201) return null;
+
+        // Add lesson to student agenda
+
+        LessonsAgenda studentAgenda = getLessonsAgenda(student.getStudentAgenda());
+        studentAgenda.getLessons().add(lessonId);
+        updateLessonsAgenda(studentAgenda);
+
+        return jakarta.ws.rs.core.Response.ok().build();
+    }
 }

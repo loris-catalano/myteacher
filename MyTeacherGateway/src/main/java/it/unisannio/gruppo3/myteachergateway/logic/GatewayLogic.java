@@ -30,4 +30,5 @@ public interface GatewayLogic {
      Response createPayment(Payment payment);
 
 
+     Response payLesson(Long lessonId, Long studentId);
 }

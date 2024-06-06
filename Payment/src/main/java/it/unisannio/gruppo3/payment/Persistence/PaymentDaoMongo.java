@@ -82,7 +82,7 @@ public PaymentDaoMongo(){
         if(d!=null) {
             return new Payment(
                     d.getLong(ELEMENT_ID),
-                    d.getDouble(ELEMENT_AMOUNT),
+                    d.getInteger(ELEMENT_AMOUNT),
                     d.getLong(ELEMENT_LESSON_ID));
         }
         return null;
