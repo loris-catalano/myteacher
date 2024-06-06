@@ -1,21 +1,21 @@
 package it.unisannio.gruppo3.entities;
 
 public class Payment {
-    public Payment(Long id, Double amount, Long lessonId){
+    public Payment(Long id, int amount, Long lessonId){
         this.id= id;
         this.amount=amount;
         this.lessonId=lessonId;
     }
 
-    public Payment(Double amount, Long lessonId){
+    public Payment(int amount, Long lessonId){
         this.amount=amount;
         this.lessonId=lessonId;
     }
 
 
-    public Double getAmount(){return amount;}
+    public int getAmount(){return amount;}
 
-    public void setAmount(Double amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -31,7 +31,7 @@ public class Payment {
     }
 
 
-    private Double amount;
+    private int amount;
     private Long id;
     private Long lessonId;
 }
