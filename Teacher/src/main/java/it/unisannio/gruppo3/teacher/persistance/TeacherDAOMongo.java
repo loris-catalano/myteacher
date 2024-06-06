@@ -77,7 +77,7 @@ public class TeacherDAOMongo implements TeacherDAO {
                     d.getList(COLLECTION_RECEIVED_REVIEWS, Long.class),
                     d.getDouble(ELEMENT_LATITUDE),
                     d.getDouble(ELEMENT_LONGITUDE),
-                    (LessonsAgenda)d.get(ELEMENT_AGENDA),
+                    d.getLong(ELEMENT_AGENDA),
                     d.getString(ELEMENT_CURRICULUM),
                     (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT),
                     d.getString(ELEMENT_EMAIL),

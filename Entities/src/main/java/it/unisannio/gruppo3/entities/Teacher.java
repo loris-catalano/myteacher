@@ -7,7 +7,7 @@ import java.util.List;
 public class Teacher {
 
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,7 +23,7 @@ public class Teacher {
         this.nroCell=nroCell;
         this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -123,11 +123,11 @@ public class Teacher {
         this.availableTimeSlot = availableTimeSlot;
     }
 
-    public LessonsAgenda getTeacherAgenda() {
+    public Long getTeacherAgenda() {
         return teacherAgenda;
     }
 
-    public void setTeacherAgenda(LessonsAgenda teacherAgenda) {
+    public void setTeacherAgenda(Long teacherAgenda) {
         this.teacherAgenda = teacherAgenda;
     }
 
@@ -150,7 +150,7 @@ public class Teacher {
     private Double latitude;
     private Double longitude;
     private Time availableTimeSlot;
-    private LessonsAgenda teacherAgenda;
+    private Long teacherAgenda;
     private String resume;
     private String email;
     private String nroCell;
