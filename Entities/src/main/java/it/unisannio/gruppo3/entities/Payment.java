@@ -1,6 +1,6 @@
 package it.unisannio.gruppo3.entities;
 
-public class Payment {
+public class Payment implements Comparable<Payment> {
     public Payment(Long id, Double amount, Long lessonId){
         this.id= id;
         this.amount=amount;
@@ -25,8 +25,24 @@ public class Payment {
         this.lessonId = lessonId;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Payment pymt = (Payment) obj;
+        return id == pymt.getId();}
 
-    private Double amount;
+    public int compareTo(Payment pymt){
+        return this.amount.compareTo(pymt.getAmount());
+    }
+
+    public int hashCode(){
+    final int PRIME = 3;
+    int result = 1;
+    result = PRIME * result + id.hashCode();
+return result;
+}
+
+private Double amount;
     private Long id;
     private Long lessonId;
 }
