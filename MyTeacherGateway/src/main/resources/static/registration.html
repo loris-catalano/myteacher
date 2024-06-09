@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione</title>
+    <link rel="stylesheet" href="style/styles.css">
+    <script defer src="scripts/registration.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Registrazione</h2>
+        <form action="/register" method="post">
+            <div class="form-group">
+                <label for="role">Registrati come</label>
+                <select id="role" name="role" onchange="toggleRoleFields()">
+                    <option value="">Seleziona un ruolo</option>
+                    <option value="student">Studente</option>
+                    <option value="teacher">Docente</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Conferma Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">Nome</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Cognome</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="nroCell">Cellulare</label>
+                <input type="number" id="cellNumber" name="lastName" required>
+            </div>
+            <!--
+            <div class="form-group student-field" style="display: none;">
+                <label for="student-id">ID Studente</label>
+                <input type="text" id="student-id" name="student-id">
+            </div>-->
+            <div class="form-group teacher-field" style="display: none;">
+                <label for="age">Età</label>
+                <input type="number" id="age" name="age" min="18" max="100">
+            </div>
+            <div class="form-group teacher-field" style="display: none;">
+                <label for="subjects">Materie</label>
+                <input type="text" id="subjects" name="subjects">
+            </div>
+
+
+            
+            <div class="form-group">
+                <button type="submit">Registrati</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
