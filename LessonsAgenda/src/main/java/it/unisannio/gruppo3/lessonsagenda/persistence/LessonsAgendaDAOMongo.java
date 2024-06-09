@@ -14,7 +14,8 @@ import com.mongodb.client.model.Filters;
 
 import java.util.ArrayList;
 
-public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{ private static String host = System.getenv("MONGO_ADDRESS");
+public class LessonsAgendaDAOMongo implements LessonsAgendaDAO{
+    private static String host = System.getenv("MONGO_ADDRESS");
     private static String port = System.getenv("MONGO_PORT");
 
     private final MongoClient mongoClient;

@@ -22,7 +22,7 @@ public interface TeacherDAO {
     String ELEMENT_CURRICULUM="curriculum";
     String ELEMENT_AVAILABLE_TIME_SLOT="availableTimeSlot";
     String ELEMENT_EMAIL="email";
-    String ELEMENT_NROCELL="nroCell";
+    String ELEMENT_CELL_NUMBER="cellNumber";
 
     String ELEMENT_HIGHEST_ID = "highest";
 

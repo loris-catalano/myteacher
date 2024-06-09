@@ -17,7 +17,7 @@ public interface StudentDAO {
     String ELEMENT_AGENDA = "agenda";
     String ELEMENT_ID = "_id";
     String ELEMENT_EMAIL="email";
-    String ELEMENT_NROCELL="nroCell";
+    String ELEMENT_CELL_NUMBER="nroCell";
 
     String ELEMENT_HIGHEST_ID = "highest";
 
