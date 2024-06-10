@@ -68,6 +68,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Handle errors
             });
         } else {
+            const user_data = {"email":data['email'], "password":data['password'], "roles":[data['role']]};
+            console.log(user_data);
+
+            let subjects = data["subjects"].split(",")
+
+            const teacher_data = {"firstName":data['firstName'], "lastName":data['lastName'], "email": data['email'], "cellNumber":data['cellNumber'], "age":data['age'], "subjects":subjects};
+            console.log(teacher_data);
+
+            Promise.all([
+                fetch('/myTeacher/users/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(user_data)
+                }),
+                fetch('/myTeacher/teachers/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(teacher_data)
+                })
+            ]).then(responses => {
+                return Promise.all(responses.map(response => {
+                    const contentType = response.headers.get('Content-Type');
+                    if (response.ok && contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else if (response.ok) {
+                        return response.text().then(text => ({ text }));
+                    } else {
+                        return response.text().then(text => Promise.reject(new Error(text)));
+                    }
+                }));
+            }).then(data => {
+                console.log('Both requests were successful:', data);
+                window.location.pathname= "/teacher.html";
+                // Handle successful responses
+            }).catch(error => {
+                console.error('Error:', error);
+                // Handle errors
+            });
         }
 
         
