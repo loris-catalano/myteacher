@@ -10,13 +10,13 @@
 <body>
     <div class="login-container">
         <h2>Registrazione</h2>
-        <form action="/register" method="post">
+        <form id="registration-form">
             <div class="form-group">
                 <label for="role">Registrati come</label>
                 <select id="role" name="role" onchange="toggleRoleFields()">
                     <option value="">Seleziona un ruolo</option>
-                    <option value="student">Studente</option>
-                    <option value="teacher">Docente</option>
+                    <option value="ROLE_STUDENT">Studente</option>
+                    <option value="ROLE_TEACHER">Docente</option>
                 </select>
             </div>
             <div class="form-group">
@@ -40,14 +40,9 @@
                 <input type="text" id="lastName" name="lastName" required>
             </div>
             <div class="form-group">
-                <label for="nroCell">Cellulare</label>
-                <input type="number" id="cellNumber" name="lastName" required>
+                <label for="cellNumber">Cellulare</label>
+                <input type="number" id="cellNumber" name="cellNumber" required>
             </div>
-            <!--
-            <div class="form-group student-field" style="display: none;">
-                <label for="student-id">ID Studente</label>
-                <input type="text" id="student-id" name="student-id">
-            </div>-->
             <div class="form-group teacher-field" style="display: none;">
                 <label for="age">Età</label>
                 <input type="number" id="age" name="age" min="18" max="100">
@@ -56,9 +51,6 @@
                 <label for="subjects">Materie</label>
                 <input type="text" id="subjects" name="subjects">
             </div>
-
-
-            
             <div class="form-group">
                 <button type="submit">Registrati</button>
             </div>

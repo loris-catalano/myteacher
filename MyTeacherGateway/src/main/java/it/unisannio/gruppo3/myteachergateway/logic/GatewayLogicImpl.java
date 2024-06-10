@@ -449,7 +449,32 @@ public class GatewayLogicImpl implements GatewayLogic  {
 
     @Override
     public jakarta.ws.rs.core.Response createUser(User user) {
-        return null;
+        try {
+            String URL = String.format(USER_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            String json = gson.toJson(user);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 201 )return null;
+
+            URI uri = UriBuilder.fromPath(response.header("location")).build();
+            return jakarta.ws.rs.core.Response.created(uri).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

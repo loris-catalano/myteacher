@@ -3,6 +3,7 @@ package it.unisannio.gruppo3.myteachergateway.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,9 +33,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
-                .httpBasic(withDefaults())
-                .csrf(csrf -> csrf.disable());
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/myTeacher/users/").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/myTeacher/teachers/").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/myTeacher/students/").permitAll()
+                        .requestMatchers("/myTeacher/lessonsAgendas/").permitAll()
+                        .anyRequest().authenticated())
+                        .httpBasic(withDefaults())
+                        .csrf(csrf -> csrf.disable());
+
+
 
 
 
