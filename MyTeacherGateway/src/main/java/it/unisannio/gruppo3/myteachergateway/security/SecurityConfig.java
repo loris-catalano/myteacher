@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/myTeacher/students/").permitAll()
                         .requestMatchers("/myTeacher/lessonsAgendas/").permitAll()
                         .anyRequest().authenticated())
+                        //.formLogin(formLogin -> formLogin.loginPage("/public/login.html").permitAll())
                         .httpBasic(withDefaults())
                         .csrf(csrf -> csrf.disable());
 

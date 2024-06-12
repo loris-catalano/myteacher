@@ -554,4 +554,32 @@ public class GatewayLogicImpl implements GatewayLogic  {
 
         return jakarta.ws.rs.core.Response.ok().build();
     }
+
+    @Override
+    public ArrayList<LessonsAgenda> getAllLessonsAgendas() {
+        try {
+            String URL = String.format(LESSONS_AGENDA_SERVICE_URL);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    //    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<LessonsAgenda>) gson.fromJson(responseBody, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

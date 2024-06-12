@@ -168,6 +168,14 @@ public class GatewayService {
 
 
     @GET
+    @Path("/lessonsAgendas")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getAllLessonsAgendas() {
+        ArrayList<LessonsAgenda> lessonsAgendas = logic.getAllLessonsAgendas();
+        return Response.ok(lessonsAgendas).build();
+    }
+
+    @GET
     @Path("/lessonsAgendas/{id}")
     @RolesAllowed({"STUDENT","TEACHER"})
     public Response getLessonsAgenda(@PathParam("id") Long id) {

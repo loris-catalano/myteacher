@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homepage</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+<header>
+
+    <h1> <img src="logo.png" class="logo-picture"> MyTeacher</h1>
+    <nav>
+        <a href="homepage.html">Home</a>
+        <a href="aboutus.html">Chi siamo</a>
+    </nav>
+</header>
+<div class="container">
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Cerca una materia...">
+        <button onclick="search()">Cerca</button>
+    </div>
+
+    <div class="segment">
+        <h2>Lezioni in agenda</h2>
+        <ul class="lessons-list" id="lessonsList">
+        </ul>
+    </div>
+
+
+    <div class="segment">
+        <h2>Lista di professori</h2>
+        <ul class="teachers-list" id="teachersList">
+            <li>Teacher 1</li>
+            <li>Teacher 2</li>
+            <li>Teacher 3</li>
+            <li>Teacher 4</li>
+            <li>Teacher 5</li>
+        </ul>
+    </div>
+    
+</div>
+
+</body>
+</html>

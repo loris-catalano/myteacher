@@ -5,14 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="style/styles.css">
+    <script defer src="scripts/login.js"></script>
 </head>
 <body>
 <div class="login-container">
     <h2>Login</h2>
-    <form action="/login" method="post">
+    <form id="login-form" action="/login">
         <div class="form-group">
-            <label for="username">Nome utente</label>
-            <input type="text" id="username" name="username" required>
+            <label for="role">Accedi come</label>
+            <select id="role" name="role">
+                <option value="">Seleziona un ruolo</option>
+                <option value="ROLE_STUDENT">Studente</option>
+                <option value="ROLE_TEACHER">Docente</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
         </div>
         <div class="form-group">
             <label for="password">Password</label>

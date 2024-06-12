@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }));
             }).then(data => {
                 console.log('Both requests were successful:', data);
-                window.location.pathname= "/student.html";
+                window.location.pathname= "/student/homepage.html";
                 // Handle successful responses
             }).catch(error => {
                 console.error('Error:', error);
@@ -104,14 +104,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }));
             }).then(data => {
                 console.log('Both requests were successful:', data);
-                window.location.pathname= "/teacher.html";
+                window.location.pathname= "/teacher/homepage.html";
                 // Handle successful responses
             }).catch(error => {
                 console.error('Error:', error);
                 // Handle errors
             });
         }
-
-        
     });
 });
