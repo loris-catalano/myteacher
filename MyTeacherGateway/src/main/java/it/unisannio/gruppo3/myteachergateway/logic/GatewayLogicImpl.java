@@ -9,6 +9,8 @@ import okhttp3.*;
 import okio.BufferedSink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import java.io.IOException;
@@ -133,6 +135,34 @@ public class GatewayLogicImpl implements GatewayLogic  {
 
             Teacher teacher = gson.fromJson(responseBody, Teacher.class);
             return teacher;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Teacher> getAllTeachers() {
+        try {
+            String URL = String.format(TEACHER_SERVICE_URL);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<Teacher>) gson.fromJson(responseBody, ArrayList.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -582,4 +612,43 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return null;
         }
     }
+
+    public String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    @Override
+    public Student getCurrentStudent() {
+        String email = getCurrentUserEmail();
+
+        try {
+            String URL = String.format(STUDENT_SERVICE_URL + "email/" + email);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return gson.fromJson(responseBody, Student.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
 }

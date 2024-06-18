@@ -56,5 +56,10 @@ public class TeacherLogicImpl implements TeacherLogic {
         return teacherDAO.getTeachersBySubjects(subject);
     }
 
+    @Override
+    public ArrayList<Teacher> getAllTeachers() {
+        return teacherDAO.getAllTeachers();
+    }
+
 
 }

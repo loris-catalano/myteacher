@@ -38,4 +38,6 @@ public interface StudentDAO {
     boolean closeConnection();
 
     Long getNextId();
+
+    Student getStudentByEmail(String email);
 }

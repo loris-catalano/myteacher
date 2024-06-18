@@ -49,3 +49,12 @@ nav a:hover {
     border: 3px solid #2838c9;
     border-radius: 5px;
 }
+.teacher-element{
+    border-style: solid;
+    border-color: #2838c9;
+    border-radius: 10px;
+    background-color: #9ee8ff;
+
+    padding: 10px;
+    margin: 5px;
+}

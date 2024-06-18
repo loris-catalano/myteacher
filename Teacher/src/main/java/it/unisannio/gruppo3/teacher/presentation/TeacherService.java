@@ -1,5 +1,6 @@
 package it.unisannio.gruppo3.teacher.presentation;
 
+import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.entities.Teacher;
 import it.unisannio.gruppo3.teacher.logic.TeacherLogic;
 import it.unisannio.gruppo3.teacher.logic.TeacherLogicImpl;
@@ -103,6 +104,13 @@ public class TeacherService {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
+
+    @GET
+    public Response getAlTeachers() {
+        ArrayList<Teacher> teachers = logic.getAllTeachers();
+        return Response.ok(teachers).build();
+    }
+
 //
     @PUT
     public Response updateTeacher(Teacher teacher) {

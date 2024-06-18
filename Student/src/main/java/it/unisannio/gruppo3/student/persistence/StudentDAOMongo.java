@@ -164,4 +164,10 @@ public class StudentDAOMongo implements StudentDAO{
         Long actualHighestID = studentsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
         return actualHighestID+1;
     }
+
+    @Override
+    public Student getStudentByEmail(String email) {
+        Document d = studentsCollection.find(Filters.eq(ELEMENT_EMAIL,email)).first();
+        return studentFromDocument(d);
+    }
 }

@@ -205,6 +205,15 @@ public class TeacherDAOMongo implements TeacherDAO {
             return teachers;
         }
 
+    @Override
+    public ArrayList<Teacher> getAllTeachers() {
+        ArrayList<Teacher> teachers = new ArrayList<>();
+        for(Document doc:collection.find()){
+            if(doc.containsKey(ELEMENT_HIGHEST_ID)) {continue;}
+            teachers.add(teacherFromDocument(doc));
+        }
+        return teachers;
+    }
 
 }
 

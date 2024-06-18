@@ -8,10 +8,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
 import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogic;
 import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogicImpl;
-import jakarta.ws.rs.core.UriBuilder;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,6 +23,23 @@ public class GatewayService {
     public GatewayService() {
         logic = new GatewayLogicImpl();
     }
+
+    /*@GET
+    @Path("/currentUser/email")
+    @PermitAll
+    public String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }*/
+
+    @GET
+    @Path("/currentUser/student")
+    @PermitAll
+    public Response getCurrentStudent() {
+        Student student = logic.getCurrentStudent();
+        return Response.ok(student).build();
+    }
+
 
     @POST
     @Path("/users/")
@@ -41,6 +57,8 @@ public class GatewayService {
         return Response.ok(student).build();
     }
 
+
+
     @POST
     @Path("/students/")
     @PermitAll
@@ -55,6 +73,14 @@ public class GatewayService {
     public Response getTeacher(@PathParam("id") Long id) {
         Teacher teacher = logic.getTeacher(id);
         return Response.ok(teacher).build();
+    }
+
+    @GET
+    @Path("/teachers/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getAllTeachers() {
+        ArrayList<Teacher> teachers = logic.getAllTeachers();
+        return Response.ok(teachers).build();
     }
 
     @POST
