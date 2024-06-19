@@ -1,5 +1,6 @@
 package it.unisannio.gruppo3.myteachergateway.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -35,14 +39,18 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/public/student/**").permitAll()
+                        .requestMatchers("/public/teacher/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/myTeacher/users/").permitAll()
                         .requestMatchers(HttpMethod.POST,"/myTeacher/teachers/").permitAll()
                         .requestMatchers(HttpMethod.POST,"/myTeacher/students/").permitAll()
                         .requestMatchers("/myTeacher/lessonsAgendas/").permitAll()
                         .anyRequest().authenticated())
-                        //.formLogin(formLogin -> formLogin.loginPage("/public/login.html").permitAll())
+                        .formLogin(formLogin -> formLogin.loginPage("/public/login.html").permitAll())
                         .httpBasic(withDefaults())
-                        .csrf(csrf -> csrf.disable());
+                        .csrf(csrf -> csrf.disable())
+
+        ;
 
 
 
