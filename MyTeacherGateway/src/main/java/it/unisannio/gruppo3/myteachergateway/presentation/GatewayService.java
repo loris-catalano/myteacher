@@ -246,8 +246,13 @@ public class GatewayService {
 
 
     @GET
-    @Path("/checkCredentials")
-    @RolesAllowed({"STUDENT","TEACHER"})
-    public Response checkCredentials(){return Response.ok().build();}
+    @Path("/checkCredentials/student")
+    @RolesAllowed({"STUDENT"})
+    public Response checkStudentCredentials(){return Response.ok().build();}
+
+    @GET
+    @Path("/checkCredentials/teacher")
+    @RolesAllowed({"TEACHER"})
+    public Response checkteacherCredentials(){return Response.ok().build();}
 
 }

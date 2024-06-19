@@ -61,13 +61,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }));
             }).then(data => {
                 console.log('Both requests were successful:', data);
+                alert("Registrazione avvenuta con successo! Verrai reinderizzato alla pagina di accesso.")
                 window.location.pathname= "/student/homepage.html";
                 // Handle successful responses
             }).catch(error => {
                 console.error('Error:', error);
                 // Handle errors
             });
-        } else {
+        } else if (data['role'] === 'ROLE_TEACHER') {
             const user_data = {"email":data['email'], "password":data['password'], "roles":[data['role']]};
             console.log(user_data);
 
@@ -104,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }));
             }).then(data => {
                 console.log('Both requests were successful:', data);
+                alert("Registrazione avvenuta con successo! Verrai reinderizzato alla pagina di accesso.");
                 window.location.pathname= "/teacher/homepage.html";
                 // Handle successful responses
             }).catch(error => {
@@ -111,5 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Handle errors
             });
         }
+        else{alert("Seleziona un ruolo con il quale vuoi registrarti.")}
     });
 });
