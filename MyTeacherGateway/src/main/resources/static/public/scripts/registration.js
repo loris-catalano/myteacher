@@ -1,14 +1,14 @@
 function toggleRoleFields() {
     var role = document.getElementById("role").value;
-    var studentFields = document.querySelectorAll(".student-field");
-    var teacherFields = document.querySelectorAll(".teacher-field");
+    var studentFields = document.querySelectorAll(".form-group.student-field");
+    var teacherFields = document.querySelectorAll(".form-group.teacher-field");
 
     studentFields.forEach(function(field) {
-        field.style.display = role === "student" ? "block" : "none";
+        field.style.display = role === "ROLE_STUDENT" ? "block" : "none";
     });
 
     teacherFields.forEach(function(field) {
-        field.style.display = role === "teacher" ? "block" : "none";
+        field.style.display = role === "ROLE_TEACHER" ? "block" : "none";
     });
 }
 
