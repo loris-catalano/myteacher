@@ -185,12 +185,15 @@ public class GatewayService {
     }
 
 
+
     @GET
     @Path("lessons/{lessonId}/student/{studentId}")
     @RolesAllowed({"STUDENT"})
     public Response payLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
         return logic.payLesson(lessonId,studentId);
     }
+
+
 
 
     @GET
@@ -241,5 +244,10 @@ public class GatewayService {
         return logic.createPayment(payment);
     }
 
+
+    @GET
+    @Path("/checkCredentials")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response checkCredentials(){return Response.ok().build();}
 
 }

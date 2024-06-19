@@ -35,20 +35,15 @@ function teacherHtml(teacher){
 }
 
 function fillTeachers(){
-
-    console.log("dentro 1")
     var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
-
-
     var url = `${URL}/myTeacher/teachers/`;
+
     xhttp.open("GET", url, false);
+    xhttp.setRequestHeader("Authorization", localStorage.getItem("Authorization"))
     xhttp.send();
 
     if (xhttp.status == "200") {
-        console.log("dentro 2")
         let teachers = JSON.parse(xhttp.responseText)
-        console.log(teachers)
         for(i in teachers){
             document.getElementById("teachersList").innerHTML += teacherHtml(teachers[i]);
         }
@@ -60,5 +55,7 @@ function fillTeachers(){
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    fillTeachers();
+    if(localStorage.getItem("Authorization") !== null) {
+        fillTeachers();
+    }
 })
