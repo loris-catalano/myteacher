@@ -8,10 +8,9 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.MediaType;
 import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogic;
 import it.unisannio.gruppo3.myteachergateway.logic.GatewayLogicImpl;
-import jakarta.ws.rs.core.UriBuilder;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -24,6 +23,23 @@ public class GatewayService {
     public GatewayService() {
         logic = new GatewayLogicImpl();
     }
+
+    /*@GET
+    @Path("/currentUser/email")
+    @PermitAll
+    public String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }*/
+
+    @GET
+    @Path("/currentUser/student")
+    @PermitAll
+    public Response getCurrentStudent() {
+        Student student = logic.getCurrentStudent();
+        return Response.ok(student).build();
+    }
+
 
     @POST
     @Path("/users/")
@@ -41,11 +57,13 @@ public class GatewayService {
         return Response.ok(student).build();
     }
 
+
+
     @POST
     @Path("/students/")
     @PermitAll
     public Response createStudent(Student student) {
-        return logic.createStudent(student);
+        return logic.createStudent(student);    //this also creates an empty LessonsAgenda and puts the id in the student
     }
 
 
@@ -57,12 +75,21 @@ public class GatewayService {
         return Response.ok(teacher).build();
     }
 
+    @GET
+    @Path("/teachers/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getAllTeachers() {
+        ArrayList<Teacher> teachers = logic.getAllTeachers();
+        return Response.ok(teachers).build();
+    }
+
     @POST
     @Path("/teachers/")
     @PermitAll
     public Response createTeacher(Teacher teacher) {
-        return logic.createTeacher(teacher);
+        return logic.createTeacher(teacher);     //this also creates an empty LessonsAgenda and puts the id in the teacher
     }
+
 
 
     @GET
@@ -150,22 +177,40 @@ public class GatewayService {
         return Response.ok(lesson).build();
     }
 
+    @GET
+    @Path("/lessons/")
+    @RolesAllowed({"STUDENT"})
+    public Response getAllLessons() {
+        ArrayList<Lesson> lessons = logic.getAllLessons();
+        return Response.ok(lessons).build();
+    }
+
     @POST
     @Path("/lessons/")
     @RolesAllowed({"TEACHER"})
     public Response createLesson(Lesson lesson) {
-        LessonsAgenda teacherAgenda = logic.getTeacher(lesson.getTeacherId()).getTeacherAgenda();
-        logic.updateLessonsAgenda(teacherAgenda);
         return logic.createLesson(lesson);
     }
 
-    /*
+
+
     @GET
     @Path("lessons/{lessonId}/student/{studentId}")
     @RolesAllowed({"STUDENT"})
-    public Response payLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
-    }*/
+    public Response bookLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
+        return logic.bookLesson(lessonId,studentId);
+    }
 
+
+
+
+    @GET
+    @Path("/lessonsAgendas")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response getAllLessonsAgendas() {
+        ArrayList<LessonsAgenda> lessonsAgendas = logic.getAllLessonsAgendas();
+        return Response.ok(lessonsAgendas).build();
+    }
 
     @GET
     @Path("/lessonsAgendas/{id}")
@@ -207,5 +252,15 @@ public class GatewayService {
         return logic.createPayment(payment);
     }
 
+
+    @GET
+    @Path("/checkCredentials/student")
+    @RolesAllowed({"STUDENT"})
+    public Response checkStudentCredentials(){return Response.ok().build();}
+
+    @GET
+    @Path("/checkCredentials/teacher")
+    @RolesAllowed({"TEACHER"})
+    public Response checkteacherCredentials(){return Response.ok().build();}
 
 }

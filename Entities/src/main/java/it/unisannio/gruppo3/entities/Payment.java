@@ -7,10 +7,17 @@ public class Payment implements Comparable<Payment> {
         this.lessonId=lessonId;
     }
 
+    public Payment(int amount, Long lessonId){
+        this.amount=amount;
+        this.lessonId=lessonId;
+    }
 
-    public Double getAmount(){return amount;}
+    public Payment(){}
 
-    public void setAmount(Double amount) {
+
+    public int getAmount(){return amount;}
+
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

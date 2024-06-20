@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Teacher implements Comparable<Teacher>{
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String cellNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,10 +19,10 @@ public class Teacher implements Comparable<Teacher>{
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
-        this.nroCell=nroCell;
+        this.cellNumber=cellNumber;
         this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, LessonsAgenda lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String cellNumber) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,7 +35,7 @@ public class Teacher implements Comparable<Teacher>{
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
-        this.nroCell=nroCell;
+        this.cellNumber=cellNumber;
         this.email=email;
     }
     public Teacher(){}
@@ -61,11 +61,11 @@ public class Teacher implements Comparable<Teacher>{
         return email;
     }
 
-    public String getNroCell() {
-        return nroCell;
+    public String getCellNumber() {
+        return cellNumber;
     }
 
-    public void setNroCell(String nroCell) {this.nroCell = nroCell;}
+    public void setCellNumber(String cellNumber) {this.cellNumber = cellNumber;}
 
     public void setEmail(String email){this.email=email;}
 
@@ -122,11 +122,11 @@ public class Teacher implements Comparable<Teacher>{
         this.availableTimeSlot = availableTimeSlot;
     }
 
-    public LessonsAgenda getTeacherAgenda() {
+    public Long getTeacherAgenda() {
         return teacherAgenda;
     }
 
-    public void setTeacherAgenda(LessonsAgenda teacherAgenda) {
+    public void setTeacherAgenda(Long teacherAgenda) {
         this.teacherAgenda = teacherAgenda;
     }
 
@@ -173,10 +173,10 @@ public int compareTo(Teacher teacher){
     private Double latitude;
     private Double longitude;
     private Time availableTimeSlot;
-    private LessonsAgenda teacherAgenda;
+    private Long teacherAgenda;
     private String resume;
     private String email;
-    private String nroCell;
+    private String cellNumber;
 
 }
 

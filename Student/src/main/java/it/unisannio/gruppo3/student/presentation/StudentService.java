@@ -43,10 +43,23 @@ public class StudentService {
     }
 
     @GET
+    @Path("/email/{email}")
+    public Response getStudentByEmail(@PathParam("email") String email){
+        Student studentByEmail = logic.getStudentByEmail(email);
+        if (studentByEmail != null){
+            return Response.ok(studentByEmail).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+
+    @GET
     public Response getAllStudents() {
         ArrayList<Student> students = logic.getAllStudents();
         return Response.ok(students).build();
     }
+
+
 
     @PUT
     public Response updateStudent(Student student) {

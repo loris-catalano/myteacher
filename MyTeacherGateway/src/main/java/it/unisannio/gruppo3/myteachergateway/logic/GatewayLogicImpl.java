@@ -9,10 +9,13 @@ import okhttp3.*;
 import okio.BufferedSink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Array;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -74,6 +77,14 @@ public class GatewayLogicImpl implements GatewayLogic  {
     @Override
     public jakarta.ws.rs.core.Response createStudent(Student student) {
         try {
+            // Creates an empty lessons agenda and gets the id by looking at its location
+            jakarta.ws.rs.core.Response res = createLessonsAgenda(new LessonsAgenda(new ArrayList<>()));
+            String location = res.getLocation().toString();
+            String[] segments = location.split("/");
+            Long lessonsAgendaId = Long.parseLong(segments[segments.length - 1]);
+
+            student.setStudentAgenda(getLessonsAgenda(lessonsAgendaId).getId());
+
             String URL = String.format(STUDENT_SERVICE_URL);
 
             Gson gson = new GsonBuilder()
@@ -131,8 +142,45 @@ public class GatewayLogicImpl implements GatewayLogic  {
     }
 
     @Override
+    public ArrayList<Teacher> getAllTeachers() {
+        try {
+            String URL = String.format(TEACHER_SERVICE_URL);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<Teacher>) gson.fromJson(responseBody, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public jakarta.ws.rs.core.Response createTeacher(Teacher teacher) {
         try {
+            // Creates an empty lessons agenda and gets the id by looking at its location
+            jakarta.ws.rs.core.Response res = createLessonsAgenda(new LessonsAgenda(new ArrayList<>()));
+            String location = res.getLocation().toString();
+            String[] segments = location.split("/");
+            Long lessonsAgendaId = Long.parseLong(segments[segments.length - 1]);
+
+            teacher.setTeacherAgenda(getLessonsAgenda(lessonsAgendaId).getId());
+
+
             String URL = String.format(TEACHER_SERVICE_URL);
 
             Gson gson = new GsonBuilder()
@@ -305,9 +353,78 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    public jakarta.ws.rs.core.Response updateLesson(Lesson lesson){
+        try {
+            String URL = String.format(LESSON_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .create();
+
+            String json = gson.toJson(lesson);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .put(body)
+                    .build();
+
+            System.out.println("body: "+body+"\nreq: "+ request.body().toString());
+
+
+            Response response = client.newCall(request).execute();
+            System.out.println(response.code());
+            if (response.code() != 200 )return null;
+
+            return jakarta.ws.rs.core.Response.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Lesson> getAllLessons() {
+        try {
+            String URL = String.format(LESSON_SERVICE_URL);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    //    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<Lesson>) gson.fromJson(responseBody, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public jakarta.ws.rs.core.Response createLesson(Lesson lesson) {
         try {
+            //Get the teacher agenda from the id of the teacher of the lesson
+            LessonsAgenda teacherAgenda = getLessonsAgenda(getTeacher(lesson.getTeacherId()).getTeacherAgenda());
+            //Add this lesson to the teacher agenda
+            ArrayList<Long> lessons = teacherAgenda.getLessons();
+            lessons.add(lesson.getId());
+            //Update teacher agenda with the new lesson
+            teacherAgenda.setLessons(lessons);
+            updateLessonsAgenda(teacherAgenda);
+
+
             String URL = String.format(LESSON_SERVICE_URL);
 
             Gson gson = new GsonBuilder()
@@ -421,7 +538,32 @@ public class GatewayLogicImpl implements GatewayLogic  {
 
     @Override
     public jakarta.ws.rs.core.Response createUser(User user) {
-        return null;
+        try {
+            String URL = String.format(USER_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            String json = gson.toJson(user);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 201 )return null;
+
+            URI uri = UriBuilder.fromPath(response.header("location")).build();
+            return jakarta.ws.rs.core.Response.created(uri).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -479,6 +621,93 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return null;
         }
     }
+
+    @Override
+    public jakarta.ws.rs.core.Response bookLesson(Long lessonId, Long studentId) {
+
+        Lesson lesson = getLesson(lessonId);
+        Student student = getStudent(studentId);
+
+        lesson.setStudentId(studentId);
+
+        jakarta.ws.rs.core.Response res = updateLesson(lesson);
+
+        System.out.println("updateLesson response: " + res.getStatus());
+        if(res.getStatus() != 200) return null;
+
+        // Add lesson to student agenda
+
+        LessonsAgenda studentAgenda = getLessonsAgenda(student.getStudentAgenda());
+        studentAgenda.getLessons().add(lessonId);
+        updateLessonsAgenda(studentAgenda);
+
+        return jakarta.ws.rs.core.Response.ok().build();
+    }
+
+    @Override
+    public ArrayList<LessonsAgenda> getAllLessonsAgendas() {
+        try {
+            String URL = String.format(LESSONS_AGENDA_SERVICE_URL);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    //    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<LessonsAgenda>) gson.fromJson(responseBody, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+    @Override
+    public Student getCurrentStudent() {
+        String email = getCurrentUserEmail();
+
+        try {
+            String URL = String.format(STUDENT_SERVICE_URL + "email/" + email);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return gson.fromJson(responseBody, Student.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
 
 }

@@ -77,11 +77,11 @@ public class TeacherDAOMongo implements TeacherDAO {
                     d.getList(COLLECTION_RECEIVED_REVIEWS, Long.class),
                     d.getDouble(ELEMENT_LATITUDE),
                     d.getDouble(ELEMENT_LONGITUDE),
-                    (LessonsAgenda)d.get(ELEMENT_AGENDA),
+                    d.getLong(ELEMENT_AGENDA),
                     d.getString(ELEMENT_CURRICULUM),
                     (Time)d.get(ELEMENT_AVAILABLE_TIME_SLOT),
                     d.getString(ELEMENT_EMAIL),
-                    d.getString(ELEMENT_NROCELL));
+                    d.getString(ELEMENT_CELL_NUMBER));
         }
         return null;
     }
@@ -107,7 +107,7 @@ public class TeacherDAOMongo implements TeacherDAO {
                 .append(ELEMENT_CURRICULUM, teacher.getResume())
                 .append(ELEMENT_AVAILABLE_TIME_SLOT,teacher.getAvailableTimeSlot())
                 .append(ELEMENT_EMAIL,teacher.getEmail())
-                .append(ELEMENT_NROCELL,teacher.getNroCell());
+                .append(ELEMENT_CELL_NUMBER,teacher.getCellNumber());
 
          }
 
@@ -205,6 +205,15 @@ public class TeacherDAOMongo implements TeacherDAO {
             return teachers;
         }
 
+    @Override
+    public ArrayList<Teacher> getAllTeachers() {
+        ArrayList<Teacher> teachers = new ArrayList<>();
+        for(Document doc:collection.find()){
+            if(doc.containsKey(ELEMENT_HIGHEST_ID)) {continue;}
+            teachers.add(teacherFromDocument(doc));
+        }
+        return teachers;
+    }
 
 }
 

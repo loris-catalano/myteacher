@@ -92,7 +92,7 @@ public class StudentDAOMongo implements StudentDAO{
                 .append(ELEMENT_COMPLETED_REVIEWS, student.getCompletedReviews())
                 .append(ELEMENT_AGENDA, student.getStudentAgenda())
                 .append(ELEMENT_EMAIL,student.getEmail())
-                .append(ELEMENT_NROCELL,student.getNroCell());
+                .append(ELEMENT_CELL_NUMBER,student.getCellNumber());
     }
 
     private Student studentFromDocument(Document document){
@@ -105,7 +105,7 @@ public class StudentDAOMongo implements StudentDAO{
                     document.getList(ELEMENT_COMPLETED_REVIEWS, Long.class),
                     document.getLong(ELEMENT_AGENDA),
                     document.getString(ELEMENT_EMAIL),
-                    document.getString(ELEMENT_NROCELL)
+                    document.getString(ELEMENT_CELL_NUMBER)
                     );
         else return null;
     }
@@ -163,5 +163,11 @@ public class StudentDAOMongo implements StudentDAO{
     public Long getNextId() {
         Long actualHighestID = studentsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
         return actualHighestID+1;
+    }
+
+    @Override
+    public Student getStudentByEmail(String email) {
+        Document d = studentsCollection.find(Filters.eq(ELEMENT_EMAIL,email)).first();
+        return studentFromDocument(d);
     }
 }

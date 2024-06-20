@@ -69,6 +69,8 @@ public class MongoAuthUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        //GET USER CON CHIAMATA HTTP
+
         System.out.println("userName = " + userName);
 
         Document userDoc = userCollection.find(eq(ELEMENT_USERNAME, userName)).first();

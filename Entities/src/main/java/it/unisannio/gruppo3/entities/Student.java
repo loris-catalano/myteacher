@@ -3,21 +3,26 @@ package it.unisannio.gruppo3.entities;
 import java.util.List;
 import java.util.Objects;
 
+<<<<<<< beadf64e6c7c20c490bfc2ebf5d9d7b5c1a8361a
 public class Student implements Comparable<Student> {
     public Student(String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String nroCell) {
+=======
+public class Student {
+    public Student(String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String cellNumber) {
+>>>>>>> 6e4f0dffd10bd3b4bd7b7c5f7bc274f781db98e8
         this.id = null;//the id will be set by us when creating
         this.email=email;
-        this.nroCell=nroCell;
+        this.cellNumber=cellNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.lessonBonusPoints = lessonBonusPoints;
         this.completedReviews = completedReviews;
         this.studentAgenda = studentAgenda;
     }
-    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String nroCell) {
+    public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String cellNumber) {
         this.id = id;
         this.email=email;
-        this.nroCell=nroCell;
+        this.cellNumber=cellNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.lessonBonusPoints = lessonBonusPoints;
@@ -59,8 +64,8 @@ public class Student implements Comparable<Student> {
     public void setStudentAgenda(Long studentAgenda) {
         this.studentAgenda = studentAgenda;
     }
-    public String getNroCell() {
-        return this.nroCell;
+    public String getCellNumber() {
+        return this.cellNumber;
     }
     public String getEmail() {
         return this.email;
@@ -75,7 +80,7 @@ public class Student implements Comparable<Student> {
                 ", completedReviews=" + completedReviews +
                 ", studentAgenda=" + studentAgenda +
                 ", email='" + email + '\'' +
-                ", nroCell='" + nroCell + '\'' +
+                ", cellNumber='" + cellNumber + '\'' +
                 '}';
     }
     @Override
@@ -87,7 +92,7 @@ public class Student implements Comparable<Student> {
                 firstName.equals(student.firstName) &&
                 lastName.equals(student.lastName) &&
                 email.equals(student.email) &&
-                nroCell.equals(student.nroCell) &&
+                cellNumber.equals(student.cellNumber) &&
                 Objects.equals(id, student.id) &&
                 Objects.equals(completedReviews, student.completedReviews) &&
                 Objects.equals(studentAgenda, student.studentAgenda);
@@ -120,6 +125,6 @@ public class Student implements Comparable<Student> {
     private List<Long> completedReviews;
     private Long studentAgenda;
     private String email;
-    private String nroCell;
+    private String cellNumber;
 }
 
