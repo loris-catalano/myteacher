@@ -15,4 +15,6 @@ public interface LessonLogic {
     boolean deleteLesson(Long id);
 
     ArrayList<Lesson> getAllLessons();
+
+    Long getNextId();
 }

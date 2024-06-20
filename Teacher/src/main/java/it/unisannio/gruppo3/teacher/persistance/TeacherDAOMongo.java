@@ -215,6 +215,12 @@ public class TeacherDAOMongo implements TeacherDAO {
         return teachers;
     }
 
+    @Override
+    public Long getNextId() {
+        Long actualHighestID = collection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
+        return actualHighestID+1;
+    }
+
 }
 
 

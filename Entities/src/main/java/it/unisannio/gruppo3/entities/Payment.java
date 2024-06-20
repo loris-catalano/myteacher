@@ -1,13 +1,15 @@
 package it.unisannio.gruppo3.entities;
 
 public class Payment implements Comparable<Payment> {
+
+
     public Payment(Long id, Double amount, Long lessonId){
         this.id= id;
         this.amount=amount;
         this.lessonId=lessonId;
     }
 
-    public Payment(int amount, Long lessonId){
+    public Payment(Double amount, Long lessonId){
         this.amount=amount;
         this.lessonId=lessonId;
     }
@@ -15,9 +17,9 @@ public class Payment implements Comparable<Payment> {
     public Payment(){}
 
 
-    public int getAmount(){return amount;}
+    public Double getAmount(){return amount;}
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
@@ -43,13 +45,13 @@ public class Payment implements Comparable<Payment> {
     }
 
     public int hashCode(){
-    final int PRIME = 3;
-    int result = 1;
-    result = PRIME * result + id.hashCode();
-return result;
-}
+          final int PRIME = 3;
+          int result = 1;
+          result = PRIME * result + id.hashCode();
+          return result;
+    }
 
-private Double amount;
+    private Double amount;
     private Long id;
     private Long lessonId;
 }

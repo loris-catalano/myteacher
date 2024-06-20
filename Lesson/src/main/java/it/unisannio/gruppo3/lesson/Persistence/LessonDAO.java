@@ -33,4 +33,6 @@ public interface LessonDAO {
     boolean closeConnection();
 
     ArrayList<Lesson> getAllLessons();
+
+    Long getNextId();
 }

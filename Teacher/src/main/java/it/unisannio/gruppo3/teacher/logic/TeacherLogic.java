@@ -23,5 +23,6 @@ public interface TeacherLogic {
     ArrayList<Teacher> getTeachersBySubjects(String subject);
 
 
+    public Long getNextId() ;
     ArrayList<Teacher> getAllTeachers();
 }

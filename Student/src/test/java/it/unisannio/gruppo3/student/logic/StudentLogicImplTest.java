@@ -31,7 +31,6 @@ public class StudentLogicImplTest {
 
     @Test
     @Order(1)
-
     void createStudent() {
         Long nextId = studentLogic.getNextId();
         assertTrue(nextId > 0);
@@ -44,10 +43,8 @@ public class StudentLogicImplTest {
 
     @Test
     @Order(2)
-
     void getStudent() {
         Student student = studentLogic.getStudent(st1Id);
-
         assertEquals(st1,student);
     }
 

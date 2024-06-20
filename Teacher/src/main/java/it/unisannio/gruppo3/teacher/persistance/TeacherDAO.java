@@ -51,4 +51,6 @@ public interface TeacherDAO {
 
 
     ArrayList<Teacher> getAllTeachers();
+
+    Long getNextId();
 }

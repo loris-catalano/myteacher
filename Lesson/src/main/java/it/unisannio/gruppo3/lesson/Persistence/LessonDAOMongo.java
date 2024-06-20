@@ -112,6 +112,12 @@ public class LessonDAOMongo implements LessonDAO {
         return lessons;
     }
 
+    @Override
+    public Long getNextId() {
+        Long actualHighestID = lessonsCollection.find(Filters.eq("_id","counter")).first().getLong(ELEMENT_HIGHEST_ID);
+        return actualHighestID+1;
+    }
+
     /**
      * Creates a new MongoDB document from a Student object
      * @param lesson The lesson

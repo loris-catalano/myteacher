@@ -132,8 +132,12 @@ public class TeacherService {
         } else {
             return Response.serverError().build();
         }
+    }
 
+    @GET
+    public Response getAllTeachers() {
+        ArrayList<Teacher> teachers = logic.getAllTeachers();
+        return Response.ok(teachers).build();
+    }
 
-
-
-}}
+}

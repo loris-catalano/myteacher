@@ -39,4 +39,6 @@ public class LessonLogicImpl implements LessonLogic {
     public ArrayList<Lesson> getAllLessons() {
         return lessonDAO.getAllLessons();
     }
+    @Override
+    public Long getNextId(){return lessonDAO.getNextId();}
 }

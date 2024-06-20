@@ -146,7 +146,7 @@ public class Teacher implements Comparable<Teacher>{
                 (this.firstName.equals(tcr.getFirstName())) &&
                 (this.lastName.equals(tcr.getLastName())) && (this.email.equals(tcr.getEmail()));}
 
-public int compareTo(Teacher teacher){
+    public int compareTo(Teacher teacher){
         return this.lastName.compareTo(teacher.getLastName());
 }
 
