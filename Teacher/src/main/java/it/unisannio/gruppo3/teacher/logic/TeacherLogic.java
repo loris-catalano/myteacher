@@ -24,4 +24,6 @@ public interface TeacherLogic {
 
 
     ArrayList<Teacher> getAllTeachers();
+
+    Teacher getTeacherByEmail(String email);
 }

@@ -41,4 +41,5 @@ public interface GatewayLogic {
 
      ArrayList<Teacher> getAllTeachers();
 
+     Teacher getCurrentTeacher();
 }
