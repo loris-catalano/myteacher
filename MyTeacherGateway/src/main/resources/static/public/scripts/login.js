@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert("Hai inserito una email o una password errata.")
             }
         }else{
-            document.getElementById('login-form').reset();
             alert("Seleziona un ruolo per effettuare l'autenticazione.")
         }
     })

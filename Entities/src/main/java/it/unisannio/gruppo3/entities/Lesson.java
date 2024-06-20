@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Date;
 import java.util.LongSummaryStatistics;
 
-public class Lesson {
+public class Lesson implements Comparable<Lesson> {
     private Long id;
     private int price;
     private String subject;
@@ -79,6 +79,28 @@ public class Lesson {
 
     public void setTeacherId(Long teacherId) {
         this.teacherId=teacherId;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Lesson lsn = (Lesson) obj;
+        return id == lsn.getId() &&
+                (this.studentId.equals(lsn.getStudentId())) &&
+                (this.teacherId.equals(lsn.getTeacherId()));}
+
+    public int compareTo(Lesson lsn) {
+        return Integer.compare(this.price,lsn.getPrice());
+    }
+
+
+    public int hashCode() {
+        final int PRIME = 5;
+        int result = 1;
+        result = PRIME * result + (id == null ? 0 : id.hashCode());;
+        result = PRIME * result + teacherId.hashCode();
+        result = PRIME * result + studentId.hashCode();
+        return result;
     }
 
 

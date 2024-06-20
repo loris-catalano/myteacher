@@ -2,7 +2,7 @@ package it.unisannio.gruppo3.entities;
 
 import java.util.ArrayList;
 
-public class Chat {
+public class Chat implements Comparable<Chat>{
 
     public Chat(){}
 
@@ -37,6 +37,26 @@ public class Chat {
         return this.messages;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Chat cht = (Chat) obj;
+        return id == cht.getId() &&
+                (this.studentId.equals(cht.getStudentId())) &&
+                (this.teacherId.equals(cht.getTeacherId()));}
+
+    public int compareTo(Chat cht){
+        return Integer.compare(this.getMessages().size(),cht.getMessages().size());}
+
+    public int hashCode() {
+        final int PRIME = 5;
+        int result = 1;
+        result = PRIME * result + (id == null ? 0 : id.hashCode());;
+        result = PRIME * result + studentId.hashCode();
+        result = PRIME * result + teacherId.hashCode();
+
+        return result;
+    }
     private Long id, studentId, teacherId;
     private ArrayList<Message> messages;
 

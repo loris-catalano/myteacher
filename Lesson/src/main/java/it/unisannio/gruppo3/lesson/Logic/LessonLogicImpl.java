@@ -1,8 +1,11 @@
 package it.unisannio.gruppo3.lesson.Logic;
 
 import it.unisannio.gruppo3.entities.Lesson;
+import it.unisannio.gruppo3.entities.Student;
 import it.unisannio.gruppo3.lesson.Persistence.LessonDAO;
 import it.unisannio.gruppo3.lesson.Persistence.LessonDAOMongo;
+
+import java.util.ArrayList;
 
 public class LessonLogicImpl implements LessonLogic {
 
@@ -30,5 +33,10 @@ public class LessonLogicImpl implements LessonLogic {
     @Override
     public boolean deleteLesson(Long id) {
         return lessonDAO.deleteLesson(id);
+    }
+
+    @Override
+    public ArrayList<Lesson> getAllLessons() {
+        return lessonDAO.getAllLessons();
     }
 }

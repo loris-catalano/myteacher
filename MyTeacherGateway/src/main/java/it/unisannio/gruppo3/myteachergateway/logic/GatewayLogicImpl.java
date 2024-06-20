@@ -353,6 +353,65 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    public jakarta.ws.rs.core.Response updateLesson(Lesson lesson){
+        try {
+            String URL = String.format(LESSON_SERVICE_URL);
+
+            Gson gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .create();
+
+            String json = gson.toJson(lesson);
+            MediaType JSON = MediaType.get("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(json, JSON);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .put(body)
+                    .build();
+
+            System.out.println("body: "+body+"\nreq: "+ request.body().toString());
+
+
+            Response response = client.newCall(request).execute();
+            System.out.println(response.code());
+            if (response.code() != 200 )return null;
+
+            return jakarta.ws.rs.core.Response.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Lesson> getAllLessons() {
+        try {
+            String URL = String.format(LESSON_SERVICE_URL);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    //    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<Lesson>) gson.fromJson(responseBody, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public jakarta.ws.rs.core.Response createLesson(Lesson lesson) {
         try {
@@ -564,17 +623,17 @@ public class GatewayLogicImpl implements GatewayLogic  {
     }
 
     @Override
-    public jakarta.ws.rs.core.Response payLesson(Long lessonId, Long studentId) {
-
-        // Create the payment
+    public jakarta.ws.rs.core.Response bookLesson(Long lessonId, Long studentId) {
 
         Lesson lesson = getLesson(lessonId);
         Student student = getStudent(studentId);
-        int price = lesson.getPrice();
 
-        jakarta.ws.rs.core.Response res = createPayment(new Payment(price, lessonId));
+        lesson.setStudentId(studentId);
 
-        if(res.getStatus() != 201) return null;
+        jakarta.ws.rs.core.Response res = updateLesson(lesson);
+
+        System.out.println("updateLesson response: " + res.getStatus());
+        if(res.getStatus() != 200) return null;
 
         // Add lesson to student agenda
 

@@ -4,8 +4,7 @@ import java.io.File;
 import java.sql.Time;
 import java.util.List;
 
-public class Teacher {
-
+public class Teacher implements Comparable<Teacher>{
 
     public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String cellNumber) {
         this.id = id;
@@ -138,6 +137,30 @@ public class Teacher {
     public void setResume(String resume) {
         this.resume = resume;
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Teacher tcr = (Teacher) obj;
+        return id == tcr.id &&
+                (this.firstName.equals(tcr.getFirstName())) &&
+                (this.lastName.equals(tcr.getLastName())) && (this.email.equals(tcr.getEmail()));}
+
+public int compareTo(Teacher teacher){
+        return this.lastName.compareTo(teacher.getLastName());
+}
+
+
+    public int hashCode() {
+        final int prime = 5;
+        int result = 1;
+        result = prime * result + this.id.hashCode();
+        result = prime * result + firstName.hashCode();
+        result = prime * result + lastName.hashCode();
+        result = prime * result + email.hashCode();
+        return result;
+    }
+
 
 
     private Long id=null;

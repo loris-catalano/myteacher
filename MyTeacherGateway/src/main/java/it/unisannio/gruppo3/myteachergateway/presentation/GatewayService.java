@@ -177,6 +177,14 @@ public class GatewayService {
         return Response.ok(lesson).build();
     }
 
+    @GET
+    @Path("/lessons/")
+    @RolesAllowed({"STUDENT"})
+    public Response getAllLessons() {
+        ArrayList<Lesson> lessons = logic.getAllLessons();
+        return Response.ok(lessons).build();
+    }
+
     @POST
     @Path("/lessons/")
     @RolesAllowed({"TEACHER"})
@@ -189,8 +197,8 @@ public class GatewayService {
     @GET
     @Path("lessons/{lessonId}/student/{studentId}")
     @RolesAllowed({"STUDENT"})
-    public Response payLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
-        return logic.payLesson(lessonId,studentId);
+    public Response bookLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
+        return logic.bookLesson(lessonId,studentId);
     }
 
 
