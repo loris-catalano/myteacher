@@ -2,8 +2,9 @@ package it.unisannio.gruppo3.entities;
 
 
 import java.time.Instant;
+import java.util.Objects;
 
-public class Review {
+public class Review implements Comparable<Review>{
 
     public Review(Long id, int stars, String title, String body, String answer, Long studentId, Long teacherId, Instant creationTime) {
         this.id = id;
@@ -82,6 +83,27 @@ public class Review {
     public void setCreationTime(Instant creationTime) {
         this.creationTime = Instant.now();
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review rvw= (Review) o;
+        return this.id==rvw.getId() && this.title.equals((rvw.getTitle()));
+    }
+
+    public int compareTo(Review rvw){
+        return Integer.compare(this.stars,rvw.getStars());
+    }
+
+    public int hashCode(){
+
+            final int PRIME = 2;
+            int result = 1;
+            result = PRIME * result +  id.hashCode();
+            result = PRIME * result + title.hashCode();
+            return result;
+        }
+
 
     private Long id;
     private int stars;
