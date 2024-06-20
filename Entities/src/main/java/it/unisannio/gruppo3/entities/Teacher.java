@@ -7,7 +7,7 @@ import java.util.List;
 public class Teacher {
 
 
-    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher(Long id, String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String cellNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -20,10 +20,10 @@ public class Teacher {
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
-        this.nroCell=nroCell;
+        this.cellNumber=cellNumber;
         this.email=email;
     }
-    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String nroCell) {
+    public Teacher( String firstName, String lastName, Integer age, Boolean premium, List<String> subjects, List<Long> receivedReviews, Double latitude,Double longitude, Long lessonsAgenda, String resume, Time availableTimeSlot,String email,String cellNumber) {
         this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,7 +36,7 @@ public class Teacher {
         this.teacherAgenda=lessonsAgenda;
         this.resume=resume;
         this.availableTimeSlot=availableTimeSlot;
-        this.nroCell=nroCell;
+        this.cellNumber=cellNumber;
         this.email=email;
     }
     public Teacher(){}
@@ -62,11 +62,11 @@ public class Teacher {
         return email;
     }
 
-    public String getNroCell() {
-        return nroCell;
+    public String getCellNumber() {
+        return cellNumber;
     }
 
-    public void setNroCell(String nroCell) {this.nroCell = nroCell;}
+    public void setCellNumber(String cellNumber) {this.cellNumber = cellNumber;}
 
     public void setEmail(String email){this.email=email;}
 
@@ -153,7 +153,7 @@ public class Teacher {
     private Long teacherAgenda;
     private String resume;
     private String email;
-    private String nroCell;
+    private String cellNumber;
 
 }
 

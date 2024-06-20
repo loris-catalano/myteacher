@@ -31,4 +31,11 @@ public interface GatewayLogic {
 
 
      Response payLesson(Long lessonId, Long studentId);
+
+     ArrayList<LessonsAgenda> getAllLessonsAgendas();
+
+     Student getCurrentStudent();
+
+
+     ArrayList<Teacher> getAllTeachers();
 }

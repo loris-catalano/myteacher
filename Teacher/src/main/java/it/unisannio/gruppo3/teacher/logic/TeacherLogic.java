@@ -22,6 +22,6 @@ public interface TeacherLogic {
 
     ArrayList<Teacher> getTeachersBySubjects(String subject);
 
-    
 
+    ArrayList<Teacher> getAllTeachers();
 }

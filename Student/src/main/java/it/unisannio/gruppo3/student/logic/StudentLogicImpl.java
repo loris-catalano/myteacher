@@ -41,4 +41,9 @@ public class StudentLogicImpl implements StudentLogic{
 
     @Override
     public Long getNextId() {return studentDAO.getNextId();}
+
+    @Override
+    public Student getStudentByEmail(String email) {
+        return studentDAO.getStudentByEmail(email);
+    }
 }

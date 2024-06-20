@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #3d50a1;
+    color: #000000;
+    padding: 10px;
+    text-align: center;
+}
+.logo-picture{
+    width:30px;
+    height: 30px;
+}
+nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+nav a {
+    color: #dddddd;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #000000;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+}
+nav a:hover {
+    color: #fdfdfd;
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+.search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.teacher-list {
+    list-style: none;
+    padding: 0;
+}
+.segment {
+    margin-bottom: 20px;
+    padding: 30px;
+    border: 3px solid #2838c9;
+    border-radius: 5px;
+}
+.teacher-element{
+    border-style: solid;
+    border-color: #2838c9;
+    border-radius: 10px;
+    background-color: #9ee8ff;
+
+    padding: 10px;
+    margin: 5px;
+}

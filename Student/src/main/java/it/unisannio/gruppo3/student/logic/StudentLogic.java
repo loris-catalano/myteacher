@@ -16,4 +16,6 @@ public interface StudentLogic {
     ArrayList<Student> getAllStudents();
 
     Long getNextId();
+
+    Student getStudentByEmail(String email);
 }
