@@ -18,6 +18,8 @@ public interface GatewayLogic {
      Response deleteReview(Long id);
 
      Lesson getLesson(Long id);
+
+     ArrayList<Lesson> getAllLessons();
      Response createLesson(Lesson lesson);
 
      LessonsAgenda getLessonsAgenda(Long id);
@@ -30,7 +32,7 @@ public interface GatewayLogic {
      Response createPayment(Payment payment);
 
 
-     Response payLesson(Long lessonId, Long studentId);
+     Response bookLesson(Long lessonId, Long studentId);
 
      ArrayList<LessonsAgenda> getAllLessonsAgendas();
 
@@ -38,4 +40,5 @@ public interface GatewayLogic {
 
 
      ArrayList<Teacher> getAllTeachers();
+
 }

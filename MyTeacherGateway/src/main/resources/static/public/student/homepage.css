@@ -39,7 +39,7 @@ nav a:hover {
     text-align: center;
     margin-bottom: 20px;
 }
-.teacher-list {
+.available-lessons-list {
     list-style: none;
     padding: 0;
 }
@@ -49,7 +49,7 @@ nav a:hover {
     border: 3px solid #2838c9;
     border-radius: 5px;
 }
-.teacher-element{
+.lesson-element{
     border-style: solid;
     border-color: #2838c9;
     border-radius: 10px;
@@ -57,4 +57,23 @@ nav a:hover {
 
     padding: 10px;
     margin: 5px;
+}
+
+.round-button {
+    background-color: #2838c9;
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.round-button:hover {
+    background-color: #636cc5;
 }

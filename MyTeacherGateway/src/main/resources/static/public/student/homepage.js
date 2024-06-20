@@ -23,29 +23,47 @@ function fillLessonsAgenda(){
 }
 
 
-function teacherHtml(teacher){
+function lessonHtml(lesson, teacher){
     return `
-    <div class="teacher-element">
-    <p><i>Nome</i>: ${teacher.firstName} ${teacher.lastName}<\p>
-    <p><i>Materie</i>: ${teacher.subjects}<\p>
-    <p><i>Età</i>: ${teacher.age}<\p>
-    <button type="submit" formaction="">Book a lesson</button>
+    <div class="lesson-element">
+    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}<\p>
+    <p><i>Materia</i>: ${lesson.subject}<\p>
+    <p><i>Prezzo</i>: € ${lesson.price}<\p>
+    <p><i>Data</i>: ${lesson.startLesson}<\p>
+    <p><i>Durata</i>: ${lesson.duration} ora<\p>
+    <button type="submit" formaction="" class="round-button" id="lesson-${lesson.id}">Prenota</button>
     </div>
     `
 }
 
-function fillTeachers(){
+
+function getRequest(url){
     var xhttp = new XMLHttpRequest();
-    var url = `${URL}/myTeacher/teachers/`;
 
     xhttp.open("GET", url, false);
-    xhttp.setRequestHeader("Authorization", localStorage.getItem("Authorization"))
+    xhttp.setRequestHeader("Authorization", localStorage.getItem("Authorization"));
     xhttp.send();
 
-    if (xhttp.status == "200") {
-        let teachers = JSON.parse(xhttp.responseText)
-        for(i in teachers){
-            document.getElementById("teachersList").innerHTML += teacherHtml(teachers[i]);
+    return xhttp;
+}
+
+
+function fillAvailableLessons(){
+    var xhttp = new XMLHttpRequest();
+    var lessonsurl = `${URL}/myTeacher/lessons/`;
+    var teacherurl = `${URL}/myTeacher/teachers/`;
+
+    let xhrLessons = getRequest(lessonsurl)
+
+    if (xhrLessons.status === 200) {
+        let lessons = JSON.parse(xhrLessons.responseText)
+        for(i in lessons){
+            let lesson = lessons[i]
+            console.log(lesson)
+            let xhrTeacher = getRequest(teacherurl + lesson.teacherId);
+            let teacher = JSON.parse(xhrTeacher.responseText)
+
+            document.getElementById("availableLessonsList").innerHTML += lessonHtml(lessons[i], teacher);
         }
     }
     else
@@ -56,6 +74,6 @@ function fillTeachers(){
 
 document.addEventListener('DOMContentLoaded', function() {
     if(localStorage.getItem("Authorization") !== null) {
-        fillTeachers();
+        fillAvailableLessons();
     }
 })

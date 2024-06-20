@@ -10,6 +10,7 @@ import com.mongodb.client.model.Indexes;
 import it.unisannio.gruppo3.entities.*;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -99,6 +100,16 @@ public class LessonDAOMongo implements LessonDAO {
     @Override
     public boolean closeConnection() {
         return false;
+    }
+
+    @Override
+    public ArrayList<Lesson> getAllLessons() {
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        for(Document doc:lessonsCollection.find()){
+            if(doc.containsKey(ELEMENT_HIGHEST_ID)) {continue;}
+            lessons.add(lessonFromDocument(doc));
+        }
+        return lessons;
     }
 
     /**

@@ -1,6 +1,9 @@
 package it.unisannio.gruppo3.lesson.Persistence;
 
 import it.unisannio.gruppo3.entities.Lesson;
+import it.unisannio.gruppo3.entities.Student;
+
+import java.util.ArrayList;
 
 public interface LessonDAO {
     String DATABASE_NAME = "myteacher";
@@ -28,4 +31,6 @@ public interface LessonDAO {
     boolean deleteLesson(Long id);
 
     boolean closeConnection();
+
+    ArrayList<Lesson> getAllLessons();
 }
