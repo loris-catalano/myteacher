@@ -189,9 +189,16 @@ public class GatewayService {
 
     @POST
     @Path("/lessons/")
-    @RolesAllowed({"TEACHER"})
+    @RolesAllowed({"STUDENT","TEACHER"})
     public Response createLesson(Lesson lesson) {
         return logic.createLesson(lesson);
+    }
+
+    @PUT
+    @Path("/lessons/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response updateLesson(Lesson lesson) {
+        return logic.updateLesson(lesson);
     }
 
 
