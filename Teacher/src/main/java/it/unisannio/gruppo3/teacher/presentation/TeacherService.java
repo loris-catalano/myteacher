@@ -116,7 +116,7 @@ public class TeacherService {
     }
 
     @GET
-    public Response getAlTeachers() {
+    public Response getAllTeachers() {
         ArrayList<Teacher> teachers = logic.getAllTeachers();
         return Response.ok(teachers).build();
     }
@@ -144,10 +144,5 @@ public class TeacherService {
         }
     }
 
-    @GET
-    public Response getAllTeachers() {
-        ArrayList<Teacher> teachers = logic.getAllTeachers();
-        return Response.ok(teachers).build();
-    }
 
 }
