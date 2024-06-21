@@ -206,6 +206,12 @@ public class TeacherDAOMongo implements TeacherDAO {
         }
 
     @Override
+    public Teacher getTeacherByEmail(String email) {
+        Document d = collection.find(Filters.eq(ELEMENT_EMAIL,email)).first();
+        return teacherFromDocument(d);
+    }
+
+    @Override
     public ArrayList<Teacher> getAllTeachers() {
         ArrayList<Teacher> teachers = new ArrayList<>();
         for(Document doc:collection.find()){

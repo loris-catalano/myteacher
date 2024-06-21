@@ -37,6 +37,11 @@ public class TeacherLogicImpl implements TeacherLogic {
     }
 
     @Override
+    public Teacher getTeacherByEmail(String email) {
+        return teacherDAO.getTeacherByEmail(email);
+    }
+
+    @Override
     public ArrayList<Teacher> getTeachersByAge(int age) {
         return teacherDAO.getTeachersByAge(age);
     }
@@ -63,6 +68,8 @@ public class TeacherLogicImpl implements TeacherLogic {
 
     @Override
     public Long getNextId() {return teacherDAO.getNextId();}
+
+
 
 
 }

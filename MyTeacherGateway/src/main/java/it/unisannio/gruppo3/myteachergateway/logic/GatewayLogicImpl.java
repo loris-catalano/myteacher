@@ -707,6 +707,36 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    @Override
+    public Teacher getCurrentTeacher() {
+        String email = getCurrentUserEmail();
+
+        try {
+            String URL = String.format(TEACHER_SERVICE_URL + "email/" + email);
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return gson.fromJson(responseBody, Teacher.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 

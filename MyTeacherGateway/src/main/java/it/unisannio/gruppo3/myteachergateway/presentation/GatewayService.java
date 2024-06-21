@@ -24,13 +24,7 @@ public class GatewayService {
         logic = new GatewayLogicImpl();
     }
 
-    /*@GET
-    @Path("/currentUser/email")
-    @PermitAll
-    public String getCurrentUserEmail() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
-    }*/
+
 
     @GET
     @Path("/currentUser/student")
@@ -38,6 +32,14 @@ public class GatewayService {
     public Response getCurrentStudent() {
         Student student = logic.getCurrentStudent();
         return Response.ok(student).build();
+    }
+
+    @GET
+    @Path("/currentUser/teacher")
+    @PermitAll
+    public Response getCurrentTeacher() {
+        Teacher teacher = logic.getCurrentTeacher();
+        return Response.ok(teacher).build();
     }
 
 
@@ -226,16 +228,6 @@ public class GatewayService {
     public Response createLessonsAgenda(LessonsAgenda lessonsAgenda) {
         return logic.createLessonsAgenda(lessonsAgenda);
     }
-
-
-    /*Don't know if necessary
-    @PUT
-    @Path("/lessonsAgendas/")
-    @RolesAllowed({"STUDENT","TEACHER"})
-    public Response updateLessonsAgenda(LessonsAgenda lessonsAgenda) {
-        return logic.updateLessonsAgenda(lessonsAgenda);
-    }*/
-
 
     @GET
     @Path("/payments/{id}")

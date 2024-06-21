@@ -106,6 +106,16 @@ public class TeacherService {
     }
 
     @GET
+    @Path("/email/{email}")
+    public Response getTeacherByEmail(@PathParam("email") String email){
+        Teacher teacherByEmail = logic.getTeacherByEmail(email);
+        if (teacherByEmail != null){
+            return Response.ok(teacherByEmail).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @GET
     public Response getAlTeachers() {
         ArrayList<Teacher> teachers = logic.getAllTeachers();
         return Response.ok(teachers).build();

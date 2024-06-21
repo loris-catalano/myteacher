@@ -25,4 +25,6 @@ public interface TeacherLogic {
 
     public Long getNextId() ;
     ArrayList<Teacher> getAllTeachers();
+
+    Teacher getTeacherByEmail(String email);
 }

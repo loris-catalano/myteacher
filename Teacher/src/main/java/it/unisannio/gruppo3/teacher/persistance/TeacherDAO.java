@@ -53,4 +53,6 @@ public interface TeacherDAO {
     ArrayList<Teacher> getAllTeachers();
 
     Long getNextId();
+    
+    Teacher getTeacherByEmail(String email);
 }

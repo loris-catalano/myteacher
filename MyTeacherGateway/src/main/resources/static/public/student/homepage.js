@@ -26,15 +26,17 @@ function fillLessonsAgenda(){
 function lessonHtml(lesson, teacher){
     return `
     <div class="lesson-element">
-    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}<\p>
+    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
     <p><i>Materia</i>: ${lesson.subject}<\p>
     <p><i>Prezzo</i>: € ${lesson.price}<\p>
     <p><i>Data</i>: ${lesson.startLesson}<\p>
     <p><i>Durata</i>: ${lesson.duration} ora<\p>
-    <button type="submit" formaction="" class="round-button" id="lesson-${lesson.id}">Prenota</button>
+    <button type="submit" class="round-button" id="lesson-${lesson.id}">Prenota</button>
     </div>
     `
 }
+
+
 
 
 function getRequest(url){
@@ -45,6 +47,12 @@ function getRequest(url){
     xhttp.send();
 
     return xhttp;
+}
+
+function logout(){
+    localStorage.clear()
+    alert("Sei uscito dall'account corrente. Verrai reinderizzato alla pagina di accesso.")
+    window.location.pathname = "/public/login.html";
 }
 
 
@@ -72,8 +80,39 @@ function fillAvailableLessons(){
 
 
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     if(localStorage.getItem("Authorization") !== null) {
         fillAvailableLessons();
     }
+
+
+    document.querySelectorAll('.round-button').forEach(button => {
+        button.addEventListener('click', function(){
+            bookLesson(button.id)
+        });
+    });
 })
+
+
+
+function bookLesson(id){
+    lessonId = id.split("-")[1]
+    studentId = localStorage.getItem("id")
+
+
+    url = URL + "/myTeacher/lessons/"+lessonId+"/student/"+studentId
+
+    req = getRequest(url)
+    if(req.status === 200){
+        console.log("Prenotato")
+    }
+
+}
+
+
+document.getElementById("logout").addEventListener("click", logout)
+
+
+
