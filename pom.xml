@@ -30,6 +30,9 @@
 		<module>Lesson</module>
 		<module>LessonsAgenda</module>
 		<module>MyTeacherGateway</module>
+		<module>Chat</module>
+		<module>Payment</module>
+		<module>User</module>
 	</modules>
 
     <properties>

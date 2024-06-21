@@ -3,13 +3,9 @@ package it.unisannio.gruppo3.entities;
 import java.util.List;
 import java.util.Objects;
 
-<<<<<<< beadf64e6c7c20c490bfc2ebf5d9d7b5c1a8361a
 public class Student implements Comparable<Student> {
-    public Student(String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String nroCell) {
-=======
-public class Student {
     public Student(String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String cellNumber) {
->>>>>>> 6e4f0dffd10bd3b4bd7b7c5f7bc274f781db98e8
+
         this.id = null;//the id will be set by us when creating
         this.email=email;
         this.cellNumber=cellNumber;
@@ -18,6 +14,7 @@ public class Student {
         this.lessonBonusPoints = lessonBonusPoints;
         this.completedReviews = completedReviews;
         this.studentAgenda = studentAgenda;
+        this.cellNumber=cellNumber;
     }
     public Student(Long id, String firstName, String lastName, int lessonBonusPoints, List<Long> completedReviews, Long studentAgenda,String email,String cellNumber) {
         this.id = id;
@@ -28,6 +25,7 @@ public class Student {
         this.lessonBonusPoints = lessonBonusPoints;
         this.completedReviews = completedReviews;
         this.studentAgenda = studentAgenda;
+        this.cellNumber=cellNumber;
     }
 
     public Student(){};
@@ -112,7 +110,7 @@ public class Student {
         result = PRIME * result + completedReviews.hashCode();
         result = PRIME * result + studentAgenda.hashCode();
         result = PRIME * result + email.hashCode();
-        result = PRIME * result + nroCell.hashCode();
+        result = PRIME * result + cellNumber.hashCode();
         return result;
     }
 

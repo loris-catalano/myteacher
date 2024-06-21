@@ -66,6 +66,9 @@ public class TeacherLogicImpl implements TeacherLogic {
         return teacherDAO.getAllTeachers();
     }
 
+    @Override
+    public Long getNextId() {return teacherDAO.getNextId();}
+
 
 
 

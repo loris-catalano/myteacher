@@ -1,0 +1,511 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#    - if: ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "develop") && $MY_VARIABLE
+
+variables:
+  MONGO_ADDRESS: $MONGO_ADDRESS
+  MONGO_PORT: $MONGO_PORT
+  VERSION: "0.1"
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - package
+  - delivery
+  - docker-build
+  - deployment
+
+build-job:
+  stage: build
+  image:
+    name: maven:3.8.2-openjdk-17
+    pull_policy: if-not-present
+  script:
+    - echo "Checking Maven version..."
+    - mvn -version
+    - echo "Compiling the code..."
+    - mvn clean compile
+    - echo "Compile complete."
+
+
+test-job:
+  stage: test
+  needs:
+    - build-job
+  image:
+    name: maven:3.8.2-openjdk-17
+    pull_policy: if-not-present
+  script:
+    - mvn clean test
+
+
+quality-job:
+  stage: test
+  needs:
+    - test-job
+  image:
+    name: maven:3.8.2-openjdk-17
+    pull_policy: if-not-present
+  script:
+    - mvn clean verify sonar:sonar -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN
+
+
+package-job:
+  stage: package
+  needs:
+    - test-job
+  image:
+    name: maven:3.8.2-openjdk-17
+    pull_policy: if-not-present
+  script:
+    - mvn clean package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - Student/target/*.jar
+      - Teacher/target/*.jar
+      - Review/target/*.jar
+      - Lesson/target/*.jar
+      - LessonsAgenda/target/*.jar
+      - MyTeacherGateway/target/*.jar
+      - Chat/target/*.jar
+      - Payment/target/*.jar
+      - User/target/*.jar
+
+delivery-job:
+  stage: delivery
+  needs:
+    - package-job
+  image:
+    name: curlimages/curl:latest
+    pull_policy: if-not-present
+  script:
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file Student/target/Student-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/Student/Student-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file Teacher/target/Teacher-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/Teacher/Teacher-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file Review/target/Review-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/Review/Review-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file Lesson/target/Lesson-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/Lesson/Lesson-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file LessonsAgenda/target/LessonsAgenda-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/LessonsAgenda/LessonsAgenda-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file MyTeacherGateway/target/MyTeacherGateway-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/MyTeacherGateway/MyTeacherGateway-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file Chat/target/Chat-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/Chat/Chat-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file Payment/target/Payment-${VERSION}.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/Payment/Payment-${VERSION}.jar"'
+    - 'curl -k --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file User/target/*.jar "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/User/User-${VERSION}.jar"'
+
+docker-build-Student-job:
+  variables:
+    PACKAGE_NAME: Student
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd Student
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-Student-job:
+  stage: deployment
+  needs:
+    - docker-build-Student-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Student || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Student || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/Student:0.1'
+    - echo "Application successfully deployed."
+
+docker-build-Teacher-job:
+  variables:
+    PACKAGE_NAME: Teacher
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd Teacher
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-Teacher-job:
+  stage: deployment
+  needs:
+    - docker-build-Teacher-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Teacher || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Teacher || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8082:8082 --name Teacher --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/Teacher:0.1'
+    - echo "Application successfully deployed."
+
+
+docker-build-Lesson-job:
+  variables:
+    PACKAGE_NAME: Lesson
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd Lesson
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-Lesson-job:
+  stage: deployment
+  needs:
+    - docker-build-Lesson-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Lesson || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Lesson || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8084:8084 --name Lesson --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Lesson:0.1'
+    - echo "Application successfully deployed."
+
+docker-build-Chat-job:
+  variables:
+    PACKAGE_NAME: Chat
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd Chat
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-Chat-job:
+  stage: deployment
+  needs:
+    - docker-build-Chat-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Chat || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Chat || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8088:8088 --name Chat --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Chat:0.1'
+    - echo "Application successfully deployed."
+
+
+docker-build-LessonsAgenda-job:
+  variables:
+    PACKAGE_NAME: LessonsAgenda
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd LessonsAgenda
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-LessonsAgenda-job:
+  stage: deployment
+  needs:
+    - docker-build-LessonsAgenda-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill LessonsAgenda || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm LessonsAgenda || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8086:8086 --name LessonsAgenda --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/LessonsAgenda:0.1'
+    - echo "Application successfully deployed."
+
+
+docker-build-Payment-job:
+  variables:
+    PACKAGE_NAME: Payment
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd Payment
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-Payment-job:
+  stage: deployment
+  needs:
+    - docker-build-Payment-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Payment || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Payment || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8085:8085 --name Payment --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Payment:0.1'
+    - echo "Application successfully deployed."
+
+docker-build-MyTeacherGateway-job:
+  variables:
+    PACKAGE_NAME: MyTeacherGateway
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd MyTeacherGateway
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-MyTeacherGateway-job:
+  stage: deployment
+  needs:
+    - docker-build-MyTeacherGateway-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill MyTeacherGateway || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm MyTeacherGateway || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8080:8080 --name MyTeacherGateway --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/MyTeacherGateway:0.1'
+    - echo "Application successfully deployed."
+
+docker-build-Review-job:
+  variables:
+    PACKAGE_NAME: Review
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd Review
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-Review-job:
+  stage: deployment
+  needs:
+    - docker-build-Review-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Review || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Review || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8083:8083 --name Review --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Review:0.1'
+    - echo "Application successfully deployed."
+
+
+docker-build-User-job:
+  variables:
+    PACKAGE_NAME: User
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: docker-build
+  needs:
+    - package-job
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - cd User
+    - ls
+    - docker build -t "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION" .
+    - docker push "$CI_REGISTRY_IMAGE/$PACKAGE_NAME:$VERSION"
+    - echo "Compile complete."
+
+
+
+deploy-User-job:
+  stage: deployment
+  needs:
+    - docker-build-User-job
+  image:
+    name: alpine
+    pull_policy: if-not-present
+  before_script:
+    - echo "Setting environment..."
+    - apk add sshpass
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+  script:
+    - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill User || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm User || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8089:8089 --name User --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/User:0.1'
+    - echo "Application successfully deployed."
