@@ -44,4 +44,5 @@ public interface GatewayLogic {
      Teacher getCurrentTeacher();
 
     Response updateLesson(Lesson lesson);
+
 }

@@ -236,6 +236,14 @@ public class GatewayService {
         return logic.createLessonsAgenda(lessonsAgenda);
     }
 
+    @PUT
+    @Path("/lessonsAgendas/")
+    @RolesAllowed({"STUDENT","TEACHER"})
+    public Response updateLessonsAgenda(LessonsAgenda lessonsAgenda) {
+        return logic.updateLessonsAgenda(lessonsAgenda);
+    }
+
+
     @GET
     @Path("/payments/{id}")
     @RolesAllowed({"STUDENT","TEACHER"})
