@@ -137,7 +137,7 @@ deploy-Student-job:
     - ssh "$SSH_USER@$MACHINE_IP" 'docker kill Student || true'
     - ssh "$SSH_USER@$MACHINE_IP" 'docker rm Student || true'
     # Eseguire il nuovo contenitore Docker
-    - ssh "$SSH_USER@$MACHINE_IP" 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/student:0.1'
+    - ssh "$SSH_USER@$MACHINE_IP" 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/student:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
   
 
