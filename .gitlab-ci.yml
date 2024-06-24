@@ -1,16 +1,16 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-#    - if: ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "develop") && $MY_VARIABLE
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      # - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      # - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      # - if: '($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "develop") && $MY_VARIABLE'
 
 variables:
-  MONGO_ADDRESS: $MONGO_ADDRESS
-  MONGO_PORT: $MONGO_PORT
+  MONGO_ADDRESS: '$MONGO_ADDRESS'
+  MONGO_PORT: '$MONGO_PORT'
   VERSION: "0.1"
 
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
   - package
@@ -29,7 +29,6 @@ build-job:
     - echo "Compiling the code..."
     - mvn clean compile
     - echo "Compile complete."
-
 
 test-job:
   stage: test
@@ -50,7 +49,7 @@ quality-job:
     name: maven:3.8.2-openjdk-17
     pull_policy: if-not-present
   script:
-    - mvn clean verify sonar:sonar -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN
+    - mvn clean verify sonar:sonar -Dsonar.projectKey=MyTeacher -Dsonar.projectName='MyTeacher' -Dsonar.host.url=http://172.31.6.3:9000/ -Dsonar.token=$SONAR_TOKEN
 
 
 package-job:
