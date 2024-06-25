@@ -132,12 +132,9 @@ deploy-Student-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
-    # Autenticazione al Docker Registry di GitLab
     - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
-    # Arresto e rimozione del container esistente (se presente)
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Student || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Student || true'
-    # Esecuzione del nuovo container Docker
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher/student:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
@@ -183,6 +180,7 @@ deploy-Teacher-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Teacher || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Teacher || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8082:8082 --name Teacher --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/teacher:0.0.1-SNAPSHOT'
@@ -230,6 +228,7 @@ deploy-Lesson-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Lesson || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Lesson || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8084:8084 --name Lesson --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/lesson:0.0.1-SNAPSHOT'
@@ -276,6 +275,7 @@ deploy-Chat-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Chat || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Chat || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8088:8088 --name Chat --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/chat:0.0.1-SNAPSHOT'
@@ -323,6 +323,7 @@ deploy-LessonsAgenda-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill LessonsAgenda || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm LessonsAgenda || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8086:8086 --name LessonsAgenda --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/lessonsagenda:0.0.1-SNAPSHOT'
@@ -370,6 +371,7 @@ deploy-Payment-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin" 
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Payment || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Payment || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8085:8085 --name Payment --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/payment:0.0.1-SNAPSHOT'
@@ -416,6 +418,7 @@ deploy-MyTeacherGateway-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill MyTeacherGateway || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm MyTeacherGateway || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8080:8080 --name MyTeacherGateway --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/myteachergateway:0.0.1-SNAPSHOT'
@@ -462,6 +465,7 @@ deploy-Review-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Review || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Review || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8083:8083 --name Review --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/review:0.0.1-SNAPSHOT'
@@ -509,6 +513,7 @@ deploy-User-job:
     - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill User || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm User || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8089:8089 --name User --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/user:0.0.1-SNAPSHOT'
