@@ -14,13 +14,11 @@
     <h1> <img src="logo.png" class="logo-picture" alt=""> MyTeacher</h1>
     <nav>
         <a href="homepage.html">Home</a>
-        <a href="aboutus.html">Chi siamo</a>
-        <!--<a href="../login.html" id="login-href">Accedi</a>-->
-
+        <a href="../aboutus.html">Chi siamo</a>
         <div class="dropdown">
-            <a href="javascript:void(0);" class="dropbtn" id="student-dropdown"></a>
+            <a href="javascript:void(0);" class="dropbtn" id="student-dropdown">Accedi</a>
             <div class="dropdown-content">
-                <a href="#">Profilo</a>
+                <a href="profile.html">Profilo</a>
                 <a href="#">Impostazioni</a>
                 <a href="#" id="logout-href">Esci</a>
             </div>
@@ -31,20 +29,19 @@
 <div class="container">
 
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Cerca una materia...">
-        <button onclick="search()">Cerca</button>
+        <input type="search" class="searchInput" id="searchInput" placeholder="Cerca una materia...">
+        <button onclick="search()" id="searchButton">Cerca</button>
+    </div>
+
+    <div class="segment">
+        <h2>Lezioni disponibili</h2>
+        <ul class="available-lessons-list" id="availableLessonsList">
+        </ul>
     </div>
 
     <div class="segment">
         <h2>Lezioni in agenda</h2>
         <ul class="agenda-lessons-list" id="agendaLessonsList">
-        </ul>
-    </div>
-
-
-    <div class="segment">
-        <h2>Lezioni disponibili</h2>
-        <ul class="available-lessons-list" id="availableLessonsList">
         </ul>
     </div>
 
@@ -54,9 +51,17 @@
         </ul>
     </div>
 
+
+    <div id="teacherReviewsPopup" class="popup">
+        <div class="popup-content" id="tReviews">
+            <span class="closeBtn" id="btn1">&times;</span>
+
+        </div>
+    </div>
+
     <div id="reviewPopup" class="popup">
         <div class="popup-content">
-            <span class="closeBtn">&times;</span>
+            <span class="closeBtn" id="btn2">&times;</span>
             <form>
                 <label for="stars">Stelle:</label><br>
                 <input type="number" id="stars" name="stelle" min="1" max="5"><br><br>

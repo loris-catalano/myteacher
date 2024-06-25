@@ -2,13 +2,11 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url(background2.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(images/background2.jpg);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
 }
-
-
 header {    /*not visible*/
     background-color: rgba(0, 0, 0, 0.0);
     /*background-color: #3d50a1;*/
@@ -44,7 +42,7 @@ nav a:hover {
 }
 
 .dropbtn {
-    color: #dddddd;
+    color: #ffffff;
     text-decoration: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -61,7 +59,7 @@ nav a:hover {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #dddddd;
+    /*background-color: #dddddd;*/
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -83,6 +81,49 @@ nav a:hover {
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+/* Styling the search container */
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    width: 400px;
+    margin: 0 auto;
+}
+
+/* Styling the search input */
+.searchInput {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 25px 0 0 25px;
+    width: 100%;
+    outline: none;
+    font-size: 16px;
+}
+
+/* Styling the search button */
+#searchButton {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 0 25px 25px 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#searchButton:hover {
+    color: #fdfdfd
+}
+
+/* Add some focus effect to the input */
+#searchInput:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .container {
@@ -145,7 +186,7 @@ h2{
 }
 
 .book-button:hover {
-    background-color: #636cc5;
+    background-color: #c9a068;
 }
 
 .cancel-button {
@@ -186,6 +227,18 @@ h2{
     background-color: #66c563;
 }
 
+
+#teacherReviewsPopup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
 #reviewPopup {
     display: none;
     position: fixed;
@@ -198,7 +251,7 @@ h2{
     background-color: rgba(0,0,0,0.5);
 }
 .popup-content {
-    background-color: #d4f1ff;
+    background-color: #e1c6a7;
     margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo Studente</title>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .profile-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .profile-card h2 {
+            margin: 0 0 10px;
+        }
+        .profile-card p {
+            margin: 5px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <a href="homepage.html" >Homepage</a>
+
+        <h2>Profilo Studente</h2>
+        <p id="studentId"><strong>ID:</strong> </p>
+        <p id="name"><strong>Nome:</strong> </p>
+        <p id="email"><strong>Email:</strong> </p>
+        <p id="bonusPoints"><strong>Punti Bonus:</strong> </p>
+
+    </div>
+
+
+
+    <script>
+        document.getElementById("name").innerHTML += localStorage.getItem("firstName") + " " + localStorage.getItem("lastName")
+        document.getElementById("email").innerHTML += localStorage.getItem("Email")
+        document.getElementById("studentId").innerHTML += localStorage.getItem("id")
+        document.getElementById("bonusPoints").innerHTML += localStorage.getItem("lessonBonusPoints")
+    </script>
+</body>
+</html>

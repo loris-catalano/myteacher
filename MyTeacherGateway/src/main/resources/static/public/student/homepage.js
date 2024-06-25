@@ -16,15 +16,40 @@ function availableLessonHTML(lesson, teacher){
 
     return `
     <div class="lesson-element">
-    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
-    <p><i>Materia</i>: ${lesson.subject}</p>
-    <p><i>Prezzo</i>: € ${lesson.price}</p>
-    <p><i>Data</i>: ${date} ${time}</p>
-    <p><i>Durata</i>: ${lesson.duration} ora</p>
+    <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
+    <p><strong>Materia</strong>: ${lesson.subject}</p>
+    <p><strong>Prezzo</strong>: € ${lesson.price}</p>
+    <p><strong>Data</strong>: ${date} ${time}</p>
+    <p><strong>Durata</strong>: ${lesson.duration} ora</p>
     <button type="submit" class="book-button" id="lesson-${lesson.id}" onclick="bookLesson(id)">Prenota</button>
+    <button type="button" class="see-reviews-button" id="teacher-${teacher.id}" onclick="seeTeacherReviews(id)">Recensioni docente</button>
     </div>
     `
 }
+
+function seeTeacherReviews(id){
+    id = id.split("-")[1]
+
+
+    document.getElementById('teacherReviewsPopup').style.display = 'block';
+
+    reviews = JSON.parse(getRequest(reviewUrl).responseText)
+    console.log(reviews)
+
+    for(i in reviews){
+        review = reviews[i]
+        teacherId = review.teacherId.toString()
+
+        if(teacherId !== id) continue
+        else{
+            teacher = JSON.parse(getRequest(teacherUrl + teacherId).responseText)
+            document.getElementById("tReviews").innerHTML += reviewHTML(review, teacher)
+        }
+
+    }
+
+}
+
 
 function agendaLessonHTML(lesson, teacher){
     let d = lesson.startLesson
@@ -34,10 +59,10 @@ function agendaLessonHTML(lesson, teacher){
 
     return `
     <div class="lesson-element">
-    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
-    <p><i>Materia</i>: ${lesson.subject}</p>
-    <p><i>Data</i>: ${date} ${time}</p>
-    <p><i>Durata</i>: ${lesson.duration} ore</p>
+    <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
+    <p><strong>Materia</strong>: ${lesson.subject}</p>
+    <p><strong>Data</strong>: ${date} ${time}</p>
+    <p><strong>Durata</strong>: ${lesson.duration} ore</p>
     <button type="submit" class="cancel-button" id="lesson-${lesson.id}" onclick="cancelLesson(id)">Disdici</button>
     </div>
     `
@@ -51,38 +76,29 @@ function doneLessonHTML(lesson, teacher){
 
     return `
     <div class="lesson-element">
-    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
-    <p><i>Materia</i>: ${lesson.subject}</p>
-    <p><i>Prezzo</i>: € ${lesson.price}</p>
-    <p><i>Data</i>: ${date} ${time}</p>
+    <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
+    <p><strong>Materia</strong>: ${lesson.subject}</p>
+    <p><strong>Prezzo</strong>: € ${lesson.price}</p>
+    <p><strong>Data</strong>: ${date} ${time}</p>
     <button type="submit" class="make-review-button" id="lesson-${lesson.id}" onclick="showReviewPopup(id)">Recensisci</button>
     </div>
     `
 }
 
-
-function reviewHTML(review, lesson, teacher){
+function reviewHTML(review, teacher){
     return `
     <div class="review-element">
+    <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
     
-    <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
-    <p><i>Materia</i>: ${lesson.subject}</p>
-    <p><i>Data</i>: ${lesson.startLesson}</p>
-    
-    
-    <p><i>Stelle</i>: ${review.stars}</p>
-    <p><i>Titolo</i>: ${review.title}</p>
-    <p><i>Descrizione</i>: ${review.body}</p>
-    <p><i>Data creazione</i>: ${review.creationTime}</p>
-    
-    <button type="submit" class="cancel-button" id="lesson-${lesson.id}">Disdici</button>
-    
-    <button onclick="editReview()">Modifica</button>
-    <button onclick="deleteReview()">Elimina</button>
-    
+    <p><strong>Stelle</strong>: ${review.stars}</p>
+    <p><strong>Titolo</strong>: ${review.title}</p>
+    <p><strong>Descrizione</strong>: ${review.body}</p>
+    <p><strong>Data creazione</strong>: ${review.creationTime}</p>
     </div>
     `
 }
+
+
 function getRequest(url){
     var xhttp = new XMLHttpRequest();
 
@@ -159,7 +175,6 @@ function fillAvailableLessons(){
         return null;
 }
 
-
 function fillDoneLessons(){
     var lessons = JSON.parse(getRequest(lessonsUrl).responseText)
     const now = new Date()
@@ -176,8 +191,12 @@ function fillDoneLessons(){
 }
 
 
+//tracks the X of the teacher reviews popup
+document.querySelector('#btn1').addEventListener('click', function() {
+    document.getElementById('teacherReviewsPopup').style.display = 'none';
+});
 //tracks the X of the review popup
-document.querySelector('.closeBtn').addEventListener('click', function() {
+document.querySelector('#btn2').addEventListener('click', function() {
     document.getElementById('reviewPopup').style.display = 'none';
 });
 
@@ -282,23 +301,52 @@ function makeReview(){
 
 }
 
+function search(){
+    let searchInput = document.getElementById("searchInput").value
+
+    let xhrLessons = getRequest(lessonsUrl) //get all lessons
+    if (xhrLessons.status === 200) {
+        let lessons = JSON.parse(xhrLessons.responseText)
+        document.getElementById("availableLessonsList").innerHTML = ""
+        for(i in lessons){
+            let lesson = lessons[i]
+
+            if (lesson.studentId != null || lesson.subject.toLowerCase() !== searchInput.toLowerCase()) continue; //skip booked lessons
+
+
+
+            let teacher = JSON.parse(getRequest(teacherUrl + lesson.teacherId).responseText)
+            console.log(teacher)
+            document.getElementById("availableLessonsList").innerHTML += availableLessonHTML(lessons[i], teacher);
+        }
+    }
+    else
+        return null;
+
+
+}
+
 document.getElementById("logout-href").addEventListener("click", logout)
 
+/*Check if search is empty so lessons available are resetted*/
+searchInput = document.getElementById("searchInput")
+searchInput.addEventListener("input", function checkIfEmpty() {
+    if (searchInput.value.trim() === '') {
+        fillAvailableLessons()
+    }
+})
 
 document.addEventListener('DOMContentLoaded', function() {
     topButton = document.getElementById("student-dropdown")
 
     if(localStorage.getItem("Authorization") !== null) {
         topButton.innerText = `🧑‍🎓 ${localStorage.getItem("firstName")} ${localStorage.getItem("lastName")}`
-        //document.getElementById('login-href').style.display = 'none'
-
 
         fillLessonsAgenda();
         fillAvailableLessons();
         fillDoneLessons();
     }else{
         document.querySelector(".dropdown-content").style.display = 'none'
-        topButton.innerText = "Accedi"
         topButton.href = '../login.html'
     }
 
