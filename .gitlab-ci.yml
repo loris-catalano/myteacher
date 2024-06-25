@@ -183,7 +183,7 @@ deploy-Teacher-job:
     - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Teacher || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Teacher || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8082:8082 --name Teacher --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher-gruppo2/teacher:0.0.1-SNAPSHOT'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8082:8082 --name Teacher --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher/teacher:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 
