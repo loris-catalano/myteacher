@@ -93,7 +93,7 @@ delivery-job:
 
 docker-build-Student-job:
   variables:
-    PACKAGE_NAME: Student
+    PACKAGE_NAME: student
   image:
     name: docker
     pull_policy: if-not-present
@@ -138,13 +138,13 @@ deploy-Student-job:
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Student || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Student || true'
     # Esecuzione del nuovo container Docker
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher/myteacher:0.0.1-SNAPSHOT'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher/student:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
-  
+
 
 docker-build-Teacher-job:
   variables:
-    PACKAGE_NAME: Teacher
+    PACKAGE_NAME: teacher
   image:
     name: docker
     pull_policy: if-not-present
@@ -185,13 +185,13 @@ deploy-Teacher-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Teacher || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Teacher || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8082:8082 --name Teacher --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/Teacher:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8082:8082 --name Teacher --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/teacher:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 
 docker-build-Lesson-job:
   variables:
-    PACKAGE_NAME: Lesson
+    PACKAGE_NAME: lesson
   image:
     name: docker
     pull_policy: if-not-present
@@ -232,12 +232,12 @@ deploy-Lesson-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Lesson || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Lesson || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8084:8084 --name Lesson --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Lesson:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8084:8084 --name Lesson --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/lesson:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 docker-build-Chat-job:
   variables:
-    PACKAGE_NAME: Chat
+    PACKAGE_NAME: chat
   image:
     name: docker
     pull_policy: if-not-present
@@ -278,13 +278,13 @@ deploy-Chat-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Chat || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Chat || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8088:8088 --name Chat --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Chat:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8088:8088 --name Chat --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/chat:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 
 docker-build-LessonsAgenda-job:
   variables:
-    PACKAGE_NAME: LessonsAgenda
+    PACKAGE_NAME: lessonsagenda
   image:
     name: docker
     pull_policy: if-not-present
@@ -325,13 +325,13 @@ deploy-LessonsAgenda-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill LessonsAgenda || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm LessonsAgenda || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8086:8086 --name LessonsAgenda --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/LessonsAgenda:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8086:8086 --name LessonsAgenda --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/lessonsagenda:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 
 docker-build-Payment-job:
   variables:
-    PACKAGE_NAME: Payment
+    PACKAGE_NAME: payment
   image:
     name: docker
     pull_policy: if-not-present
@@ -372,12 +372,12 @@ deploy-Payment-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Payment || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Payment || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8085:8085 --name Payment --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Payment:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8085:8085 --name Payment --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/payment:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 docker-build-MyTeacherGateway-job:
   variables:
-    PACKAGE_NAME: MyTeacherGateway
+    PACKAGE_NAME: myteachergateway
   image:
     name: docker
     pull_policy: if-not-present
@@ -418,12 +418,12 @@ deploy-MyTeacherGateway-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill MyTeacherGateway || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm MyTeacherGateway || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8080:8080 --name MyTeacherGateway --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/MyTeacherGateway:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8080:8080 --name MyTeacherGateway --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/myteachergateway:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 docker-build-Review-job:
   variables:
-    PACKAGE_NAME: Review
+    PACKAGE_NAME: review
   image:
     name: docker
     pull_policy: if-not-present
@@ -464,13 +464,13 @@ deploy-Review-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill Review || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm Review || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8083:8083 --name Review --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/Review:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8083:8083 --name Review --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/review:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
 
 
 docker-build-User-job:
   variables:
-    PACKAGE_NAME: User
+    PACKAGE_NAME: user
   image:
     name: docker
     pull_policy: if-not-present
@@ -511,5 +511,5 @@ deploy-User-job:
     - echo "Deploying application..."
     - ssh $SSH_USER@$MACHINE_IP 'docker kill User || true'
     - ssh $SSH_USER@$MACHINE_IP 'docker rm User || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8089:8089 --name User --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/User:0.1'
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8089:8089 --name User --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher/user:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
