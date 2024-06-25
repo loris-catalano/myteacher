@@ -49,7 +49,6 @@ public class SecurityConfig {
                         .formLogin(formLogin -> formLogin.loginPage("/public/login.html").permitAll())
                         .httpBasic(withDefaults())
                         .csrf(csrf -> csrf.disable())
-
         ;
 
 

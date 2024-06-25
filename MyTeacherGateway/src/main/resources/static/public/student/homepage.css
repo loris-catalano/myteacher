@@ -2,20 +2,28 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-image: url(background2.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
-header {
-    background-color: #3d50a1;
+
+
+header {    /*not visible*/
+    background-color: rgba(0, 0, 0, 0.0);
+    /*background-color: #3d50a1;*/
     color: #000000;
     padding: 10px;
     text-align: center;
 }
-.logo-picture{
-    width:30px;
+.logo-picture {
+    width: 30px;
     height: 30px;
 }
 nav {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 10px;
 }
 nav a {
@@ -30,6 +38,53 @@ nav a {
 nav a:hover {
     color: #fdfdfd;
 }
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    color: #dddddd;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #000000;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.dropbtn:hover {
+    color: #fdfdfd;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #dddddd;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #dddddd;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    color: #fdfdfd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 .container {
     max-width: 800px;
     margin: 20px auto;
@@ -51,24 +106,31 @@ nav a:hover {
     list-style: none;
     padding: 0;
 }
+h2{
+    color: #ffffff;
+    text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px  1px 0 #000,
+            1px  1px 0 #000;
+}
 .segment {
     margin-bottom: 20px;
     padding: 30px;
-    border: 3px solid #2838c9;
+    border: 5px solid #ffffff;
     border-radius: 5px;
 }
-.lesson-element{
+.lesson-element {
     border-style: solid;
-    border-color: #2838c9;
+    border-color: #c98234;
     border-radius: 10px;
-    background-color: #9ee8ff;
-
+    background-color: #e1c6a7;
     padding: 10px;
     margin: 5px;
 }
 
 .book-button {
-    background-color: #2838c9;
+    background-color: #c98234;
     border: none;
     color: white;
     padding: 10px 25px;
@@ -106,7 +168,7 @@ nav a:hover {
 }
 
 .make-review-button {
-    background-color: #2dc928;
+    background-color: #3f9f3e;
     border: none;
     color: white;
     padding: 10px 25px;
@@ -156,5 +218,3 @@ nav a:hover {
     text-decoration: none;
     cursor: pointer;
 }
-
-

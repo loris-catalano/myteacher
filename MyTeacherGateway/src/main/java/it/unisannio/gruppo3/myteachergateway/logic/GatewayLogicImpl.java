@@ -208,7 +208,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
-
     @Override
     public Review getReview(Long reviewId) {
         try {
@@ -237,7 +236,33 @@ public class GatewayLogicImpl implements GatewayLogic  {
         }
     }
 
+    @Override
+    public ArrayList<Review> getAllReviews() {
+        try {
+            String URL = String.format(REVIEW_SERVICE_URL);
 
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .get()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (response.code() != 200 ){
+                return null;
+            }
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    //    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return (ArrayList<Review>) gson.fromJson(responseBody, ArrayList.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public jakarta.ws.rs.core.Response createReview(Review review) {
@@ -413,7 +438,7 @@ public class GatewayLogicImpl implements GatewayLogic  {
     }
 
     @Override
-    public jakarta.ws.rs.core.Response createLesson(Lesson lesson) {
+    public jakarta.ws.rs.core.Response createLesson(@NotNull Lesson lesson) {
         try {
             //Get the teacher agenda from the id of the teacher of the lesson
             LessonsAgenda teacherAgenda = getLessonsAgenda(getTeacher(lesson.getTeacherId()).getTeacherAgenda());
@@ -452,7 +477,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
             return null;
         }
     }
-
 
     public LessonsAgenda getLessonsAgenda(Long lessonsAgendaid){
         try {

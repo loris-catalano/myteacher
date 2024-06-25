@@ -9,12 +9,17 @@ const lessonsAgendaUrl = `${URL}/myTeacher/lessonsAgendas/`;
 
 
 function availableLessonHTML(lesson, teacher){
+    let d = lesson.startLesson
+
+    const date = d.split('T')[0]
+    const time = d.split('T')[1].substring(0,5)
+
     return `
     <div class="lesson-element">
     <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
     <p><i>Materia</i>: ${lesson.subject}</p>
     <p><i>Prezzo</i>: € ${lesson.price}</p>
-    <p><i>Data</i>: ${lesson.startLesson}</p>
+    <p><i>Data</i>: ${date} ${time}</p>
     <p><i>Durata</i>: ${lesson.duration} ora</p>
     <button type="submit" class="book-button" id="lesson-${lesson.id}" onclick="bookLesson(id)">Prenota</button>
     </div>
@@ -22,11 +27,16 @@ function availableLessonHTML(lesson, teacher){
 }
 
 function agendaLessonHTML(lesson, teacher){
+    let d = lesson.startLesson
+
+    const date = d.split('T')[0]
+    const time = d.split('T')[1].substring(0,5)
+
     return `
     <div class="lesson-element">
     <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
     <p><i>Materia</i>: ${lesson.subject}</p>
-    <p><i>Data</i>: ${lesson.startLesson}</p>
+    <p><i>Data</i>: ${date} ${time}</p>
     <p><i>Durata</i>: ${lesson.duration} ore</p>
     <button type="submit" class="cancel-button" id="lesson-${lesson.id}" onclick="cancelLesson(id)">Disdici</button>
     </div>
@@ -34,13 +44,18 @@ function agendaLessonHTML(lesson, teacher){
 }
 
 function doneLessonHTML(lesson, teacher){
+    let d = lesson.startLesson
+
+    const date = d.split('T')[0]
+    const time = d.split('T')[1].substring(0,5)
+
     return `
     <div class="lesson-element">
     <p><i>Docente</i>: ${teacher.firstName} ${teacher.lastName}</p>
     <p><i>Materia</i>: ${lesson.subject}</p>
     <p><i>Prezzo</i>: € ${lesson.price}</p>
-    <p><i>Data</i>: ${lesson.startLesson}</p>
-    <button type="submit" class="make-review-button" id="lesson-${lesson.id}" onclick="showReviewPopup()">Recensisci</button>
+    <p><i>Data</i>: ${date} ${time}</p>
+    <button type="submit" class="make-review-button" id="lesson-${lesson.id}" onclick="showReviewPopup(id)">Recensisci</button>
     </div>
     `
 }
@@ -68,11 +83,6 @@ function reviewHTML(review, lesson, teacher){
     </div>
     `
 }
-
-
-
-
-
 function getRequest(url){
     var xhttp = new XMLHttpRequest();
 
@@ -166,18 +176,6 @@ function fillDoneLessons(){
 }
 
 
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    if(localStorage.getItem("Authorization") !== null) {
-        fillLessonsAgenda();
-        fillAvailableLessons();
-        fillDoneLessons();
-    }
-
-})
-
 //tracks the X of the review popup
 document.querySelector('.closeBtn').addEventListener('click', function() {
     document.getElementById('reviewPopup').style.display = 'none';
@@ -229,22 +227,80 @@ function cancelLesson(buttonId){
     }
 }
 
-function showReviewPopup(){
+function showReviewPopup(id){
     document.getElementById('reviewPopup').style.display = 'block';
+
+    localStorage.setItem("currLessonId", id) // temporarly set the id of the lesson of the review
 }
 
 function makeReview(){
+    const lessonId = localStorage.getItem("currLessonId").split("-")[1]
+    localStorage.removeItem("currLessonId") // remove the temporary id of the lesson of the review
+    const lesson = JSON.parse(getRequest(lessonsUrl+lessonId).responseText)
+    const teacherId = lesson.teacherId
+    const studentId = Number(localStorage.getItem("id"))
+
+    const reviews = JSON.parse(getRequest(reviewUrl).responseText)
+    for(i in reviews){
+        review = reviews[i]
+
+        console.log(review)
+
+
+        if(review.studentId === studentId && review.teacherId === teacherId){
+            alert("Hai già fatto una recensione per questa lezione.")
+            window.location.pathname = "/public/student/homepage.html"
+            return
+        }
+    }
 
     const stars = document.getElementById('stars').value;
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
 
+    console.log(lesson)
+    console.log(teacherId)
+
+    let body = {
+        stars: stars,
+        title: title,
+        body: description,
+        studentId: studentId,
+        teacherId: teacherId
+    };
+
+    body = JSON.stringify(body);
+
+
+    const req = postRequest(reviewUrl, body)
+
+    if(req.status === 201){
+        alert("Review submitted.")
+    }else{
+        alert("There was an error")
+    }
 
 }
 
+document.getElementById("logout-href").addEventListener("click", logout)
 
 
-document.getElementById("logout").addEventListener("click", logout)
+document.addEventListener('DOMContentLoaded', function() {
+    topButton = document.getElementById("student-dropdown")
+
+    if(localStorage.getItem("Authorization") !== null) {
+        topButton.innerText = `🧑‍🎓 ${localStorage.getItem("firstName")} ${localStorage.getItem("lastName")}`
+        //document.getElementById('login-href').style.display = 'none'
 
 
+        fillLessonsAgenda();
+        fillAvailableLessons();
+        fillDoneLessons();
+    }else{
+        document.querySelector(".dropdown-content").style.display = 'none'
+        topButton.innerText = "Accedi"
+        topButton.href = '../login.html'
+    }
+
+})
 

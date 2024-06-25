@@ -120,6 +120,16 @@ public class GatewayService {
         return Response.ok(review).build();
     }
 
+    @GET
+    @Path("/reviews/")
+    @RolesAllowed({"STUDENT"})
+    public Response getAllReviews() {
+        ArrayList<Review> reviews = logic.getAllReviews();
+        return Response.ok(reviews).build();
+    }
+
+
+
     @POST
     @Path("/reviews/")
     @RolesAllowed({"STUDENT"})
@@ -209,8 +219,6 @@ public class GatewayService {
     public Response bookLesson(@PathParam("lessonId") Long lessonId, @PathParam("studentId") Long studentId){
         return logic.bookLesson(lessonId,studentId);
     }
-
-
 
 
     @GET

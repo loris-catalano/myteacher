@@ -45,4 +45,5 @@ public interface GatewayLogic {
 
     Response updateLesson(Lesson lesson);
 
+     ArrayList<Review> getAllReviews();
 }

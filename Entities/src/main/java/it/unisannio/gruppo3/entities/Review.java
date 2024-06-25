@@ -1,6 +1,5 @@
 package it.unisannio.gruppo3.entities;
 
-
 import java.time.Instant;
 import java.util.Objects;
 
