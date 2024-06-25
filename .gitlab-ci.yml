@@ -124,20 +124,21 @@ deploy-Student-job:
     pull_policy: if-not-present
   before_script:
     - echo "Setting environment..."
-    - apk update
-    - apk add --no-cache sshpass openssh-client
+    - apk add sshpass
+    - apk add openssh-client
     - eval $(ssh-agent -s)
     - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
-    # Correzione dell'uso di sshpass con ssh e ssh-copy-id
-    - sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$MACHINE_IP" ls
-    - sshpass -p "$SSH_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no "$SSH_USER@$MACHINE_IP"
+    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
+    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
   script:
     - echo "Deploying application..."
-    # Uccidere e rimuovere il contenitore esistente se esiste
-    - ssh "$SSH_USER@$MACHINE_IP" 'docker kill Student || true'
-    - ssh "$SSH_USER@$MACHINE_IP" 'docker rm Student || true'
-    # Eseguire il nuovo contenitore Docker
-    - ssh "$SSH_USER@$MACHINE_IP" 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher/myteacher:0.0.1-SNAPSHOT'
+    # Autenticazione al Docker Registry di GitLab
+    - ssh $SSH_USER@$MACHINE_IP "echo $CI_REGISTRY_PASSWORD | docker login gitlab.services.ding.unisannio.it:5050 -u $CI_REGISTRY_USER --password-stdin"
+    # Arresto e rimozione del container esistente (se presente)
+    - ssh $SSH_USER@$MACHINE_IP 'docker kill Student || true'
+    - ssh $SSH_USER@$MACHINE_IP 'docker rm Student || true'
+    # Esecuzione del nuovo container Docker
+    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw2024-gruppo2/myteacher/myteacher:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
   
 
