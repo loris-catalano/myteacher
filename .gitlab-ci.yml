@@ -1,16 +1,16 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-#    - if: ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "develop") && $MY_VARIABLE
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      # - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      # - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      # - if: '($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == "develop") && $MY_VARIABLE'
 
 variables:
-  MONGO_ADDRESS: $MONGO_ADDRESS
-  MONGO_PORT: $MONGO_PORT
+  MONGO_ADDRESS: '$MONGO_ADDRESS'
+  MONGO_PORT: '$MONGO_PORT'
   VERSION: "0.1"
 
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
   - package
@@ -29,7 +29,6 @@ build-job:
     - echo "Compiling the code..."
     - mvn clean compile
     - echo "Compile complete."
-
 
 test-job:
   stage: test
@@ -50,7 +49,7 @@ quality-job:
     name: maven:3.8.2-openjdk-17
     pull_policy: if-not-present
   script:
-    - mvn clean verify sonar:sonar -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN
+    - mvn clean verify sonar:sonar -Dsonar.projectKey=MyTeacher -Dsonar.projectName='MyTeacher' -Dsonar.host.url=http://172.31.6.3:9000/ -Dsonar.token=$SONAR_TOKEN
 
 
 package-job:
@@ -125,18 +124,22 @@ deploy-Student-job:
     pull_policy: if-not-present
   before_script:
     - echo "Setting environment..."
-    - apk add sshpass
-    - apk add openssh-client
+    - apk update
+    - apk add --no-cache sshpass openssh-client
     - eval $(ssh-agent -s)
     - ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
-    - sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$MACHINE_IP ls
-    - sshpass -p $SSH_PASSWORD ssh-copy-id $SSH_USER@$MACHINE_IP
+    # Correzione dell'uso di sshpass con ssh e ssh-copy-id
+    - sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER@$MACHINE_IP" ls
+    - sshpass -p "$SSH_PASSWORD" ssh-copy-id -o StrictHostKeyChecking=no "$SSH_USER@$MACHINE_IP"
   script:
     - echo "Deploying application..."
-    - ssh $SSH_USER@$MACHINE_IP 'docker kill Student || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker rm Student || true'
-    - ssh $SSH_USER@$MACHINE_IP 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/Student:0.1'
+    # Uccidere e rimuovere il contenitore esistente se esiste
+    - ssh "$SSH_USER@$MACHINE_IP" 'docker kill Student || true'
+    - ssh "$SSH_USER@$MACHINE_IP" 'docker rm Student || true'
+    # Eseguire il nuovo contenitore Docker
+    - ssh "$SSH_USER@$MACHINE_IP" 'docker run -d -p 0.0.0.0:8081:8081 --name Student --pull=always gitlab.services.ding.unisannio.it:5050/ingsw24-gruppo2/myteacher-gruppo2/student:0.0.1-SNAPSHOT'
     - echo "Application successfully deployed."
+  
 
 docker-build-Teacher-job:
   variables:
