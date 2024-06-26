@@ -49,7 +49,7 @@ quality-job:
     name: maven:3.8.2-openjdk-17
     pull_policy: if-not-present
   script:
-    - mvn clean verify sonar:sonar -Dsonar.projectKey=MyTeacher -Dsonar.projectName='MyTeacher' -Dsonar.host.url=http://172.31.6.3:9000/ -Dsonar.token=$SONAR_TOKEN
+    - mvn clean verify sonar:sonar -Dsonar.projectKey=myteacher -Dsonar.projectName='myteacher' -Dsonar.host.url=http://172.31.6.3:9000/ -Dsonar.token=$SONAR_TOKEN
 
 
 package-job:
