@@ -2,10 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Teacher Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homepage</title>
+    <link rel="stylesheet" href="homepage.css">
+
+    <script defer src="homepage.js"></script>
 </head>
+
 <body>
-    <h1>Teacher homepage (work in progress)</h1>
+<header>
+    <h1> <img src="logo.png" class="logo-picture" alt=""> MyTeacher</h1>
+    <nav>
+        <a href="homepage.html">Home</a>
+        <a href="../aboutus.html">Chi siamo</a>
+        <div class="dropdown">
+            <a href="javascript:void(0);" class="dropbtn" id="student-dropdown">Accedi</a>
+            <div class="dropdown-content">
+                <a href="profile.html">Profilo</a>
+                <a href="#">Impostazioni</a>
+                <a href="#" id="logout-href">Esci</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+
+
+    <div class="segment">
+        <h2>Lezioni in agenda</h2>
+        <ul class="agenda-lessons-list" id="agendaLessonsList">
+        </ul>
+    </div>
+
+    <div class="segment">
+        <h2>Lezioni tenute</h2>
+        <ul class="done-lessons-list" id="doneLessonsList">
+        </ul>
+    </div>
+
+    <div class="segment">
+        <h2>Recensioni ottenute</h2>
+        <ul class="reviews-list" id="reviewsList">
+        </ul>
+    </div>
+    
+</div>
 
 </body>
 </html>
