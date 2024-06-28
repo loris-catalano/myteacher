@@ -215,15 +215,49 @@ h2{
     background-color: #c56363;
 }
 
+/*Review card*/
 
 .review-element {
-    border-style: solid;
-    border-color: #61a14b;
+    border: 1px solid #61a14b;
     border-radius: 10px;
-    background-color: #a3d787;
-    padding: 10px;
-    margin: 5px;
+    background-color: #a1ffa1;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
 }
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.review-student {
+    margin: 0;
+    font-size: 1.1em;
+}
+.review-stars {
+    margin: 0;
+    font-size: 1.1em;
+    color: #bda02b;
+}
+.review-title {
+    margin: 10px 0;
+    font-size: 1.4em;
+    color: #333;
+}
+.review-body {
+    font-size: 1em;
+    color: #3b3b3b;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+.review-date {
+    font-size: 0.9em;
+    color: #6c6c6c;
+}
+
+/***/
 
 
 #lessonPopup {

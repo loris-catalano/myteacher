@@ -66,12 +66,15 @@ function reviewHTML(review, student){
 
     return `
     <div class="review-element">
-    <p><strong>Studente</strong>: ${student.firstName} ${student.lastName}</p>
-    
-    <p><strong>Stelle</strong>: ${review.stars}</p>
-    <p><strong>Titolo</strong>: ${review.title}</p>
-    <p><strong>Descrizione</strong>: ${review.body}</p>
-    <p><strong>Data creazione</strong>: ${date} ${time}</p>
+    <div class="review-header">
+        <p class="review-student"><strong>Studente</strong>: ${student.firstName} ${student.lastName}</p>
+        <p class="review-stars">
+            <strong>Stelle</strong>: ${review.stars} <span class="stars">★</span>
+        </p>
+    </div>
+    <h3 class="review-title">${review.title}</h3>
+    <p class="review-body">${review.body}</p>
+    <p class="review-date"><strong>Data creazione</strong>: ${date} ${time}</p>
     </div>
     `
 }
