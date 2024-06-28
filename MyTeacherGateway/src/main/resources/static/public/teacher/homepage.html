@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Homepage</title>
+    <title>Teacher Homepage</title>
     <link rel="stylesheet" href="homepage.css">
 
     <script defer src="homepage.js"></script>
@@ -28,6 +28,10 @@
 
 <div class="container">
 
+    <div class="create-lesson-container">
+        <button onclick="showLessonPopup()" id="showLessonPopupButton">+ Crea una nuova lezione</button>
+    </div>
+
 
     <div class="segment">
         <h2>Lezioni in agenda</h2>
@@ -46,6 +50,33 @@
         <ul class="reviews-list" id="reviewsList">
         </ul>
     </div>
+
+
+    <div id="lessonPopup" class="popup">
+        <div class="popup-content">
+            <span class="closeBtn" id="btn2" onclick="hideLessonPopup()">&times;</span>
+            <form>
+                <label for="subject">Materia:</label><br>
+                <input type="text" id="subject" name="subject" required><br><br>
+
+                <label for="price">Prezzo:</label><br>
+                <input type="number" id="price" name="price" max="100" required><br><br>
+
+                <label for="startLessonDate">Data:</label><br>
+                <input type="date" id="startLessonDate" name="startLessonDate" required><br><br>
+
+                <label for="startLessonTime">Ora:</label><br>
+                <input type="time" id="startLessonTime" name="startLessonTime" required><br><br>
+
+                <label for="duration">Durata (ore):</label><br>
+                <input type="number" id="duration" name="duration" min="1" max="5" step="1" required><br><br>
+
+                <button type="button" onclick="createLesson()">Crea</button>
+            </form>
+        </div>
+    </div>
+
+
     
 </div>
 

@@ -273,9 +273,9 @@ function makeReview(){
     const req = postRequest(reviewUrl, body)
 
     if(req.status === 201){
-        alert("Review submitted.")
+        alert("Recensione effettuata.")
     }else{
-        alert("There was an error")
+        alert("C'è stato un errore")
     }
 
 }
@@ -338,7 +338,7 @@ searchInput.addEventListener("input", function checkIfEmpty() {
 document.addEventListener('DOMContentLoaded', function() {
     topButton = document.getElementById("student-dropdown")
 
-    if(localStorage.getItem("Authorization") !== null) {
+    if(localStorage.getItem("Authorization") !== null && localStorage.getItem("Role") === "ROLE_STUDENT") {
         topButton.innerText = `🧑‍🎓 ${localStorage.getItem("firstName")} ${localStorage.getItem("lastName")}`
 
         fillLessonsAgenda();

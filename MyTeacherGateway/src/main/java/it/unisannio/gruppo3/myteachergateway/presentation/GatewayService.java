@@ -122,7 +122,7 @@ public class GatewayService {
 
     @GET
     @Path("/reviews/")
-    @RolesAllowed({"STUDENT"})
+    @RolesAllowed({"STUDENT","TEACHER"})
     public Response getAllReviews() {
         ArrayList<Review> reviews = logic.getAllReviews();
         return Response.ok(reviews).build();
@@ -191,7 +191,7 @@ public class GatewayService {
 
     @GET
     @Path("/lessons/")
-    @RolesAllowed({"STUDENT"})
+    @RolesAllowed({"STUDENT","TEACHER"})
     public Response getAllLessons() {
         ArrayList<Lesson> lessons = logic.getAllLessons();
         return Response.ok(lessons).build();
@@ -209,6 +209,13 @@ public class GatewayService {
     @RolesAllowed({"STUDENT","TEACHER"})
     public Response updateLesson(Lesson lesson) {
         return logic.updateLesson(lesson);
+    }
+
+    @DELETE
+    @Path("/lessons/{id}")
+    @RolesAllowed({"TEACHER"})
+    public Response deleteLesson(@PathParam("id")Long id) {
+        return logic.deleteLesson(id);
     }
 
 

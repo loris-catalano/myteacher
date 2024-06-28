@@ -8,24 +8,6 @@ const reviewUrl = `${URL}/myTeacher/reviews/`;
 const lessonsAgendaUrl = `${URL}/myTeacher/lessonsAgendas/`;
 
 
-function availableLessonHTML(lesson, teacher){
-    let d = lesson.startLesson
-
-    const date = d.split('T')[0]
-    const time = d.split('T')[1].substring(0,5)
-
-    return `
-    <div class="lesson-element">
-    <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
-    <p><strong>Materia</strong>: ${lesson.subject}</p>
-    <p><strong>Prezzo</strong>: € ${lesson.price}</p>
-    <p><strong>Data</strong>: ${date} ${time}</p>
-    <p><strong>Durata</strong>: ${lesson.duration} ora</p>
-    <button type="submit" class="book-button" id="lesson-${lesson.id}" onclick="bookLesson(id)">Prenota</button>
-    <button type="button" class="see-reviews-button" id="teacher-${teacher.id}" onclick="seeTeacherReviews(id)">Recensioni docente</button>
-    </div>
-    `
-}
 
 function agendaLessonHTML(lesson, student){
     let d = lesson.startLesson
@@ -33,14 +15,29 @@ function agendaLessonHTML(lesson, student){
     const date = d.split('T')[0]
     const time = d.split('T')[1].substring(0,5)
 
-    return `
-    <div class="lesson-element">
-    <p><strong>Studente</strong>: ${student.firstName} ${student.lastName}</p>
-    <p><strong>Data</strong>: ${date} ${time}</p>
-    <p><strong>Durata</strong>: ${lesson.duration} ore</p>
-    <button type="submit" class="cancel-button" id="lesson-${lesson.id}" onclick="cancelLesson(id)">Disdici</button>
-    </div>
-    `
+    if(student.status){ //if he has "status" field it is an error (there is no student)
+        return `
+        <div class="lesson-element">
+        <p><strong>Studente</strong>: Nessuno studente prenotato</p>
+        <p><strong>Materia</strong>: ${lesson.subject}</p>
+        <p><strong>Data</strong>: ${date} ${time}</p>
+        <p><strong>Durata</strong>: ${lesson.duration} ore</p>
+        <button type="submit" class="cancel-button" id="lesson-${lesson.id}" onclick="cancelLesson(id)">Cancella</button>
+        </div>
+        `
+    }else {
+        return `
+        <div class="lesson-element">
+        <p><strong>Studente</strong>: ${student.firstName} ${student.lastName}</p>
+        <p><strong>Materia</strong>: ${lesson.subject}</p>
+        <p><strong>Data</strong>: ${date} ${time}</p>
+        <p><strong>Durata</strong>: ${lesson.duration} ore</p>
+        <button type="submit" class="cancel-button" id="lesson-${lesson.id}" onclick="cancelLesson(id)">Disdici</button>
+        </div>
+        `
+    }
+
+
 }
 
 function doneLessonHTML(lesson, student){
@@ -52,6 +49,7 @@ function doneLessonHTML(lesson, student){
     return `
     <div class="lesson-element">
     <p><strong>Studente</strong>: ${student.firstName} ${student.lastName}</p>
+    <p><strong>Materia</strong>: ${lesson.subject}</p>
     <p><strong>Costo</strong>: € ${lesson.price}</p>
     <p><strong>Data</strong>: ${date} ${time}</p>
     <!--<button type="submit" class="make-review-button" id="lesson-${lesson.id}" onclick="showReviewPopup(id)">Recensisci</button>-->
@@ -59,15 +57,21 @@ function doneLessonHTML(lesson, student){
     `
 }
 
-function reviewHTML(review, teacher){
+function reviewHTML(review, student){
+    const d = review.creationTime
+
+    const date = d.split('T')[0]
+    const time = d.split('T')[1].substring(0,5)
+
+
     return `
     <div class="review-element">
-    <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
+    <p><strong>Studente</strong>: ${student.firstName} ${student.lastName}</p>
     
     <p><strong>Stelle</strong>: ${review.stars}</p>
     <p><strong>Titolo</strong>: ${review.title}</p>
     <p><strong>Descrizione</strong>: ${review.body}</p>
-    <p><strong>Data creazione</strong>: ${review.creationTime}</p>
+    <p><strong>Data creazione</strong>: ${date} ${time}</p>
     </div>
     `
 }
@@ -82,7 +86,6 @@ function getRequest(url){
 
     return xhttp;
 }
-
 function postRequest(url, body){
     var xhttp = new XMLHttpRequest();
 
@@ -93,7 +96,6 @@ function postRequest(url, body){
 
     return xhttp;
 }
-
 function putRequest(url, body){
     var xhttp = new XMLHttpRequest();
 
@@ -104,6 +106,50 @@ function putRequest(url, body){
 
     return xhttp;
 }
+function deleteRequest(url){
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open("DELETE", url, false);
+    xhttp.setRequestHeader("Authorization", localStorage.getItem("Authorization"));
+    xhttp.send();
+
+    return xhttp;
+}
+
+
+function createLesson(){
+
+    const teacherId = localStorage.getItem("id")
+
+    const subject = document.getElementById('subject').value;
+    const price = document.getElementById('price').value;
+    const duration = document.getElementById('duration').value;
+
+    const startLessonDate = document.getElementById('startLessonDate').value;
+    const startLessonTime = document.getElementById('startLessonTime').value;
+    const startLesson =  startLessonDate+"T"+startLessonTime+":00.000Z"
+
+    let body = {
+        teacherId: teacherId,
+        subject: subject,
+        price: price,
+        duration: duration,
+        startLesson:startLesson
+    };
+
+    body = JSON.stringify(body);
+
+    const req = postRequest(lessonsUrl, body)
+
+    if(req.status === 201){
+        alert("Lezione creata.")
+    }else{
+        alert("C'è stato un errore")
+    }
+
+    location.reload()
+}
+
 
 function logout(){
     localStorage.clear()
@@ -118,11 +164,16 @@ function fillLessonsAgenda(){
     const lessonsAgenda = JSON.parse( getRequest(lessonsAgendaUrl+lessonsAgendaId).responseText )
 
     const lessonsIds = lessonsAgenda['lessons']
+    const now = new Date()
 
     for(i in lessonsIds){
         currLessonId = lessonsIds[i]
 
         let lesson = JSON.parse( getRequest(lessonsUrl+currLessonId).responseText )
+
+        if(Date.parse(lesson.startLesson) < now) continue; //Pass on lesson ended
+
+
         let student = JSON.parse(getRequest(studentUrl + lesson.studentId).responseText)
 
         document.getElementById("agendaLessonsList").innerHTML += agendaLessonHTML(lesson, student);
@@ -131,6 +182,15 @@ function fillLessonsAgenda(){
 }
 
 function fillReviews(){
+    const reviews = JSON.parse(getRequest(reviewUrl).responseText)
+    for(i in reviews){
+        review = reviews[i]
+
+        if(review.teacherId.toString() !== localStorage.getItem("id")) continue;
+
+        student = JSON.parse(getRequest(studentUrl+review.studentId).responseText)
+        document.getElementById("reviewsList").innerHTML += reviewHTML(review, student);
+    }
 
 }
 
@@ -141,99 +201,37 @@ function fillDoneLessons(){
     for(i in lessons){
         lesson = lessons[i]
 
-        if(Date.parse(lesson.startLesson) > now  || lesson.studentId.toString() !== localStorage.getItem("id")) continue; //Pass on lesson not done yet and on other students lessons
+        if(Date.parse(lesson.startLesson) > now  || lesson.teacherId.toString() !== localStorage.getItem("id")) continue; //Pass on lesson not done yet and on other lessons
+        if(lesson.studentId == null)continue;   // if lesson is not booked by any student
+        let student = JSON.parse(getRequest(studentUrl + lesson.studentId).responseText)
 
-        let teacher = JSON.parse(getRequest(teacherUrl + lesson.teacherId).responseText)
-
-        document.getElementById("doneLessonsList").innerHTML += doneLessonHTML(lesson, teacher);
+        document.getElementById("doneLessonsList").innerHTML += doneLessonHTML(lesson, student);
     }
 }
 
 
-//tracks the X of the teacher reviews popup
-function hideTeacherReviewsPopup(){
-    document.getElementById('teacherReviewsPopup').style.display = 'none';
-}
+
 //tracks the X of the review popup
-function hideReviewPopup(){
-    document.getElementById('reviewPopup').style.display = 'none';
+function hideLessonPopup(){
+    document.getElementById('lessonPopup').style.display = 'none';
 }
 
-
-function bookLesson(id){
-    lessonId = id.split("-")[1]
-    studentId = localStorage.getItem("id")
-
-    url = URL + "/myTeacher/lessons/"+lessonId+"/student/"+studentId
-
-    req = getRequest(url)
-    if(req.status === 200){
-        console.log("Prenotato")
-        alert("Prenotazione effettuata!")
-        const bookButton = document.getElementById('lesson-'+lessonId);
-
-        bookButton.innerText = 'Prenotato';
-        bookButton.style.backgroundColor = 'grey';
-        bookButton.disabled = true;
-        bookButton.style.cursor = 'not-allowed';
-    }
-}
 
 function cancelLesson(buttonId){
     const lessonId = buttonId.split("-")[1]
-    const studentId = localStorage.getItem("id")
-
-    // Remove student from lesson
-    const lesson = JSON.parse( getRequest(lessonsUrl+lessonId).responseText )
-    lesson.studentId = null
-    const req = putRequest(lessonsUrl, JSON.stringify(lesson))
-
-    // Remove lesson from student agenda
-    const lessonsAgenda = JSON.parse( getRequest(lessonsAgendaUrl+localStorage.getItem("studentAgenda")).responseText )
-    let lessons = lessonsAgenda['lessons']
-    lessons = lessons.filter(function(less) {
-        return less.toString() !== lessonId;
-    });
-    lessonsAgenda['lessons']=lessons;
-    const req2 = putRequest(lessonsAgendaUrl, JSON.stringify(lessonsAgenda))
+    const req = deleteRequest(lessonsUrl + lessonId)
 
 
-    if(req.status === 200 && req2.status === 200){
+    if(req.status === 204){
         console.log("Cancellato")
         alert("Cancellazione effettuata. Troppe cancellazioni porteranno al ban dell'account.")
-        location.reload() //refresh the page to make the current lesson go away from agenda
+        //location.reload() //refresh the page to make the current lesson go away from agenda
     }
 }
 
-function showReviewPopup(id){
-    document.getElementById('reviewPopup').style.display = 'block';
-
-    localStorage.setItem("currLessonId", id) // temporarly set the id of the lesson of the review
+function showLessonPopup(id){
+    document.getElementById('lessonPopup').style.display = 'block';
 }
-
-function seeTeacherReviews(id){
-    id = id.split("-")[1]
-
-    document.getElementById('teacherReviewsPopup').style.display = 'block';
-
-    reviews = JSON.parse(getRequest(reviewUrl).responseText)
-    console.log(reviews)
-
-    teacherReviewsDiv = document.getElementById("tReviews")
-    teacherReviewsDiv.innerHTML = '<span class="closeBtn" id="btn1" onclick="hideTeacherReviewsPopup()">&times;</span>'
-
-    for(i in reviews){
-        review = reviews[i]
-        teacherId = review.teacherId.toString()
-
-        if(teacherId !== id) continue
-        else{
-            teacher = JSON.parse(getRequest(teacherUrl + teacherId).responseText)
-            teacherReviewsDiv.innerHTML += reviewHTML(review, teacher)
-        }
-    }
-}
-
 
 
 document.getElementById("logout-href").addEventListener("click", logout)
@@ -247,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         fillLessonsAgenda();
         fillDoneLessons();
+        fillReviews();
     }else{
         document.querySelector(".dropdown-content").style.display = 'none'
         topButton.href = '../login.html'
