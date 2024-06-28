@@ -45,5 +45,8 @@ public interface GatewayLogic {
 
     Response updateLesson(Lesson lesson);
 
+    Response deleteLesson(Long id);
+
      ArrayList<Review> getAllReviews();
+
 }

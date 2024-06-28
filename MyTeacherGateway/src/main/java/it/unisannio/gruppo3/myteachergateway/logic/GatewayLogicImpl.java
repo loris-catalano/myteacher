@@ -440,15 +440,6 @@ public class GatewayLogicImpl implements GatewayLogic  {
     @Override
     public jakarta.ws.rs.core.Response createLesson(@NotNull Lesson lesson) {
         try {
-            //Get the teacher agenda from the id of the teacher of the lesson
-            LessonsAgenda teacherAgenda = getLessonsAgenda(getTeacher(lesson.getTeacherId()).getTeacherAgenda());
-            //Add this lesson to the teacher agenda
-            ArrayList<Long> lessons = teacherAgenda.getLessons();
-            lessons.add(lesson.getId());
-            //Update teacher agenda with the new lesson
-            teacherAgenda.setLessons(lessons);
-            updateLessonsAgenda(teacherAgenda);
-
 
             String URL = String.format(LESSON_SERVICE_URL);
 
@@ -468,10 +459,73 @@ public class GatewayLogicImpl implements GatewayLogic  {
 
             Response response = client.newCall(request).execute();
 
+            //Get the teacher agenda from the id of the teacher of the lesson
+            LessonsAgenda teacherAgenda = getLessonsAgenda(getTeacher(lesson.getTeacherId()).getTeacherAgenda());
+            //Add this lesson to the teacher agenda
+            ArrayList<Long> lessons = teacherAgenda.getLessons();
+
+            //get id of the lesson from the path
+            Long id = Long.parseLong(response.header("location").toString().split("/")[5]);
+            lessons.add(id);
+            //Update teacher agenda with the new lesson
+            teacherAgenda.setLessons(lessons);
+            updateLessonsAgenda(teacherAgenda);
+
+
             if (response.code() != 201 )return null;
 
             URI uri = UriBuilder.fromPath(response.header("location")).build();
             return jakarta.ws.rs.core.Response.created(uri).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public jakarta.ws.rs.core.Response deleteLesson(Long id) {
+        try {
+            Lesson lesson = getLesson(id);
+            Teacher teacher = getTeacher(lesson.getTeacherId());
+            Student student = getStudent(lesson.getStudentId());
+
+            //Update teacher agenda
+            LessonsAgenda teacherAgenda = getLessonsAgenda(teacher.getTeacherAgenda());
+            ArrayList<Long> lessonsIds = teacherAgenda.getLessons();
+            lessonsIds.remove(id);
+            teacherAgenda.setLessons(lessonsIds);
+            updateLessonsAgenda(teacherAgenda);
+
+            //Update student agenda if there was a student booked for the lesson
+            if(student!=null){
+                LessonsAgenda studentAgenda = getLessonsAgenda(student.getStudentAgenda());
+                ArrayList<Long> lessIds = studentAgenda.getLessons();
+                lessIds.remove(id);
+                studentAgenda.setLessons(lessIds);
+                updateLessonsAgenda(studentAgenda);
+            }
+
+            //Then delete also lesson
+
+            String URL = String.format(LESSON_SERVICE_URL + id);
+
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .delete()
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.code() != 204 && response.code() != 202 )return null;
+
+            String responseBody = response.body().string();
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                    .create();
+
+            return jakarta.ws.rs.core.Response.noContent().build();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
