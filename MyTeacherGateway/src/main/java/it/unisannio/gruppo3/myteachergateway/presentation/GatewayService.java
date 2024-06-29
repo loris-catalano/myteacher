@@ -60,7 +60,6 @@ public class GatewayService {
     }
 
 
-
     @POST
     @Path("/students/")
     @PermitAll

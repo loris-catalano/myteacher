@@ -228,7 +228,7 @@ function cancelLesson(buttonId){
     if(req.status === 204){
         console.log("Cancellato")
         alert("Cancellazione effettuata. Troppe cancellazioni porteranno al ban dell'account.")
-        //location.reload() //refresh the page to make the current lesson go away from agenda
+        location.reload() //refresh the page to make the current lesson go away from agenda
     }
 }
 
