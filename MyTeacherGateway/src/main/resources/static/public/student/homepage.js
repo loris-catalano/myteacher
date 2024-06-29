@@ -1,4 +1,4 @@
-const URL = "http://localhost:8080";
+const URL = "http://172.31.6.3:8080";
 
 const lessonsUrl = `${URL}/myTeacher/lessons/`;
 const teacherUrl = `${URL}/myTeacher/teachers/`;
