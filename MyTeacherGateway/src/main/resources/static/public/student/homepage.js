@@ -62,6 +62,12 @@ function doneLessonHTML(lesson, teacher){
 }
 
 function reviewHTML(review, teacher){
+    let d = review.creationTime
+
+    const date = d.split('T')[0]
+    const time = d.split('T')[1].substring(0,5)
+
+
     return `
     <div class="review-element">
     <p><strong>Docente</strong>: ${teacher.firstName} ${teacher.lastName}</p>
@@ -69,7 +75,7 @@ function reviewHTML(review, teacher){
     <p><strong>Stelle</strong>: ${review.stars}</p>
     <p><strong>Titolo</strong>: ${review.title}</p>
     <p><strong>Descrizione</strong>: ${review.body}</p>
-    <p><strong>Data creazione</strong>: ${review.creationTime}</p>
+    <p><strong>Data creazione</strong>: ${date} ${time}</p>
     </div>
     `
 }
@@ -121,10 +127,13 @@ function fillLessonsAgenda(){
 
     const lessonsIds = lessonsAgenda['lessons']
 
+    const now = new Date()
+
     for(i in lessonsIds){
         currLessonId = lessonsIds[i]
 
         let lesson = JSON.parse( getRequest(lessonsUrl+currLessonId).responseText )
+        if(Date.parse(lesson.startLesson) < now ) continue; //Pass on lesson not done yet and on other students lessons
         let teacher = JSON.parse(getRequest(teacherUrl + lesson.teacherId).responseText)
 
         document.getElementById("agendaLessonsList").innerHTML += agendaLessonHTML(lesson, teacher);

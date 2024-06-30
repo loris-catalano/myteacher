@@ -162,7 +162,6 @@ function logout(){
 
 
 function fillLessonsAgenda(){
-
     const lessonsAgendaId = localStorage.getItem("teacherAgenda")
     const lessonsAgenda = JSON.parse( getRequest(lessonsAgendaUrl+lessonsAgendaId).responseText )
 
