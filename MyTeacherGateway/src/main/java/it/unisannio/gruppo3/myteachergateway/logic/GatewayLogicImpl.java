@@ -22,7 +22,7 @@ import java.util.Objects;
 
 
 public class GatewayLogicImpl implements GatewayLogic  {
-    public static final String SERVER_IP = "localhost";
+    public static final String SERVER_IP = "172.31.6.3";
 
     private static final String STUDENT_SERVICE_URL = "http://"+SERVER_IP+":8081/student/studentService/";
     private static final String TEACHER_SERVICE_URL = "http://"+SERVER_IP+":8082/teacher/teacherService/";
