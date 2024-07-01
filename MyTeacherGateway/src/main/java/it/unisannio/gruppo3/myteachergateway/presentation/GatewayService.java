@@ -128,7 +128,6 @@ public class GatewayService {
     }
 
 
-
     @POST
     @Path("/reviews/")
     @RolesAllowed({"STUDENT"})
@@ -170,14 +169,6 @@ public class GatewayService {
     public Response deleteReview(@PathParam("id")Long id) {
         return logic.deleteReview(id);
     }
-
-    /* I don't know if it is necessary
-    @PUT
-    @Path("/reviews/")
-    @RolesAllowed({"STUDENT","TEACHER"})
-    public Response updateReview(Review review) {
-        return logic.updateReview(review);
-    }*/
 
 
     @GET

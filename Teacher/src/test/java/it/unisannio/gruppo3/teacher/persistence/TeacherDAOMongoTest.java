@@ -71,6 +71,7 @@ public class TeacherDAOMongoTest {
     @Order(5)
     void deleteTeacher() {
         teacherDAO.deleteTeacher(th1Id);
+        assertNull(teacherDAO.getTeacher(th1Id));
     }
 }
 

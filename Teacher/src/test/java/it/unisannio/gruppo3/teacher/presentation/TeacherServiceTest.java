@@ -117,8 +117,6 @@ public class TeacherServiceTest {
 
         // Verifica che la chiamata al metodo deleteTeacher abbia avuto successo (status code 204)
         assertEquals(204, response.getStatus());
-
-
     }
 }
 

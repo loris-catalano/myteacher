@@ -68,6 +68,7 @@ public class TeacherLogicImplTest {
     @Order(5)
     void deleteTeacher() {
         teacherLogic.deleteTeacher(th1Id);
+        assertNull(teacherLogic.getTeacher(th1Id));
     }
 
 }
